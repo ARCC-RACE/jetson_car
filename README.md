@@ -1,13 +1,12 @@
 # jetson_car
 Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson Car (TX2) with RealSense D400
 
+
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on the main ROV system (Master).
+### Simulation Setup
 
-### Simultation Setup:
-
-### Nvidia Jetson TX2 Setup:
+### Nvidia Jetson Setup
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
 - clone https://github.com/jetsonhacks/installROSTX2.git to Desktop
 - Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX
@@ -16,43 +15,9 @@ These instructions will get you a copy of the project up and running on your loc
 - `installROSTX2/installROS.sh -p ros-kinetic-desktop`
 - `installRealSenseROSTx2/installRealSenseROS.sh ~/Desktop/jetson_car/jetson_car_ws`
 
-### Network Setup:
+### Prerequisites
 
-### Prerequisites (OUTDATED)
-
-What things you should to install to develop and run software and how to install them
-
-Code Blocks IDE on rpi ubuntu mate
-* `sudo apt-get install codeblocks`
-
-On the RPI turn on the CSI, SPI, I2C, and UART interfaces using `sudo raspi-config`
-
-Setup the I2C interface on Ubutnu Mate
-* `cd /boot/config.txt`
-* uncomment `dtparam=i2c_arm=off` and change to `dtparam=i2c_arm=on`
-* uncomment `dtparam=i2c_arm_baudrate=100000` and change to `dtparam=i2c_arm_baudrate=400000`
-* restart pi
-
-Setup the ros_lib file for arduino serial
-* See sketchbook README.md documentation
-
-RPI Camera node setup
-* See raspicam_node README.md documentation
-
-### Network Setup (OUTDATED)
-
-What things you need to do so that the ROS network operates properly 
-
-On ubuntu 16.04 go to Network Connections app and add a new ethernet connection (name the connection `ROVEthernetConnection`)
-* On the topside computer have a static (manual) IP of `192.168.1.100`, netmask `24`, Gateway `92.168.1.1`, DNS server `27.0.1.1, 8.8.8.8, 192.168.1.1`
-* On the bottomside computer have a static (manual) IP of `192.168.1.111`, netmask `24`, Gateway `192.168.1.1`, DNS server `127.0.1.1, 8.8.8.8, 192.168.1.1`
-* Run the setupROSNetwork.sh script in the scripts folder
-
-Once the network connection has been verified (on bottomside `ping master` / on topside `ping bottomside`)
-* Run `sshSetup.sh` in the scripts folder
-* Do not add any paraphrases 
-* on bottomside `ssh master` / on topside `ssh bottomside`
-* Make sure both work without entering a password 
+### Network Setup
 
 #### Network Setup DEBUG
 
