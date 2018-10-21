@@ -5,7 +5,7 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 Setup:
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
 - clone https://github.com/jetsonhacks/installROSTX2.git to Desktop
-- clone https://github.com/jetsonhacks/installRealSenseROSTX2.git to Desktop
+- Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
 - `cd ~/Desktop`
 - `installROSTX2/installROS.sh -p ros-kinetic-desktop`
