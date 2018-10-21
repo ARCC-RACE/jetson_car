@@ -10,4 +10,3 @@ Setup:
 - `cd ~/Desktop`
 - `installROSTX2/installROS.sh -p ros-kinetic-desktop`
 - `installRealSenseROSTx2/installRealSenseROS.sh ~/Desktop/jetson_car/jetson_car_ws`
-- `sudo apt-get install atom` to get hte Atom IDE
