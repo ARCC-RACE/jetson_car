@@ -13,4 +13,5 @@ echo "RESTART SYSTEM"
 #sudo "${MY_PATH}/jetsonhacks/buildLibrealsense2TX/scripts/configureKernel.sh" #DON'T USE
 #sudo "${MY_PATH}/jetsonhacks/installROSTX2/installROS.sh -p ros-kinetic-desktop"
 #sudo "${MY_PATH}/jetsonhacks/installROSTX2/setupCatkinWorkspace.sh"
+#make sure to source devel of jetsoncar_ws 
 #sudo "${MY_PATH}/jetsonhacks/installRealSense2ROSTX/installRealSenseROS.sh jetsoncar_ws"
