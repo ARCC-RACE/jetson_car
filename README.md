@@ -6,12 +6,11 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 
 ### Simulation Setup
 
-### Nvidia Jetson Setup
+### Nvidia Jetson Setup without full setup script
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
 - Check to make sure you are running L4T version 28.2.1 for use with convenience scripts
  - If you version is off download jetpack here https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3
  - Follow this tutorial on reflashing the Jetson TX2 https://www.youtube.com/watch?v=D7lkth34rgM
- - 
 - clone https://github.com/jetsonhacks/installROSTX2.git to Desktop
 - Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX
 (makes sure to install realsense before doing the kernal patches)
