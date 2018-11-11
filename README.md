@@ -5,6 +5,13 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 ## Getting Started
 
 ### Simulation Setup
+- Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
+ - https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md
+ - `sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCD` (Is this needed?)
+ - `sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u` (Is this needed? Try without -u arg)
+ - `sudo apt-get install librealsense2`
+ - `sudo apt-get install librealsense2-dev`
+ - `sudo apt-get install librealsense2-dbg`
 
 ### Nvidia Jetson Setup without full setup script
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
