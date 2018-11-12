@@ -195,7 +195,7 @@ Visualization Manager:
       Enabled: false
       History Length: 1
       Name: Imu
-      Topic: /imu
+      Topic: /racecar/imu
       Unreliable: false
       Value: false
   Enabled: true

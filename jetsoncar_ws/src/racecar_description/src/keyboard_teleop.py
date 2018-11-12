@@ -37,7 +37,7 @@ def vels(speed,turn):
 
 if __name__=="__main__":
   settings = termios.tcgetattr(sys.stdin)
-  pub = rospy.Publisher('/vesc/low_level/ackermann_cmd_mux/output', AckermannDriveStamped)
+  pub = rospy.Publisher('/racecar/ackermann_cmd', AckermannDriveStamped)
   rospy.init_node('keyop')
 
   x = 0
