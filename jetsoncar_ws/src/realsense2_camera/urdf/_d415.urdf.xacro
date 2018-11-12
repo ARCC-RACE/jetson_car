@@ -13,28 +13,29 @@ aluminum peripherial evalution case.
 
   <!-- The following values are approximate, and the camera node
    publishing TF values with actual calibrated camera extrinsic values -->
-  <xacro:property name="d415_cam_depth_to_left_ir_offset" value="-0.0275"/>
-  <xacro:property name="d415_cam_depth_to_right_ir_offset" value="0.0275"/>
+  <xacro:property name="d415_cam_depth_to_left_ir_offset" value="0.0"/>
+  <xacro:property name="d415_cam_depth_to_right_ir_offset" value="-0.050"/>
+  <xacro:property name="d415_cam_depth_to_color_offset" value="0.015"/>
 
   <!-- The following values model the aluminum peripherial case for the
     d415 camera, with the camera joint represented by the actual
     peripherial camera tripod mount -->
-  <xacro:property name="d415_cam_width" value="0.099"/>
-  <xacro:property name="d415_cam_height" value="0.035"/>
-  <xacro:property name="d415_cam_depth" value="0.0185"/>
-  <xacro:property name="d415_cam_mount_from_center_offset" value=".0375"/>
+  <xacro:property name="d415_cam_width" value="0.090"/>
+  <xacro:property name="d415_cam_height" value="0.03"/>
+  <xacro:property name="d415_cam_depth" value="0.02505"/>
+  <xacro:property name="d415_cam_mount_from_center_offset" value="0.0149"/>
 
   <!-- The following offset is relative the the physical d415 camera peripherial
     camera tripod mount -->
-  <xacro:property name="d415_cam_depth_px" value="0.00"/>
-  <xacro:property name="d415_cam_depth_py" value="-0.0425"/>
-  <xacro:property name="d415_cam_depth_pz" value="0.026"/>
+  <xacro:property name="d415_cam_depth_px" value="${d415_cam_mount_from_center_offset}"/>
+  <xacro:property name="d415_cam_depth_py" value="0.0175"/>
+  <xacro:property name="d415_cam_depth_pz" value="${d415_cam_height/2}"/>
 
   <material name="aluminum">
     <color rgba="0.5 0.5 0.5 1"/>
   </material>
 
-  <xacro:macro name="sensor_d415" params="parent *origin">
+  <xacro:macro name="sensor_d415" params="parent camera_name *origin">
 
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="camera_joint" type="fixed">
@@ -45,7 +46,7 @@ aluminum peripherial evalution case.
 
     <link name="camera_link">
       <visual>
-      <origin xyz="0.003 0 ${d415_cam_height/2}" rpy="0 0 ${M_PI/2}"/>
+      <origin xyz="0.007 0 ${d415_cam_height/2+0.0015}" rpy="0 0 ${M_PI/2}"/>
         <geometry>
           <!--<box size="${d415_cam_width} ${d415_cam_height} ${d415_cam_depth}"/>-->
           <mesh filename="package://realsense2_camera/meshes/d415.dae" />
@@ -110,5 +111,68 @@ aluminum peripherial evalution case.
       <child link="camera_right_ir_optical_frame" />
     </joint>
     <link name="camera_right_ir_optical_frame"/>
+
+    <!-- camera color joints and links -->
+    <joint name="camera_color_joint" type="fixed">
+      <origin xyz="0 ${d415_cam_depth_to_color_offset} 0" rpy="0 0 0" />
+      <parent link="camera_depth_frame" />
+      <child link="camera_color_frame" />
+    </joint>
+    <link name="camera_color_frame"/>
+
+    <joint name="camera_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_color_frame" />
+      <child link="camera_color_optical_frame" />
+    </joint>
+    <link name="camera_color_optical_frame"/>
+
+    <!-- D415 3D Depth Camera -->
+    <gazebo reference="camera_depth_frame">
+      <sensor name="realsense_d415" type="depth">
+        <always_on>1</always_on>
+        <visualize>1</visualize>
+        <camera name='${camera_name}'>
+          <horizontal_fov>1.1065</horizontal_fov>
+          <image> <!-- Values can be changed in physical version -->
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <depth_camera>
+            <output>depths</output>
+          </depth_camera>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="camera_link_controller" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>30.0</updateRate>
+          <cameraName>${camera_name}_ir</cameraName>
+          <imageTopicName>/${camera_name}/depth/image_raw</imageTopicName>
+          <cameraInfoTopicName>/${camera_name}/depth/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/${camera_name}/depth/image_raw</depthImageTopicName>
+          <depthImageInfoTopicName>/${camera_name}/depth/camera_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/${camera_name}/depth/points</pointCloudTopicName>
+          <frameName>/camera_depth_optical_frame</frameName>
+          <pointCloudCutoff>0.16</pointCloudCutoff>
+          <pointCloudCutoffmax>8</pointCloudCutoffmax>
+          <distortionK1>0.00000001</distortionK1>
+          <distortionK2>0.00000001</distortionK2>
+          <distortionK3>0.00000001</distortionK3>
+          <distortionT1>0.00000001</distortionT1>
+          <distortionT2>0.00000001</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
+      </sensor>
+    </gazebo>
+
   </xacro:macro>
 </robot>
