@@ -1,0 +1,19 @@
+<launch>
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racecar_description)/urdf/racecar.xacro'" />
+
+  <!-- publish joint sensor states -->
+  <node name="joint_state_publisher" type="joint_state_publisher" pkg="joint_state_publisher">
+    <param name="use_gui" value="TRUE" />
+  </node>
+
+  <!-- publish robot tf tree -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+    <remap from="/joint_states" to="/racecar/joint_states"/>
+  </node>
+
+  <!-- visualize robot using rviz -->
+  <node name="rviz" type="rviz" pkg="rviz" args="-d $(find racecar_description)/rviz_config/racecar.rviz" />
+
+</launch>

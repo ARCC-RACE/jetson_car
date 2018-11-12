@@ -8,7 +8,7 @@ This is the URDF model for the Intel RealSense 430 camera, in it's
 aluminum peripherial evaluation case.
 -->
 
-<robot name="sensor_d435" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="sensor_d435" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:macro name="sensor_d435" params="parent camera_name *origin">
     <xacro:property name="M_PI" value="3.1415926535897931" />
 
@@ -146,6 +146,11 @@ aluminum peripherial evaluation case.
             <near>0.1</near>
             <far>100</far>
           </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
         </camera>
         <plugin name="camera_link_controller" filename="libgazebo_ros_openni_kinect.so">
           <baseline>0.2</baseline>
