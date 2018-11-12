@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<robot name="racecar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Gazebo plugins -->
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/racecar</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+
+  <xacro:include filename="$(find racecar_description)/urdf/macros.xacro" />
+
+  <link name="base_link" />
+
+  <!-- Add chassis and it's inertia link -->
+
+  <link name="chassis">
+    <inertial>
+      <xacro:chassis_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:chassis_geometry/>
+      <material name="red" />
+    </visual>
+    <collision>
+      <xacro:chassis_geometry/> <!--Should simplify geometry for performance -->
+      <material name="red" />
+    </collision>
+  </link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="chassis" />
+  </joint>
+
+  <!-- Add the left rear wheel with its joints and tranmissions -->
+
+  <link name="left_rear_wheel">
+    <inertial>
+      <xacro:left_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_rear_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:left_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="left_rear_wheel_joint" type="continuous">
+    <origin xyz="0 0.1 0" rpy="1.5708 0 0" />
+    <parent link="chassis" />
+    <child link="left_rear_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100" />
+  </joint>
+
+  <xacro:wheel_transmission name="left_rear_wheel" />
+
+  <!-- Add the right rear wheel with its joints and tranmissions -->
+
+  <link name="right_rear_wheel">
+    <inertial>
+      <xacro:right_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_rear_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:right_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="right_rear_wheel_joint" type="continuous">
+    <origin xyz="0 -0.1 0" rpy="1.5708 0 0" />
+    <parent link="chassis" />
+    <child link="right_rear_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100" />
+  </joint>
+
+  <xacro:wheel_transmission name="right_rear_wheel" />
+
+  <!-- Add the left steering hinge with its joints and tranmissions -->
+
+  <link name="left_steering_hinge">
+    <inertial>
+      <xacro:steering_hinge_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_steering_hinge_geometry />
+      <material name="grey" />
+    </visual>
+  </link>
+
+  <joint name="left_steering_hinge_joint" type="revolute">
+    <origin xyz="0.325 0.1 0" rpy="0 1.5708 0" />
+    <parent link="chassis" />
+    <child link="left_steering_hinge" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.0" upper="1.0" effort="10" velocity="100" />
+  </joint>
+
+  <xacro:steering_hinge_transmission name="left_steering_hinge" />
+
+  <!-- Add the right steering hinge with its joints and tranmissions -->
+
+  <link name="right_steering_hinge">
+    <inertial>
+      <xacro:steering_hinge_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_steering_hinge_geometry />
+      <material name="grey" />
+    </visual>
+  </link>
+
+  <joint name="right_steering_hinge_joint" type="revolute">
+    <origin xyz="0.325 -0.1 0" rpy="0 1.5708 0" />
+    <parent link="chassis" />
+    <child link="right_steering_hinge" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.0" upper="1.0" effort="10" velocity="100" />
+  </joint>
+  <xacro:steering_hinge_transmission name="right_steering_hinge" />
+
+  <!-- Add the left front wheel with its joints and tranmissions -->
+
+  <link name="left_front_wheel">
+    <inertial>
+      <xacro:left_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:left_front_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:left_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="left_front_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="1.5708 0 0" />
+    <parent link="left_steering_hinge" />
+    <child link="left_front_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100" />
+  </joint>
+
+  <xacro:wheel_transmission name="left_front_wheel" />
+
+  <!-- Add the left front wheel with its joints and tranmissions -->
+
+  <link name="right_front_wheel">
+    <inertial>
+      <xacro:right_wheels_inertial_params />
+    </inertial>
+    <visual>
+      <xacro:right_front_wheel_geometry />
+      <material name="black" />
+    </visual>
+    <collision>
+      <xacro:right_wheels_collision_geometry />
+    </collision>
+  </link>
+
+  <joint name="right_front_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="1.5708 0 0" />
+    <parent link="right_steering_hinge" />
+    <child link="right_front_wheel" />
+    <axis xyz="0 0 -1" />
+    <limit effort="10" velocity="100"/>
+  </joint>
+
+  <xacro:wheel_transmission name="right_front_wheel" />
+
+  <!-- RealSense D415 Camera -->
+
+  <xacro:include filename="$(find realsense2_camera)/urdf/_d415.urdf.xacro"/>
+
+  <sensor_d415 parent="chassis" camera_name="front_cam">
+    <origin xyz="0.350 0 0.04" rpy="0 0 0"/>
+  </sensor_d415>
+
+  <!-- IMU -->
+
+  <link name="imu_link">
+    <visual>
+      <geometry>
+        <box size="0.001 0.002 0.0005" />
+      </geometry>
+      <material name="black" />
+    </visual>
+  </link>
+
+  <joint name="chassis_imu_joint" type="fixed">
+    <origin xyz="0.230 0.02 0.03" rpy="0 0 0" />
+    <parent link="chassis" />
+    <child link="imu_link" />
+  </joint>
+
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+  <!-- Add the remaining xacros -->
+
+  <xacro:include filename="$(find racecar_description)/urdf/racecar.gazebo" />
+  <xacro:include filename="$(find racecar_description)/urdf/materials.xacro" />
+
+</robot>
