@@ -3,6 +3,9 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 
 
 ## Getting Started
+- If you are on the jetson TX2 hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"`
+- If you are on other hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera_jetson"`
+
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
