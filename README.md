@@ -3,8 +3,8 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 
 
 ## Getting Started
-- If you are on the jetson TX2 hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"`
-- If you are on other hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera_jetson"`
+- If you are on the jetson TX2 hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in jetsoncar_ws
+- If you are on other hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_jetson"` in jetsoncar_ws
 
 
 ### Simulation Setup
