@@ -15,19 +15,22 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
  - `sudo apt-get install librealsense2`
  - `sudo apt-get install librealsense2-dev`
  - `sudo apt-get install librealsense2-dbg`
+ 
+ - `cd ~/Desktop/jetson_car/jetsoncar_ws`
+ - `catkin_make` (even if this fails)
+ - `soruce devel/setup.bash`
+ - `rosdep install racecar_description`
 
 ### Nvidia Jetson Setup without full setup script
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
 - Check to make sure you are running L4T version 28.2.1 for use with convenience scripts
  - If you version is off download jetpack here https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3
  - Follow this tutorial on reflashing the Jetson TX2 https://www.youtube.com/watch?v=D7lkth34rgM
-- clone https://github.com/jetsonhacks/installROSTX2.git to Desktop
+- ~~clone https://github.com/jetsonhacks/installROSTX2.git to Desktop
 - Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX
-(makes sure to install realsense before doing the kernal patches)
+(makes sure to install realsense before doing the kernal patches)~~
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
-- `cd ~/Desktop`
-- `installROSTX2/installROS.sh -p ros-kinetic-desktop`
-- `installRealSenseROSTx2/installRealSenseROS.sh ~/Desktop/jetson_car/jetson_car_ws`
+- Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
 
 ### Prerequisites
 
