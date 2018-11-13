@@ -26,9 +26,8 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 - Check to make sure you are running L4T version 28.2.1 for use with convenience scripts
  - If you version is off download jetpack here https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3
  - Follow this tutorial on reflashing the Jetson TX2 https://www.youtube.com/watch?v=D7lkth34rgM
-- ~~clone https://github.com/jetsonhacks/installROSTX2.git to Desktop
-- Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX
-(makes sure to install realsense before doing the kernal patches)~~
+- ~~clone https://github.com/jetsonhacks/installROSTX2.git to Desktop~~
+- ~~Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX(makes sure to install realsense before doing the kernal patches)~~
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
 - Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
 
