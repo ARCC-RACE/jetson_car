@@ -9,13 +9,12 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
- - https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md
- - `sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCD` (Is this needed?)
- - `sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u` (Is this needed? Try without -u arg)
- - `sudo apt-get install librealsense2`
- - `sudo apt-get install librealsense2-dev`
- - `sudo apt-get install librealsense2-dbg`
- 
+   - https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md
+   - `sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCD` (Is this needed?)
+   - `sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u` (Is this needed? Try without -u arg)
+   - `sudo apt-get install librealsense2`
+   - `sudo apt-get install librealsense2-dev`
+   - `sudo apt-get install librealsense2-dbg`
  - `cd ~/Desktop/jetson_car/jetsoncar_ws`
  - `catkin_make` (even if this fails)
  - `soruce devel/setup.bash`
@@ -24,8 +23,8 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 ### Nvidia Jetson Setup without full setup script
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
 - Check to make sure you are running L4T version 28.2.1 for use with convenience scripts
- - If you version is off download jetpack here https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3
- - Follow this tutorial on reflashing the Jetson TX2 https://www.youtube.com/watch?v=D7lkth34rgM
+   - If you version is off download jetpack here https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3
+   - Follow this tutorial on reflashing the Jetson TX2 https://www.youtube.com/watch?v=D7lkth34rgM
 - ~~clone https://github.com/jetsonhacks/installROSTX2.git to Desktop~~
 - ~~Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX (makes sure to install realsense before doing the kernal patches)~~
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
