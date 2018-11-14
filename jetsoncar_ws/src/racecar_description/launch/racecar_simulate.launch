@@ -7,7 +7,7 @@
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racecar_description)/urdf/racecar.xacro'" />
 
   <!-- publish robot tf tree -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
     <remap from="/joint_states" to="/racecar/joint_states"/>
   </node>
 
