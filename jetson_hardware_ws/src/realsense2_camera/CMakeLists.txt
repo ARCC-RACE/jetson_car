@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(realsense2_jetson)
+project(realsense2_camera)
 
 option(BUILD_WITH_OPENMP "Use OpenMP" OFF)
 
