@@ -223,7 +223,7 @@
       </plugin>
       <pose>0 0 0 0 0 0</pose>
     </sensor>
-  </gazebo>
+   </gazebo>
 
   <!-- Add the remaining xacros -->
 
