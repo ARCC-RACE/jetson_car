@@ -4,8 +4,7 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 
 ## Getting Started
 - If you are on the jetson TX2 hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in jetsoncar_ws
-- If you are on other hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_jetson"` in jetsoncar_ws
-
+- In `jetson_hardware_workspace` there is a properly versioned package for the realsense D400 camera.
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
@@ -78,7 +77,7 @@ Please read [CONTRIBUTING.md](https://github.com/Michael-Equi/ROV_Test_Bench/blo
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
 ## Authors
 
