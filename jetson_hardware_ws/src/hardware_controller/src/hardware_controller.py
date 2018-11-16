@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+#Poorly written code DO NOT USE!
+# Use CPP program instead 
+
 import serial
-import rospy 
+import rospy
 from control_msgs.msg import JointControllerState
 
 steeringVal = 0
@@ -24,7 +27,7 @@ def formPacket(throttle, steering):
    return packet
 
 arduinoSer = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-   
+
 rospy.init_node("hardware_controller")
 SteeringSub = rospy.Subscriber("racecar/left_steering_hinge_position_controller/state", JointControllerState, updateSteering)
 throttleSub = rospy.Subscriber("racecar/left_rear_wheel_velocity_controller/state", JointControllerState, updateThrottle)
@@ -34,4 +37,3 @@ while not rospy.is_shutdown():
    rospy.loginfo(steeringVal)
    arduinoSer.write(formPacket(throttleVal, steeringVal))
    rate.sleep()
-      
