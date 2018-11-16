@@ -7,6 +7,14 @@ int main(int argc, char** argv){
   ros::NodeHandle nh1; //Node handle for dealing with the controller_manager
   ros::NodeHandle nh2; //Node handle for dealing with hardware_interface CB timers
 
+  /*
+  Two seperate callback queues are required to properly handle the
+  services of the control Controller_Manager and the callbacks of the
+  ros::timer that updates the hardware_interface values.
+
+  See https://answers.ros.org/question/119316/using-controller-manager-and-getting-it-to-work/
+  */
+
   ros::CallbackQueue nh1_callback_queue;
   ros::CallbackQueue nh2_callback_queue;
 
@@ -21,6 +29,6 @@ int main(int argc, char** argv){
 
   Racecar racecar(nh1, nh2);
   ros::waitForShutdown();
-  
+
   return 0;
 }

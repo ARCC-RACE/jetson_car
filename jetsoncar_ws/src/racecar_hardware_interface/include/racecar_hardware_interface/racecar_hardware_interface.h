@@ -9,6 +9,8 @@
 #include <ros/ros.h>
 #include <memory> //For shared pointer wrapper
 
+#include "racecar_hardware_interface/racecar_arduino_com.h"
+
 class Racecar : public hardware_interface::RobotHW
 {
   hardware_interface::JointStateInterface jnt_state_interface;
@@ -22,12 +24,14 @@ class Racecar : public hardware_interface::RobotHW
   double vel[6];
   double eff[6];
 
-  ros::NodeHandle& _nh1; //Node handle for dealing with the controller_manager
-  ros::NodeHandle& _nh2; //Node handle for dealing with hardware_interface timers
-  std::shared_ptr<controller_manager::ControllerManager> _cm;
+  ros::NodeHandle& nh1_; //Node handle for dealing with the controller_manager
+  ros::NodeHandle& nh2_; //Node handle for dealing with hardware_interface timers
+  std::shared_ptr<controller_manager::ControllerManager> cm_;
 
   ros::Duration loop_time; // 1/50  ros::Duration elapsed_time(0.02);
   ros::Timer timer_loop;
+
+  HardwareCom hwController; //for hardware serial communcation with arduino
 
 public:
   Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2);
