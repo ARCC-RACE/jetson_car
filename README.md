@@ -1,19 +1,21 @@
 # jetson_car
 Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson Car (TX2) with RealSense D400
 
+Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-BQ1HAR4U3CumyJK
 
 ## Getting Started
+- Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - If you are on the jetson TX2 hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in jetsoncar_ws
-- In `jetson_hardware_workspace` there is a properly versioned package for the realsense D400 camera.
+- In `jetson_hardware_workspace` there is a properly versioned package for running the realsense D400 camera on the nvidia jetson TX2 hardware.
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
    - https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md
-   - `sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCD` (Is this needed?)
-   - `sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u` (Is this needed? Try without -u arg)
+   - `sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCD`
+   - `sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u`
    - `sudo apt-get install librealsense2`
    - `sudo apt-get install librealsense2-dev`
-   - `sudo apt-get install librealsense2-dbg`
+   - `sudo apt-get install librealsense2-dbg`(May not be needed)
  - `cd ~/Desktop/jetson_car/jetsoncar_ws`
  - `catkin_make` (even if this fails)
  - `soruce devel/setup.bash`

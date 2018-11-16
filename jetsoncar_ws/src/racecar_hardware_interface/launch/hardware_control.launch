@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racecar_description)/urdf/racecar.xacro'" />
+
+  <!-- publish robot tf tree -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+    <remap from="/joint_states" to="/racecar/joint_states"/>
+  </node>
+
+  <!-- Start hardware communication controllers (interface) -->
+  <node name="racecar_hardware_interface" pkg="racecar_hardware_interface" type="racecar_hardware_interface_node" output="screen" ns="/racecar"/>
+
+  <!-- Start robot contorllers -->
+  <include file="$(find racecar_description)/launch/racecar_control.launch"/>
+
+  <!-- visualize robot using rviz -->
+  <node name="rviz" type="rviz" pkg="rviz" args="-d $(find racecar_description)/rviz_config/racecar.rviz" />
+
+</launch>
