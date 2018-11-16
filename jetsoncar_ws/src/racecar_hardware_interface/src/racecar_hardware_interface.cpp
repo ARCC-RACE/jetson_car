@@ -2,11 +2,12 @@
 // http://wiki.ros.org/ros_control/Tutorials/Create%20your%20own%20hardware%20interface
 #include "racecar_hardware_interface/racecar_hardware_interface.h"
 
-Racecar::Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2): _nh1(nh1), _nh2(nh2), loop_time(0.02)
+Racecar::Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2): nh1_(nh1), nh2_(nh2), loop_time(0.02), hwController("/dev/ttyACM0", 115200)
  {
-   controller_manager::ControllerManager *cm = new controller_manager::ControllerManager(this, _nh1); //start the controller manager
-   _cm.reset(cm); //Transfer pointer into a shared_ptr wrapper for protection
-   timer_loop = _nh2.createTimer(loop_time, &Racecar::update, this);
+   controller_manager::ControllerManager *cm = new controller_manager::ControllerManager(this, nh1_); //start the controller manager
+   cm_.reset(cm); //Transfer pointer into a shared_ptr wrapper for protection
+
+   timer_loop = nh2_.createTimer(loop_time, &Racecar::update, this);
 
    // connect and register the joint state interface
    hardware_interface::JointStateHandle state_handle_left_rear_wheel("left_rear_wheel_joint", &pos[0], &vel[0], &eff[0]);
@@ -54,16 +55,21 @@ Racecar::Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2): _nh1(nh1), _nh2(nh
 //Set the physical values for the joint
 //number of joints = 6
 void Racecar::write(){
-  for(int i=0; i<6; i++){ //Iterate through all 6 joints
-    ROS_INFO_STREAM("Joint data: " << i << " " << cmd[i]);
-  }
+  hwController.setController(6, cmd);
+  /*for(int i=0; i<6; i++){ //Iterate through all 6 joints
+    ROS_DEBUG_STREAM("Joint data: " << i << " " << cmd[i]);
+  }*/
 }
 
 //Read the joint sensors in order to publish joint state
 void Racecar::read(){
-  for(int i=0; i<6; i++){ //Iterate through 6 effort joints
-    vel[i] = 0;
-    ROS_INFO_STREAM("wheel velocity: " << vel[i]);
+  for(int i=0; i<4; i++){ //Iterate through 4 effort velocity joints
+    vel[i] = hwController.readController(static_cast<Joint>(i));
+    ROS_DEBUG_STREAM("Wheel velocity: " << vel[i]);
+  }
+  for(int i=4; i<6; i++){ //Iterate through 2 effort position joints
+    pos[i] = hwController.readController(static_cast<Joint>(i));
+    ROS_DEBUG_STREAM("Steering position: " << pos[i]);
   }
 }
 
@@ -71,6 +77,6 @@ void Racecar::read(){
 void Racecar::update(const ros::TimerEvent& e){
   ros::Duration elapsed_time = ros::Duration(e.current_real - e.last_real);
   read();
-  _cm->update(ros::Time::now(), elapsed_time);
+  cm_->update(ros::Time::now(), elapsed_time);
   write();
 }
