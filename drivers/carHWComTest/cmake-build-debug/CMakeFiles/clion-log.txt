@@ -1,0 +1,4 @@
+/home/michael/IDEs/clion-2018.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/michael/Desktop/carHWComTest
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/michael/Desktop/carHWComTest/cmake-build-debug
