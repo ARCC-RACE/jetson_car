@@ -1,4 +1,4 @@
-#include <racecar_hardware_interface/racecar_arduino_com.h>
+#include "racecar_hardware_interface/racecar_arduino_com.h"
 
 /**
 * @breif constrians value between min and max inclusive. Value is returned by reference.
@@ -31,7 +31,8 @@ T map(T input, T inMin, T inMax, T outMin, T outMax){
 }
 
 
-HardwareCom::HardwareCom(std::string port, int baud): connection(port, baud, serial::Timeout::simpleTimeout(10))
+HardwareCom::HardwareCom(std::string port, int baud): connection(port, baud, serial::Timeout::simpleTimeout(10), serial::eightbits, serial::parity_even, serial::stopbits_one)
+//Serial set to SER_8E1 (8 bit, even parity, 1 stop bit)
 {
   //Set vars to zero
   steeringPosition = 0;
@@ -49,10 +50,10 @@ HardwareCom::HardwareCom(std::string port, int baud): connection(port, baud, ser
 void HardwareCom::setController(int length, double* cmd){
   double steeringCmd = cmd[LEFT_STEERING_HINGE];
   double throttleCmd = cmd[LEFT_REAR_WHEEL];
-  ROS_INFO_STREAM("Steering cmd: " << steeringCmd);
-  ROS_INFO_STREAM("Throttle cmd: " << throttleCmd);
-  int steeringVal =  map<double>(steeringCmd, -1, 1, -1000, 1000);
-  int throttleVal =  map<double>(throttleCmd, -10, 10, -1000, 1000);
+  ROS_DEBUG_STREAM("Steering cmd: " << steeringCmd);
+  ROS_DEBUG_STREAM("Throttle cmd: " << throttleCmd);
+  auto steeringVal =  static_cast<int>(map<double>(steeringCmd, -1, 1, -1000, 1000));
+  auto throttleVal =  static_cast<int>(map<double>(throttleCmd, -10, 10, -1000, 1000));
   constrain(steeringVal, -1000, 1000);
 
   //Safety precausion if throttle value goes out of bounds
@@ -61,20 +62,23 @@ void HardwareCom::setController(int length, double* cmd){
     throttleVal = 0;
   }
 
-  //Fill packetDown with four bytes with proper packet structure
-  packetDown[3] = steeringVal >> 8;               //Steering MSB
-  packetDown[2] = steeringVal & 0b0000000011111111; //Steering LSB
-  packetDown[1] = throttleVal >> 8;               //Throttle  MSB
-  packetDown[0] = throttleVal & 0b0000000011111111; //Throttle LSB
+  //Fill packetDown with four bytes with proper packet structure and PEC
+  packetDown[3] = static_cast<uint8_t>(steeringVal >> 8);                 //Steering MSB
+  packetDown[2] = static_cast<uint8_t>(steeringVal & 0b0000000011111111); //Steering LSB
+  packetDown[1] = static_cast<uint8_t>(throttleVal >> 8);                 //Throttle  MSB
+  packetDown[0] = static_cast<uint8_t>(throttleVal & 0b0000000011111111); //Throttle LSB
 
-  size_t bytesSent = connection.write(packetDown, 4); //Sending 4 bytes
+  packetDown[4] = static_cast<uint8_t >(packetDown[0]^packetDown[1]^packetDown[2]^packetDown[3]); //PEC by XORing all values
 
-  if(bytesSent != 4){
-    ROS_ERROR("Number of bytes sent not equal to four!");
+  size_t bytesSent = connection.write(packetDown, packetDownSize); //Sending 4 bytes
+
+  if(bytesSent != packetDownSize){
+    ROS_ERROR("Number of bytes sent not equal to %d!", packetDownSize);
   }
 
   steeringPosition = steeringCmd; //Temp
-  wheelVelocity = throttleCmd; //Temp
+  wheelVelocity = throttleCmd;    //Temp
+
   /*usleep(100); //sleep for 100 microseconds
 
   connection.read(packetUp, 4);
@@ -90,7 +94,7 @@ double HardwareCom::readController(Joint joint){
 
   if(joint == LEFT_REAR_WHEEL || joint == RIGHT_REAR_WHEEL || joint == LEFT_FRONT_WHEEL || joint == RIGHT_FRONT_WHEEL){
     return(wheelVelocity);
-  } else if(joint == LEFT_STEERING_HINGE || joint == LEFT_STEERING_HINGE) {
+  } else if(joint == LEFT_STEERING_HINGE || joint == RIGHT_STEERING_HINGE) {
     return(steeringPosition);
   } else {
     return 0;

@@ -27,11 +27,12 @@ class HardwareCom
   //Serial object that manages USB serial connection
   serial::Serial connection;
 
-  //Packet structure = |steering MSB|steering LSB|throttle MSB|throttle LSB|
-  uint8_t packetDown[4]; //Packet to the arduino (length = 4)
+  //Packet structure = |PEC|steering MSB|steering LSB|throttle MSB|throttle LSB|
+  uint8_t packetDown[5];        //Packet to the arduino (length = 4 + PEC)
+  const int packetDownSize = 5; //number of bytes of data + PEC byte
 
-  uint8_t packetUp[4];     //Packet from the arduino (length = 4)
-  double steeringPosition; //Member var for holding "actual" steering angle
+  uint8_t packetUp[4];      //Packet from the arduino (length = 4) (unused)
+  double steeringPosition;  //Member var for holding "actual" steering angle
   double wheelVelocity;     //Member var for holding "actual" wheel velocity
 
 
