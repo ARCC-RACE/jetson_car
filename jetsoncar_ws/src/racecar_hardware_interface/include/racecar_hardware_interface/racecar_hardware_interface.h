@@ -35,7 +35,7 @@ class Racecar : public hardware_interface::RobotHW
 
 public:
   Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2);
-  void read(); //update the JointSate value
+  void read();  //update the JointSate value
   void write(); //update the motor/servo to the joints setpoint
   void update(const ros::TimerEvent& e);
 };

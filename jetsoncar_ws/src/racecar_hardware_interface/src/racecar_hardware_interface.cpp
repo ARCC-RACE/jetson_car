@@ -64,7 +64,7 @@ void Racecar::write(){
 //Read the joint sensors in order to publish joint state
 void Racecar::read(){
   for(int i=0; i<4; i++){ //Iterate through 4 effort velocity joints
-    vel[i] = hwController.readController(static_cast<Joint>(i));
+    vel[i] = hwController.readController(static_cast<Joint>(i))
     ROS_DEBUG_STREAM("Wheel velocity: " << vel[i]);
   }
   for(int i=4; i<6; i++){ //Iterate through 2 effort position joints
