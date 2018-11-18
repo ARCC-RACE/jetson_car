@@ -4,7 +4,7 @@
 #include <bitset>
 
 int main() {
-    HardwareCom arduinoConnection("/dev/ttyACM0", 115200);
+    HardwareCom arduinoConnection("/dev/ttyUSB0", 115200);
     double testArr[6] = {5, 5, 5, 5, 1, 0.5};
     while(true){
         for(double i = -1; i < 1; i+=0.001) {

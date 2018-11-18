@@ -1,3 +1,3 @@
-/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir
+/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir

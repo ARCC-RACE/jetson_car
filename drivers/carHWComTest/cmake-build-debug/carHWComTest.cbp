@@ -8,43 +8,43 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/michael/Desktop/carHWComTest/cmake-build-debug"/>
+				<Option working_dir="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/michael/Desktop/carHWComTest/cmake-build-debug"/>
+				<Option working_dir="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/michael/Desktop/carHWComTest/cmake-build-debug"/>
+				<Option working_dir="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="carHWComTest">
-				<Option output="/home/michael/Desktop/carHWComTest/cmake-build-debug/carHWComTest" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/michael/Desktop/carHWComTest/cmake-build-debug"/>
+				<Option output="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/carHWComTest" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/home/michael/Desktop/carHWComTest/."/>
+					<Add directory="/home/michael/Desktop/jetson_car/drivers/carHWComTest/."/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
 					<Add directory="/usr/include/c++/5/backward"/>
@@ -55,20 +55,20 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 carHWComTest"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 carHWComTest"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="carHWComTest/fast">
-				<Option output="/home/michael/Desktop/carHWComTest/cmake-build-debug/carHWComTest" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/michael/Desktop/carHWComTest/cmake-build-debug"/>
+				<Option output="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/carHWComTest" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/home/michael/Desktop/carHWComTest/."/>
+					<Add directory="/home/michael/Desktop/jetson_car/drivers/carHWComTest/."/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
 					<Add directory="/usr/include/c++/5/backward"/>
@@ -79,26 +79,26 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 carHWComTest/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 carHWComTest/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/michael/Desktop/carHWComTest/main.cpp">
+		<Unit filename="/home/michael/Desktop/jetson_car/drivers/carHWComTest/main.cpp">
 			<Option target="carHWComTest"/>
 		</Unit>
-		<Unit filename="/home/michael/Desktop/carHWComTest/racecar_arduino_com.cpp">
+		<Unit filename="/home/michael/Desktop/jetson_car/drivers/carHWComTest/racecar_arduino_com.cpp">
 			<Option target="carHWComTest"/>
 		</Unit>
-		<Unit filename="/home/michael/Desktop/carHWComTest/serial.cpp">
+		<Unit filename="/home/michael/Desktop/jetson_car/drivers/carHWComTest/serial.cpp">
 			<Option target="carHWComTest"/>
 		</Unit>
-		<Unit filename="/home/michael/Desktop/carHWComTest/unix.cpp">
+		<Unit filename="/home/michael/Desktop/jetson_car/drivers/carHWComTest/unix.cpp">
 			<Option target="carHWComTest"/>
 		</Unit>
-		<Unit filename="/home/michael/Desktop/carHWComTest/CMakeLists.txt">
+		<Unit filename="/home/michael/Desktop/jetson_car/drivers/carHWComTest/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

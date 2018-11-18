@@ -68,9 +68,9 @@ void HardwareCom::setController(int length, double* cmd){
   packetDown[1] = static_cast<uint8_t>(throttleVal >> 8);                 //Throttle  MSB
   packetDown[0] = static_cast<uint8_t>(throttleVal & 0b0000000011111111); //Throttle LSB
 
-  packetDown[4] = static_cast<uint8_t >(packetDown[0]^packetDown[1]^packetDown[2]^packetDown[3]); //PEC by XORing all values
+  packetDown[4] = static_cast<uint8_t >(packetDown[0]^packetDown[1]^packetDown[2]^packetDown[3]); //PEC value obtained by XORing all values
 
-  size_t bytesSent = connection.write(packetDown, packetDownSize); //Sending 4 bytes
+  size_t bytesSent = connection.write(packetDown, packetDownSize); //Sending 4 bytes + PEC
 
   if(bytesSent != packetDownSize){
     ROS_ERROR("Number of bytes sent not equal to %d!", packetDownSize);
