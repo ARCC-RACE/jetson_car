@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/michael/Desktop/carHWComTest/main.cpp" "/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/main.cpp.o"
-  "/home/michael/Desktop/carHWComTest/racecar_arduino_com.cpp" "/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/racecar_arduino_com.cpp.o"
-  "/home/michael/Desktop/carHWComTest/serial.cpp" "/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/serial.cpp.o"
-  "/home/michael/Desktop/carHWComTest/unix.cpp" "/home/michael/Desktop/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/unix.cpp.o"
+  "/home/michael/Desktop/jetson_car/drivers/carHWComTest/main.cpp" "/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/main.cpp.o"
+  "/home/michael/Desktop/jetson_car/drivers/carHWComTest/racecar_arduino_com.cpp" "/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/racecar_arduino_com.cpp.o"
+  "/home/michael/Desktop/jetson_car/drivers/carHWComTest/serial.cpp" "/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/serial.cpp.o"
+  "/home/michael/Desktop/jetson_car/drivers/carHWComTest/unix.cpp" "/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/CMakeFiles/carHWComTest.dir/unix.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

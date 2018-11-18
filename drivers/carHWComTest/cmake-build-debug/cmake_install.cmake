@@ -1,4 +1,4 @@
-# Install script for directory: /home/michael/Desktop/carHWComTest
+# Install script for directory: /home/michael/Desktop/jetson_car/drivers/carHWComTest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/michael/Desktop/carHWComTest/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/michael/Desktop/jetson_car/drivers/carHWComTest/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

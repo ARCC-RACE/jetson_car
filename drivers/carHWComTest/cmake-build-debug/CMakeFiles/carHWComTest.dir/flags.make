@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/michael/Desktop/carHWComTest/. 
+CXX_INCLUDES = -I/home/michael/Desktop/jetson_car/drivers/carHWComTest/. 
 

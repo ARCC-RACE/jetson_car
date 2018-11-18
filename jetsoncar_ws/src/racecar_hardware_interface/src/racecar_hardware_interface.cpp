@@ -2,7 +2,7 @@
 // http://wiki.ros.org/ros_control/Tutorials/Create%20your%20own%20hardware%20interface
 #include "racecar_hardware_interface/racecar_hardware_interface.h"
 
-Racecar::Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2): nh1_(nh1), nh2_(nh2), loop_time(0.02), hwController("/dev/ttyACM0", 115200)
+Racecar::Racecar(ros::NodeHandle& nh1, ros::NodeHandle& nh2): nh1_(nh1), nh2_(nh2), loop_time(0.02), hwController("/dev/ttyUSB0", 115200)
  {
    controller_manager::ControllerManager *cm = new controller_manager::ControllerManager(this, nh1_); //start the controller manager
    cm_.reset(cm); //Transfer pointer into a shared_ptr wrapper for protection
@@ -64,7 +64,7 @@ void Racecar::write(){
 //Read the joint sensors in order to publish joint state
 void Racecar::read(){
   for(int i=0; i<4; i++){ //Iterate through 4 effort velocity joints
-    vel[i] = hwController.readController(static_cast<Joint>(i))
+    vel[i] = hwController.readController(static_cast<Joint>(i));
     ROS_DEBUG_STREAM("Wheel velocity: " << vel[i]);
   }
   for(int i=4; i<6; i++){ //Iterate through 2 effort position joints
