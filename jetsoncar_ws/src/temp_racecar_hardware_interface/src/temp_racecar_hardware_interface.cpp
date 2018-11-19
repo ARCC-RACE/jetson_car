@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
   ros::Subscriber left_rear_wheel_pub = nh.subscribe("/racecar/left_front_wheel_velocity_controller/command", 1, updateThrottle);
   ros::Subscriber left_steering_hinge_pub = nh.subscribe("/racecar/left_steering_hinge_position_controller/command", 1, updateSteering);
 
-  ros::Publisher JointStatePub = nh.advertise<sensor_msgs::JointState>("/racecar/joint_states", 1);
+  ros::Publisher JointStatePub = nh.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
   ros::Rate rate(50); //50Hz
 
