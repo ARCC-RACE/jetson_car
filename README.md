@@ -31,6 +31,7 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - ~~Follow the directions to install this repository https://github.com/jetsonhacks/installRealSense2ROSTX (makes sure to install realsense before doing the kernal patches)~~
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
 - Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
+- Install USB driver for some arduino nanos https://devtalk.nvidia.com/default/topic/1032862/jetson-tx2/a-guide-to-solve-usb-serial-driver-problems-on-tx2/
 
 ### Prerequisites
 
