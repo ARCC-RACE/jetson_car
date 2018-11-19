@@ -47,8 +47,8 @@
       <file leaf-file-name="racecar_arduino_com.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/racecar_hardware_interface/racecar_arduino_com.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="36" selection-start-line="17" selection-start-column="20" selection-end-line="36" />
+            <state relative-caret-position="300">
+              <caret line="26" column="28" lean-forward="true" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -85,7 +85,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-92" />
+    <option name="x" value="65" />
     <option name="y" value="-4" />
     <option name="width" value="2495" />
     <option name="height" value="1444" />
@@ -161,24 +161,23 @@
       <workItem from="1542416066240" duration="8831000" />
       <workItem from="1542566300049" duration="2043000" />
       <workItem from="1542569466013" duration="331000" />
-      <workItem from="1542570855125" duration="631000" />
+      <workItem from="1542570855125" duration="722000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31366000" />
+    <option name="totallyTimeSpent" value="31457000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="2495" height="1444" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2496994" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2496994" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Messages" order="0" weight="0.32884902" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.3295964" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="3" visible="true" weight="0.32884902" />
+      <window_info anchor="bottom" id="Run" order="3" weight="0.32884902" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -436,8 +435,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/racecar_hardware_interface/racecar_arduino_com.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="36" selection-start-line="17" selection-start-column="20" selection-end-line="36" />
+        <state relative-caret-position="300">
+          <caret line="26" column="28" lean-forward="true" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
         </state>
       </provider>
     </entry>
