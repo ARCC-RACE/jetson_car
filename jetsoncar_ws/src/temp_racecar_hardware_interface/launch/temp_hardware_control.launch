@@ -10,9 +10,9 @@
   <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_description" />
 
   <!-- joy node -->
-  <node pkg="joy" type="joy_node" name="joy"/>
+  <!-- <node pkg="joy" type="joy_node" name="joy"/> -->
 
-  <!-- keyboard teleop -->
+  <!-- xbox one joy teleop -->
   <node pkg="racecar_description" type="joy_teleop.py" name="joy_teleop"/>
 
 </launch>
