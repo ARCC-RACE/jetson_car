@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(realsense2_camera)
+project(realsense2_description)
 
 option(BUILD_WITH_OPENMP "Use OpenMP" OFF)
 option(SET_USER_BREAK_AT_STARTUP "Set user wait point in startup (for debug)" OFF)
