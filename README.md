@@ -7,6 +7,7 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - If you are on the jetson TX2 hardware run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in jetsoncar_ws
 - In `jetson_hardware_workspace` there is a properly versioned package for running the realsense D400 camera on the nvidia jetson TX2 hardware.
+- Download Xbox One Controller Driver https://github.com/paroj/xpad (Try controller without downloading this first)
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
