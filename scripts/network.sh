@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 if ! grep "192.168.1.100 master" /etc/hosts ; then
    sudo -- sh -c "echo 192.168.1.100   master >> /etc/hosts"
