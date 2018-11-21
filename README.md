@@ -5,8 +5,11 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 
 ## Getting Started
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
+- If running on a Desktop computer run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
 - If you want to run the realsense2 ROS node on a desktop use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws
 - Download Xbox One Controller Driver https://github.com/paroj/xpad (Try controller without downloading this first)
+- On the user interface ("remote" control machine) add `192.168.1.100 racecar` to the `/etc/hosts`
+- When communicating with the jetson run `export ROS_MASTER_URI=http://racecar:11311`
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
@@ -31,6 +34,7 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
 - Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
 - Install USB driver for some arduino nanos https://devtalk.nvidia.com/default/topic/1032862/jetson-tx2/a-guide-to-solve-usb-serial-driver-problems-on-tx2/
+- Run the `/scripts/jetson.sh` script to setup network
 
 ### Prerequisites
 

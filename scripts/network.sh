@@ -9,7 +9,7 @@ if ! grep "192.168.1.101 control" /etc/hosts ; then
 fi
 
 
-if [ $(hostname -I | grep 192.168.1.100) == "192.168.1.100" ]; then
+if [ hostname -I | grep 192.168.1.100 == "192.168.1.100" ]; then
    echo "You are on the jetson with the IP of $(hostname -I)"
    if ! grep "export ROS_HOSTNAME=master" ~/.bashrc ; then
       echo -e "\nexport ROS_HOSTNAME=master" >> ~/.bashrc
@@ -17,7 +17,7 @@ if [ $(hostname -I | grep 192.168.1.100) == "192.168.1.100" ]; then
    fi
    echo -e "\n\nYou are now configured as master!"
 
-elif [ $(hostname -I | grep 192.168.1.101) == "192.168.1.101" ]; then
+elif [ hostname -I | grep 192.168.1.101 == "192.168.1.101" ]; then
    echo "You are on the control computer with the IP of $(hostname -I)"
    if ! grep "export ROS_HOSTNAME=master" ~/.bashrc ; then
       echo -e "\nexport ROS_HOSTNAME=control" >> ~/.bashrc
