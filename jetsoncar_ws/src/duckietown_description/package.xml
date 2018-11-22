@@ -1,0 +1,13 @@
+<package>
+  <name>duckietown_description</name>
+  <version>0.0.1</version>
+  <description>
+    URDF for Duckiebot.
+  </description>
+  <author>Jose Capriles</author>
+  <maintainer email="jcapriles@theconstructsim.com">Jose Capriles</maintainer>
+  <license>LGPL</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>urdf</run_depend>
+  <run_depend>xacro</run_depend>
+</package>
