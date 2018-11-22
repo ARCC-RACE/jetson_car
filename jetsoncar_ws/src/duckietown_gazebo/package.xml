@@ -16,7 +16,7 @@
   <run_depend>gazebo_ros</run_depend>
   <run_depend>duckietown_msgs</run_depend>
   <run_depend>message_runtime</run_depend>
-  
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <gazebo_ros gazebo_model_path="${prefix}/models"/>
