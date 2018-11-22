@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="duckietown" >
+  
+  <gazebo reference="wheel_left_link">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo>
+	
+  <gazebo reference="wheel_right_link">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo>
+	  
+  <!-- gazebo reference="caster_front_link">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo-->
+	  
+  <!--gazebo reference="caster_back_link">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <kp>0.0</kp>
+    <kd>0.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo-->
+	  
+  <gazebo reference="base_link">
+    <material>Gazebo/Blue</material>
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+    <sensor type="contact" name="bumpers">
+      <always_on>1</always_on>
+      <update_rate>50.0</update_rate>
+      <visualize>true</visualize>
+      <contact>
+        <collision>base_footprint_collision_base_link</collision>
+      </contact>
+    </sensor>
+  </gazebo>
+
+
+  <gazebo reference="duck_link">
+    <kp>1000000.0</kp>
+    <kd>10.0</kd>
+    <mu1>10</mu1>
+    <mu2>10</mu2>
+    <fdir1>1 0 0</fdir1>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.003</minDepth>
+  </gazebo>
+ 
+  <gazebo reference="camera_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <legacyMode>false</legacyMode>
+      <alwaysOn>true</alwaysOn>
+      <publishWheelTF>true</publishWheelTF>
+      <publishTf>1</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
+      <updateRate>100.0</updateRate>
+      <leftJoint>wheel_left_joint</leftJoint>
+      <rightJoint>wheel_right_joint</rightJoint>
+      <wheelSeparation>1.1</wheelSeparation>
+      <wheelDiameter>0.52</wheelDiameter>
+      <wheelAcceleration>1.0</wheelAcceleration>
+      <torque>20</torque>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+
+  <!-- camera -->
+  <gazebo reference="camera_link">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.04</horizontal_fov>
+        <image>
+          <width>320</width>
+          <height>240</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>50</far>
+        </clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0</updateRate>
+        <cameraName>duckbot/camera1</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  
+  <!-- imu -->
+  <gazebo>
+    <plugin name="gazebo_ros_imu_controller" filename="libgazebo_ros_imu.so">
+      <!-- <robotNamespace>/duckiebot/</robotNamespace> -->
+      <topicName>imu/data</topicName>
+      <serviceName>imu/service</serviceName>
+      <bodyName>base_link</bodyName>
+      <gaussianNoise>0</gaussianNoise>
+      <rpyOffsets>0 0 0</rpyOffsets>
+      <updateRate>30.0</updateRate>
+      <alwaysOn>true</alwaysOn>
+      <gaussianNoise>0</gaussianNoise>
+    </plugin>
+  </gazebo>
+
+</robot>
