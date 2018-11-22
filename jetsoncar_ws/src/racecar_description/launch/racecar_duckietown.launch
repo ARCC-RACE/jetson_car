@@ -14,7 +14,7 @@
   </node>
 
   <!-- Spawn the robot in gazebo -->
-  <node name="racecar_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model racecar -z 0.05 -y 3" />
+  <node name="racecar_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model racecar -z 0.05 -y 2" />
 
   <!-- Start robot contorllers -->
   <include file="$(find racecar_description)/launch/racecar_control.launch"/>
