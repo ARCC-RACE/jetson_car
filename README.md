@@ -23,6 +23,11 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
  - `catkin_make` (even if this fails)
  - `soruce devel/setup.bash`
  - `rosdep install racecar_description`
+ - Install Tensor Flow https://www.tensorflow.org/install/ (download GPU version if you have one)
+    - `sudo pip install tensorflow-gpu`
+    - If running python program fails with error `ImportError: libcudnn.so.7: cannot open shared object file: No such file or directory` see https://stackoverflow.com/questions/41991101/importerror-libcudnn-when-running-a-tensorflow-program but make sure to download proper version of cuDNN (https://developer.nvidia.com/rdp/cudnn-download)
+ - Install Keras `sudo pip install keras`
+ - `sudo pip install h5py`
 
 ### Nvidia Jetson Setup without full setup script
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
