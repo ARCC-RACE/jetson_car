@@ -26,20 +26,20 @@ def newImage(new_image):
 
         fileSelector = random.randint(0, 10) #random number between 0 and 9 inclusive
         if(fileSelector < 8): #send data to train folder
-            cv2.imwrite( "dataset/training_set/" + str(timeStamp) + ".jpg", image); #write image into train folder
+            cv2.imwrite( "../dataset/training_set/" + str(timeStamp) + ".jpg", image); #write image into train folder
             #update csv file
             global lastAckermann #Only the current acting (last updated) ackermann message is important
-            with open("dataset/training_set/tags.csv", 'a') as csvfile: # append to csv file
+            with open("../dataset/training_set/tags.csv", 'a') as csvfile: # append to csv file
                 feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
                 csv_writer = csv.writer(csvfile, feildNames)
                 newData = [str(timeStamp), str(lastAckermann.drive.steering_angle), str(lastAckermann.drive.speed)]
                 csv_writer.writerow(newData)
 
         else: #send data to test folder
-            cv2.imwrite( "dataset/test_set/" + str(timeStamp) + ".jpg", image); #write image into test folder
+            cv2.imwrite( "../dataset/test_set/" + str(timeStamp) + ".jpg", image); #write image into test folder
             #update csv file
             global lastAckermann #Only the current acting (last updated) ackermann message is important
-            with open("dataset/test_set/tags.csv", 'a') as csvfile: # append to csv file
+            with open("../dataset/test_set/tags.csv", 'a') as csvfile: # append to csv file
                 feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
                 csv_writer = csv.writer(csvfile, feildNames)
                 newData = [str(timeStamp), str(lastAckermann.drive.steering_angle), str(lastAckermann.drive.speed)]
@@ -55,11 +55,11 @@ def newDriveData(data):
 
 
 #prepare CSV files by writing header (starts with blank csv)
-with open("dataset/training_set/tags.csv", 'w') as csvfile: #csv in train folder
+with open("../dataset/training_set/tags.csv", 'w') as csvfile: #csv in train folder
     feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
     csv_writer = csv.DictWriter(csvfile, feildNames)
     csv_writer.writeheader()
-with open("dataset/test_set/tags.csv", 'w') as csvfile: #csv in test folder
+with open("../dataset/test_set/tags.csv", 'w') as csvfile: #csv in test folder
     feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
     csv_writer = csv.DictWriter(csvfile, feildNames)
     csv_writer.writeheader()
