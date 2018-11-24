@@ -20,7 +20,7 @@ def publisher():
 	# Setup BNO055
 	# Create and configure the BNO sensor connection.
 	# Raspberry Pi configuration with I2C and RST connected to GPIO 27:
-	sensor = BNO055.BNO055(rst=27)
+	sensor = BNO055.BNO055()
 
 	attempts = 0
 	# Initialize the BNO055 and stop if something went wrong.
