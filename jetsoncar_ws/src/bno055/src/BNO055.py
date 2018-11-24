@@ -239,7 +239,7 @@ class BNO055(object):
             # Use I2C if no serial port is provided.
             # Assume we're using platform's default I2C bus if none is specified.
             if i2c is None:
-                import Adafruit_GPIO.I2C as I2C
+                import I2C
                 i2c = I2C
             # Save a reference to the I2C device instance for later communication.
             self._i2c_device = i2c.get_i2c_device(address, **kwargs)
