@@ -12,15 +12,15 @@ from geometry_msgs.msg import Vector3
 from bno055.msg import bno055_info
 
 def publisher():
-	dataPub = rospy.Publisher('jetson/imu', Imu, queue_size=3)
-	infoPub = rospy.Publisher('jetson/imu_info', bno055_info, queue_size=3)
+	dataPub = rospy.Publisher('racecar/imu', Imu, queue_size=3)
+	infoPub = rospy.Publisher('racecar/imu_info', bno055_info, queue_size=3)
 	rospy.init_node('imu')
-	rate = rospy.Rate(30) #30Hz data read
+	rate = rospy.Rate(75) #75Hz data read
 
 	# Setup BNO055
 	# Create and configure the BNO sensor connection.
 	# Raspberry Pi configuration with I2C and RST connected to GPIO 27:
-	sensor = BNO055.BNO055(rst=27)
+	sensor = BNO055.BNO055()
 
 	attempts = 0
 	# Initialize the BNO055 and stop if something went wrong.
@@ -127,7 +127,7 @@ def publisher():
 
 		#update message headers
 		msgHeader.stamp = rospy.Time.now()
-		msgHeader.frame_id = 'imu_data'
+		msgHeader.frame_id = 'imu_link'
 		msg.header = msgHeader
 
 		infoHeader.stamp = rospy.Time.now()
