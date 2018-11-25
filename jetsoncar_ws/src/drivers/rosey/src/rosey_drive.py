@@ -11,6 +11,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from ackermann_msgs.msg import AckermannDriveStamped
 from sensor_msgs.msg import Image
 
+# callback that runs when a new image is recieved from realsense camera
 def newImage(new_image):
     timeStamp = rospy.get_time()
 
@@ -27,14 +28,17 @@ def newImage(new_image):
             return
         lastRead = rospy.get_time() # update lastRead time stamp
 
-#        cv2.imshow("image", image) #DEBUGGING
-#        cv2.waitKey(0)             #DEBUGGING
+        startProcessing = rospy.get_time() #DEBUGGING
+#        cv2.imshow("image", image)         #DEBUGGING
+#        cv2.waitKey(0)                     #DEBUGGING
         image = utils.preprocess(image) # preprocess image (crop, resize, rgb2yuv)
-#        cv2.imshow("image", image) #DEBUGGING
-#        cv2.waitKey(0)             #DEBUGGING
+#        cv2.imshow("image", image)         #DEBUGGING
+#        cv2.waitKey(0)                     #DEBUGGING
 
         image = np.array([image]) # give the model a 4D array
         steering_prediction = float(rosey.predict(image, batch_size=1))
+#        processTime = rospy.get_time() - startProcessing #DEBUGGING
+#        print(processTime) # prints time to process image and make prediction in seconds
         rospy.loginfo("Steering prediction from Rosey: %f", steering_prediction)
 
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
