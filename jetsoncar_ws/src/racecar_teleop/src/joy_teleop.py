@@ -20,14 +20,15 @@ def JoyCB(data):
 
 
     if data.buttons[2] != lastSteeringState and lastSteeringState == 0:
-         lastButton = data.buttons[2]
+         lastSteeringState = data.buttons[2]
          steeringState = -1*steeringState
 
-    if data.buttons[0] == 1:
+    if data.buttons[0] != lastThrottleState and lastThrottleState == 1:
+         lastThrottleState = data.buttons[0]
          throttleState = not throttleState
 
     if throttleState:
-         totalThrottle = (data.axes[2] + data.axes[5] - 2) * -1 
+         totalThrottle = (data.axes[2] + data.axes[5] - 2) * -1
     else:
          totalThrottle = data.axes[2] - data.axes[5]
 
