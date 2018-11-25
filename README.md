@@ -43,7 +43,7 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - Setup pip and download keras and tensorflow for python
    - `sudo apt-get install -y python-pip`
    - `pip install keras`
-   - `pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu
+   - `sudo pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
 `
 
 ### Prerequisites
