@@ -95,6 +95,9 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 
-#Ignore large training and testing datasets
+# Ignore large training and testing datasets
 jetsoncar_ws/src/drivers/nn_tools/dataset/training_set/*
 jetsoncar_ws/src/drivers/nn_tools/dataset/test_set/*
+
+# Ignore large nn model definition files
+jetsoncar_ws/src/drivers/rosey/models/rosey.h5
