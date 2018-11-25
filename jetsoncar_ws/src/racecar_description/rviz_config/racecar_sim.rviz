@@ -147,7 +147,7 @@ Visualization Manager:
       Visual Enabled: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: /front_cam/depth/image_raw
+      Image Topic: /front_cam/color/image_raw
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -182,7 +182,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Flat Squares
-      Topic: /front_cam/depth/points
+      Topic: /front_cam/depth/color/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

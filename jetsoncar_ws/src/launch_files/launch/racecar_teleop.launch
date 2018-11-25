@@ -1,0 +1,11 @@
+<launch>
+
+  <!-- connect to ROS master on the racecar ROS_MASTER_URI=http://racecar:11311 -->
+  <!-- you may need to export ROS_IP=ip_of_controller_computer if AF_INET error -->
+
+ <!-- joy node -->
+  <node respawn="true" pkg="joy" type="joy_node" name="joy" >
+    <param name="dev" type="string" value="/dev/input/js0" />
+  </node>
+
+</launch>
