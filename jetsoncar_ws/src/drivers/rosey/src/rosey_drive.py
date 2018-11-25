@@ -28,7 +28,7 @@ def newImage(new_image):
             return
         lastRead = rospy.get_time() # update lastRead time stamp
 
-        startProcessing = rospy.get_time() #DEBUGGING
+#        startProcessing = rospy.get_time() #DEBUGGING
 #        cv2.imshow("image", image)         #DEBUGGING
 #        cv2.waitKey(0)                     #DEBUGGING
         image = utils.preprocess(image) # preprocess image (crop, resize, rgb2yuv)
@@ -39,8 +39,8 @@ def newImage(new_image):
         steering_prediction = float(rosey.predict(image, batch_size=1))
 #        processTime = rospy.get_time() - startProcessing #DEBUGGING
 #        print(processTime) # prints time to process image and make prediction in seconds
-        rospy.loginfo("Steering prediction from Rosey: %f", steering_prediction)
 
+        rospy.logdebug("Steering prediction from Rosey: %f", steering_prediction)
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
 rosey = load_model(dir_path + '/../models/rosey.h5')
 rosey._make_predict_function() # build and compile the function on the GPU (before threading)
