@@ -38,9 +38,9 @@ def newImage(new_image):
         image = np.array([image]) # give the model a 4D array
         steering_prediction = float(rosey.predict(image, batch_size=1))
 #        processTime = rospy.get_time() - startProcessing #DEBUGGING
-#        print(processTime) # prints time to process image and make prediction in seconds DEBUGGING
-        rospy.loginfo("Steering prediction from Rosey: %f", steering_prediction)
-
+#        print(processTime) # prints time to process image and make prediction in seconds
+        rospy.logdebug("Steering prediction from Rosey: %f", steering_prediction)
+        
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
 rosey = load_model(dir_path + '/../models/rosey.h5')
 rosey._make_predict_function() # build and compile the function on the GPU (before threading)
