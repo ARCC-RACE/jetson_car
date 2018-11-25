@@ -34,7 +34,7 @@ class Rosey:
         self.model = Sequential() #linear stack of layers
         #normalize the image  to avoid saturation and make the gradients work better
         self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
-        #24 5x5 convolution kernals with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
+        #24 5x5 convolution kernels with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
         self.model.add(Conv2D(24, 5, activation="elu", strides=2))
         self.model.add(Conv2D(36, 5, activation="elu", strides=2))
         self.model.add(Conv2D(48, 5, activation="elu", strides=2))
@@ -47,15 +47,15 @@ class Rosey:
         self.model.add(Dense(100, activation="elu"))
         self.model.add(Dense(50, activation="elu"))
         self.model.add(Dense(10, activation="elu"))
-        self.model.add(Dense(1)) #No need for activation function becasue this is the output and it is not a probability
+        self.model.add(Dense(1)) #No need for activation function because this is the output and it is not a probability
         self.model.summary() #print a summary representation of model
 
 
 
     def train_model(self):
-        #filepath for save = rosey.h5 (rosey-{epoch:03d}.h5 is another option)
+        #filepath for save = rosey.epoch-loss.h5 (rosey-{epoch:03d}.h5 is another option)
         #saves epoch with the minimum val_loss
-        checkpoint = ModelCheckpoint('rosey.h5',
+        checkpoint = ModelCheckpoint('rosey.{epoch:03d}-{val_loss:.2f}.h5', # filepath = working directory/
             monitor='val_loss',
             verbose=0,
             save_best_only=True,
@@ -100,7 +100,9 @@ class Rosey:
                 self.Y_test += (float(row['Steering_angle']),)
 
 if __name__ == "__main__":
-    rosey = Rosey(data_directory = "../../nn_tools/dataset")
+    rosey = Rosey(data_directory = "../../nn_tools/dataset",
+        batch_size=40, validation_steps=2500, nb_epochs=10,
+        steps_per_epoch=10000)
     rosey.load_data()
     rosey.build_model()
     rosey.train_model()

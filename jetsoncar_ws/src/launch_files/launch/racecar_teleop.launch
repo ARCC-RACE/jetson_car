@@ -4,8 +4,14 @@
   <!-- you may need to export ROS_IP=ip_of_controller_computer if AF_INET error -->
 
  <!-- joy node -->
-  <node respawn="true" pkg="joy" type="joy_node" name="joy" >
-    <param name="dev" type="string" value="/dev/input/js0" />
-  </node>
+ <node respawn="true" pkg="joy" type="joy_node" name="joy" >
+   <param name="dev" type="string" value="/dev/input/js0" />
+ </node>
+
+  <!-- joy teleop node -->
+  <node respawn="true" pkg="racecar_teleop" type="joy_teleop.py" name="joy_teleop" />
+
+  <!-- command interface node -->
+  <node respawn="true" pkg="racecar_command_interface" type="command_interface" name="command_interface" />
 
 </launch>
