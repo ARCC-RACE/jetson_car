@@ -40,6 +40,11 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
 - Install USB driver for some arduino nanos https://devtalk.nvidia.com/default/topic/1032862/jetson-tx2/a-guide-to-solve-usb-serial-driver-problems-on-tx2/
 - Run the `/scripts/jetson.sh` script to setup network
+- Setup pip and download keras and tensorflow for python
+   - `sudo apt-get install -y python-pip`
+   - `pip install keras`
+   - `pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu
+`
 
 ### Prerequisites
 
