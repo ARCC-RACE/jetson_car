@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 
-import rospy
 import numpy as np
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
-from ackermann_msgs.msg import AckermannDriveStamped
-from sensor_msgs.msg import Image
 import csv
 
 # Keras imports to create a convolutional neural network using tensorflow on the low level
@@ -36,7 +33,7 @@ class Rosey:
 
         self.model = Sequential() #linear stack of layers
         #normalize the image  to avoid saturation and make the gradients work better
-        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental vlaue from udacity self driving car course
+        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
         #24 5x5 convolution kernals with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
         self.model.add(Conv2D(24, 5, activation="elu", strides=2))
         self.model.add(Conv2D(36, 5, activation="elu", strides=2))
