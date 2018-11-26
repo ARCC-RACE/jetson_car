@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 
-#For simulation only
+#For physical jetson car only
 
 import rospy
 from std_msgs.msg import Float64
 from ackermann_msgs.msg import AckermannDriveStamped
 from std_msgs.msg import Empty #for safety system
 
-#start as true in order to wait for control systems connection
 deadMan = True #deadmans switch (if true then man is "dead")
 
 def safetyCheck(data): #update last ping time
@@ -24,7 +23,7 @@ def set_throttle_steer(data):
     pub_pos_left_steering_hinge = rospy.Publisher('/racecar/left_steering_hinge_position_controller/command', Float64, queue_size=1)
     pub_pos_right_steering_hinge = rospy.Publisher('/racecar/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
-    throttle = data.drive.speed*10 #simulation needs values to be increased for descent speed
+    throttle = data.drive.speed #simulation needs values to be increased for descent speed
     steer = data.drive.steering_angle
 
     global deadMan
