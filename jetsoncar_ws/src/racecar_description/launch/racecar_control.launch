@@ -9,6 +9,9 @@
     right_front_wheel_velocity_controller left_steering_hinge_position_controller
     right_steering_hinge_position_controller joint_state_controller"/>
 
+  <!-- Start the command mux -->
+  <node name="cmd_mux" type="cmd_mux.py" pkg="racecar_command_controllers" ns="/racecar" />
+
   <!-- Start the software ackermann to joint_command controller -->
   <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_description" />
 

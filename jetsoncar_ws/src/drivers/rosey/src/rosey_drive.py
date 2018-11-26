@@ -40,7 +40,7 @@ def newImage(new_image):
 #        processTime = rospy.get_time() - startProcessing #DEBUGGING
 #        print(processTime) # prints time to process image and make prediction in seconds
         rospy.logdebug("Steering prediction from Rosey: %f", steering_prediction)
-        
+
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
 rosey = load_model(dir_path + '/../models/rosey.h5')
 rosey._make_predict_function() # build and compile the function on the GPU (before threading)
@@ -50,7 +50,7 @@ rospy.init_node('rosey')
 lastRead = rospy.get_time()
 steering_prediction = 0
 
-pub = rospy.Publisher("/racecar/ackermann_cmd", AckermannDriveStamped, queue_size=1) # drive control publisher
+pub = rospy.Publisher("/racecar/autonomous/ackermann_cmd", AckermannDriveStamped, queue_size=1) # drive control publisher
 rospy.Subscriber("/front_cam/color/image_raw", Image, newImage)  # input video
 
 rate = rospy.Rate(50) #50Hz publshing rate

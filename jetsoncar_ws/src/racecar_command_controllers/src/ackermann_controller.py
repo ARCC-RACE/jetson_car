@@ -47,7 +47,7 @@ def control_commands():
     rospy.init_node("ackermann_controller")
 
     lastSafetyPing = rospy.get_time() #used for checking frequency of safety pinger
-    rospy.Subscriber("/racecar/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
+    rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
     rospy.Subscriber("/racecar/safety", Empty, safetyCheck)
 
     while not rospy.is_shutdown():

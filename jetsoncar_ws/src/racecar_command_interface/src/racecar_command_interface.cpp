@@ -11,7 +11,7 @@
 ros::Publisher safety_pub;
 ros::Publisher autonomous_pub;
 ros::Publisher cruise_vel_pub;
-ros::Publisher race_pub;
+ros::Publisher sport_pub;
 ros::Publisher data_recorder_pub;
 
 bool isStopped = false; //Var to stop publishing safety msg to stop contorller
@@ -27,22 +27,22 @@ void callback(racecar_command_interface::RacecarCommandInterfaceConfig &config, 
   ROS_DEBUG("Reconfigure Request: %f %s %s %s %s", config.cruise_velocity,
                                               config.autonomous_mode?"True":"False",
                                               config.data_collection_mode?"True":"False",
-                                              config.race_mode?"True":"False",
+                                              config.sport_mode?"True":"False",
                                               config.STOP?"True":"False");
 
   std_msgs::Float64 cruise_vel_msg;
   std_msgs::Bool autonomous_mode_msg;
-  std_msgs::Bool race_mode_msg;
+  std_msgs::Bool sport_mode_msg;
   std_msgs::Bool data_recorder_msg;
 
   cruise_vel_msg.data = config.cruise_velocity;
   autonomous_mode_msg.data = config.autonomous_mode;
-  race_mode_msg.data = config.race_mode;
+  sport_mode_msg.data = config.sport_mode;
   data_recorder_msg.data = config.data_collection_mode;
 
   cruise_vel_pub.publish(cruise_vel_msg);
   autonomous_pub.publish(autonomous_mode_msg);
-  race_pub.publish(race_mode_msg);
+  sport_pub.publish(sport_mode_msg);
   data_recorder_pub.publish(data_recorder_msg);
 
   isStopped = static_cast<bool>(config.STOP);
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 
   autonomous_pub = nh.advertise<std_msgs::Bool>("/racecar/autonomous_mode", 2);
   cruise_vel_pub = nh.advertise<std_msgs::Float64>("/racecar/cruise_velocity", 2);
-  race_pub = nh.advertise<std_msgs::Bool>("/racecar/race_mode", 2);
+  sport_pub = nh.advertise<std_msgs::Bool>("/racecar/sport_mode", 2);
   data_recorder_pub = nh.advertise<std_msgs::Bool>("/racecar/record_data", 2);
 
   //Setup dynamic reconfigure

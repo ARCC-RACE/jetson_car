@@ -6,6 +6,9 @@
   <!-- Start hardware communication controllers (interface) -->
   <node name="racecar_hardware_interface" pkg="temp_racecar_hardware_interface" type="temp_racecar_hardware_interface_node" output="screen" ns="/racecar"/>
 
+  <!-- Start the command mux -->
+  <node name="cmd_mux" type="cmd_mux.py" pkg="racecar_command_controllers" ns="/racecar" />
+
   <!-- Start the software ackermann to joint_command controller (make sure this is not the SIMULATION ONLY ackermann_controller) -->
   <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_command_controllers" ns="/racecar" />
 
