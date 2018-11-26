@@ -8,6 +8,7 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from std_msgs.msg import Empty #for safety system
 
 #start as true in order to wait for control systems connection
+#also could indicated and emergency STOP command
 deadMan = True #deadmans switch (if true then man is "dead")
 
 def safetyCheck(data): #update last ping time
@@ -57,7 +58,7 @@ def control_commands():
             rospy.logerr("Deadmans switch triggered!")
         elif((rate < 0.2) and deadMan): #if man is dead but the publishing rate is now above 5Hz
             deadMan = not deadMan #deadMan is alive
-            rospy.loginfo("Connection regained!")
+            rospy.loginfo("Deadman switch reset!")
 
 
 if __name__ == '__main__':
