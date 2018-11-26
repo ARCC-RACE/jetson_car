@@ -13,5 +13,6 @@
 
   <!-- command interface node -->
   <node respawn="true" pkg="racecar_command_interface" type="racecar_command_interface_node" name="racecar_command_interface" />
+  <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="racecar_command_interface_gui" />
 
 </launch>
