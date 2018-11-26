@@ -50,6 +50,7 @@ def control_commands():
     rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
     rospy.Subscriber("/racecar/safety", Empty, safetyCheck)
 
+    loopRate = rospy.rate(50)
     while not rospy.is_shutdown():
         rate = rospy.get_time() - lastSafetyPing
         #check to see if rate is bellow 5Hz
@@ -59,6 +60,7 @@ def control_commands():
         elif((rate < 0.2) and deadMan): #if man is dead but the publishing rate is now above 5Hz
             deadMan = not deadMan #deadMan is alive
             rospy.loginfo("Deadman switch reset!")
+        loopRate.sleep()
 
 
 if __name__ == '__main__':
