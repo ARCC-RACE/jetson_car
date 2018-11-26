@@ -3,18 +3,26 @@
 import rospy
 import numpy as np
 import cv2
+import getpass #gets username for filepaths
 from cv_bridge import CvBridge, CvBridgeError
 from ackermann_msgs.msg import AckermannDriveStamped
+from std_msgs.msg import Bool
 from sensor_msgs.msg import Image
 import csv
 import random #To randomly sort files into test and train folders (20% test, 80% train)
+
+isRecording = False #by default the system is not recording
+dir = "/media/" + getpass.getuser() + "/racecarDataset" #directory of expected USB flashdrive
 
 #record data with time stamp
 def newImage(new_image):
     timeStamp = rospy.get_time()
 
+    global isRecording
     global lastRead
-    if(timeStamp - lastRead > 0.0666666667): # ~15 fps data recording (1/desired fps)
+    global dir
+
+    if(isRecording and timeStamp - lastRead > 0.0666666667): # ~15 fps data recording (1/desired fps)
 
         try:
             bridge = CvBridge() #convert ros image to cv compatible image
@@ -26,26 +34,26 @@ def newImage(new_image):
 
         fileSelector = random.randint(0, 10) #random number between 0 and 9 inclusive
         if(fileSelector < 8): #send data to train folder
-            cv2.imwrite( "../dataset/training_set/" + str(timeStamp) + ".jpg", image); #write image into train folder
+            cv2.imwrite(dir + "/dataset/training_set/" + str(timeStamp) + ".jpg", image); #write image into train folder
             #update csv file
             global lastAckermann #Only the current acting (last updated) ackermann message is important
-            with open("../dataset/training_set/tags.csv", 'a') as csvfile: # append to csv file
+            with open(dir + "/dataset/training_set/tags.csv", 'a') as csvfile: # append to csv file
                 feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
                 csv_writer = csv.writer(csvfile, feildNames)
                 newData = [str(timeStamp), str(lastAckermann.drive.steering_angle), str(lastAckermann.drive.speed)]
                 csv_writer.writerow(newData)
 
         else: #send data to test folder
-            cv2.imwrite( "../dataset/test_set/" + str(timeStamp) + ".jpg", image); #write image into test folder
+            cv2.imwrite(dir + "/dataset/test_set/" + str(timeStamp) + ".jpg", image); #write image into test folder
             #update csv file
             global lastAckermann #Only the current acting (last updated) ackermann message is important
-            with open("../dataset/test_set/tags.csv", 'a') as csvfile: # append to csv file
+            with open(dir + "/dataset/test_set/tags.csv", 'a') as csvfile: # append to csv file
                 feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
                 csv_writer = csv.writer(csvfile, feildNames)
                 newData = [str(timeStamp), str(lastAckermann.drive.steering_angle), str(lastAckermann.drive.speed)]
                 csv_writer.writerow(newData)
 
-        rospy.loginfo("Data recorded") #Everytime data is added to test/training folders
+        rospy.logdebug("Data recorded") #Everytime data is added to test/training folders
 
 
 #udpate steering and speed values
@@ -53,24 +61,42 @@ def newDriveData(data):
     global lastAckermann
     lastAckermann = data
 
+#update record update record status
+def updateRecordStatus(data):
+    global isRecording
+    isRecording = data
 
-
-#prepare CSV files by writing header (starts with blank csv)
-with open("../dataset/training_set/tags.csv", 'w') as csvfile: #csv in train folder
-    feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
-    csv_writer = csv.DictWriter(csvfile, feildNames)
-    csv_writer.writeheader()
-with open("../dataset/test_set/tags.csv", 'w') as csvfile: #csv in test folder
-    feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
-    csv_writer = csv.DictWriter(csvfile, feildNames)
-    csv_writer.writeheader()
 
 #program starts running here
 rospy.init_node("racecar_data_collector")
 lastRead = rospy.get_time() #get seconds in a float value
 
-lastAckermann = rospy.wait_for_message("/racecar/ackermann_cmd", AckermannDriveStamped)
+#create dataset directory
+#if directory is alread made do nothing
+#looking for usb flash drive with name racecarDataset
+if os.path.exists(dir):
+    try:
+        os.mkdirs(dir + "/dataset/training_set")
+        os.mkdirs(dir + "/dataset/test_set")
+        rospy.loginfo("Dataset directory created")
+        #make the csv files
+        #prepare CSV files by writing header (starts with blank csv)
+        with open(dir + "/dataset/training_set/tags.csv", 'w') as csvfile: #csv in train folder
+            feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
+            csv_writer = csv.DictWriter(csvfile, feildNames)
+            csv_writer.writeheader()
+        with open(dir + "/dataset/test_set/tags.csv", 'w') as csvfile: #csv in test folder
+            feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
+            csv_writer = csv.DictWriter(csvfile, feildNames)
+            csv_writer.writeheader()
+    except FileExistsError:
+        #if folders exists it is expected that the csv files exist as well
+        rospy.loginfo("Dataset directories already exists")
+else:
+    rospy.logerr("No racecarDataset flash drive detected")
+    exit(1)
 
+rospy.Subscriber("/racecar/record_data", Bool, updateRecordStatus) #status on whether to record data or not
 rospy.Subscriber("/racecar/ackermann_cmd", AckermannDriveStamped, newDriveData) #drive control data from user input
 rospy.Subscriber("/front_cam/color/image_raw", Image, newImage) #video
 rospy.spin() #keep node running while callbacks are handled
