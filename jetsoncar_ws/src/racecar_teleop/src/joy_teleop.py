@@ -86,9 +86,9 @@ def JoyCB(data):
     else:
          throttleVal = map(data.axes[5], 1, -1, 0, 2) - map(data.axes[2], 1, -1, 0, 2) #range is -2 to 2
 
-    #handle braking if applied (doesn't correlate to anything in simulation)
-    if(data.buttons[4] == 1 or data.buttons[5] == 1):
-        throttleVal = 6 #out of range value triggers active brake in ARC1 firmware
+#    #handle braking if applied (doesn't correlate to anything in simulation)
+#    if(data.buttons[4] == 1 or data.buttons[5] == 1):
+#        throttleVal = 6 #out of range value triggers active brake in ARC1 firmware
 
     #apply modifications to steering based on steering mode selection
     if fineSteeringState:
