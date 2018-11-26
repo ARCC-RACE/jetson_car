@@ -3,6 +3,7 @@
 import rospy
 import numpy as np
 import cv2
+import os
 import getpass #gets username for filepaths
 from cv_bridge import CvBridge, CvBridgeError
 from ackermann_msgs.msg import AckermannDriveStamped
@@ -64,11 +65,11 @@ def newDriveData(data):
 #update record update record status
 def updateRecordStatus(data):
     global isRecording
-    isRecording = data
+    isRecording = data.data
 
 
 #program starts running here
-rospy.init_node("racecar_data_collector")
+rospy.init_node("data_collector")
 lastRead = rospy.get_time() #get seconds in a float value
 
 #create dataset directory
@@ -76,8 +77,8 @@ lastRead = rospy.get_time() #get seconds in a float value
 #looking for usb flash drive with name racecarDataset
 if os.path.exists(dir):
     try:
-        os.mkdirs(dir + "/dataset/training_set")
-        os.mkdirs(dir + "/dataset/test_set")
+        os.makedirs(dir + "/dataset/training_set")
+        os.makedirs(dir + "/dataset/test_set")
         rospy.loginfo("Dataset directory created")
         #make the csv files
         #prepare CSV files by writing header (starts with blank csv)
@@ -89,7 +90,7 @@ if os.path.exists(dir):
             feildNames = ['Time_stamp', 'Steering_angle', 'Speed']
             csv_writer = csv.DictWriter(csvfile, feildNames)
             csv_writer.writeheader()
-    except FileExistsError:
+    except OSError:
         #if folders exists it is expected that the csv files exist as well
         rospy.loginfo("Dataset directories already exists")
 else:
@@ -97,6 +98,9 @@ else:
     exit(1)
 
 rospy.Subscriber("/racecar/record_data", Bool, updateRecordStatus) #status on whether to record data or not
+
+lastAckermann = rospy.wait_for_message("/racecar/ackermann_cmd", AckermannDriveStamped)
+
 rospy.Subscriber("/racecar/ackermann_cmd", AckermannDriveStamped, newDriveData) #drive control data from user input
 rospy.Subscriber("/front_cam/color/image_raw", Image, newImage) #video
 rospy.spin() #keep node running while callbacks are handled

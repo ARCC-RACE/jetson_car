@@ -49,7 +49,7 @@ void callback(racecar_command_interface::RacecarCommandInterfaceConfig &config, 
 }
 
 int main(int argc, char **argv) {
-  ros::init(argc, argv, "racecar_command_interface");
+  ros::init(argc, argv, "command_interface");
   ros::NodeHandle nh;
 
   //+20Hz publisher to act as safety mechanism for controller (dead mans switch)
