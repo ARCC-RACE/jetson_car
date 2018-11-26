@@ -50,7 +50,7 @@ def control_commands():
     rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
     rospy.Subscriber("/racecar/safety", Empty, safetyCheck)
 
-    loopRate = rospy.rate(50)
+    loopRate = rospy.Rate(50)
     while not rospy.is_shutdown():
         rate = rospy.get_time() - lastSafetyPing
         #check to see if rate is bellow 5Hz
