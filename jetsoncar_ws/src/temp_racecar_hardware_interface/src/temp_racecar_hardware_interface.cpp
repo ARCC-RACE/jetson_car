@@ -35,6 +35,8 @@ int main(int argc, char** argv) {
   while(ros::ok()){
 
     //Update command array
+    //throttle should be between -10 and 10
+    //steering should be between -1 and 1
     cmd[0] = throttle;
     cmd[1] = throttle;
     cmd[2] = throttle;
