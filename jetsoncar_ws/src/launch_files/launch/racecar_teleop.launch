@@ -12,6 +12,6 @@
   <node respawn="true" pkg="racecar_teleop" type="joy_teleop.py" name="joy_teleop" />
 
   <!-- command interface node -->
-  <node respawn="true" pkg="racecar_command_interface" type="command_interface" name="command_interface" />
+  <node respawn="true" pkg="racecar_command_interface" type="racecar_command_interface_node" name="racecar_command_interface" />
 
 </launch>
