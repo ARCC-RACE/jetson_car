@@ -19,6 +19,10 @@ from ackermann_msgs.msg import AckermannDriveStamped
 # L [0]  = steering control (-1 to 1)
 # L [1]  = No function
 
+#deals with LT RT starting at zero by waiting to write thrusters until both axes have been updated
+controllerInitializationStarted = False #allows for two step start (LT RT to 1 and then back to 0)
+controllerInitialized = False
+
 #global vars with default values set
 #vars for flipping steering
 lastSteeringState = 0  #in order to look for rising edge on button
@@ -39,6 +43,9 @@ def map(input, inMin, inMax, outMin, outMax):
 def JoyCB(data):
 
     #Use global/static vars
+    global controllerInitializationStarted
+    global controllerInitialized
+
     global lastSteeringState
     global steeringState
 
@@ -67,10 +74,21 @@ def JoyCB(data):
     lastFineSteeringState = data.buttons[3]
 
     #apply modificaitons to throttle based on drive mode selection
-    if throttleState:
+    #acceptible values for physical jetson car are +-5 (not in m/s) for now
+    if not controllerInitialized:
+        throttleVal = 0
+        if(controllerInitializationStarted and data.axes[2] == 1 and data.axes[5] == 1): #controller should be corrected by now
+            controllerInitialized = True
+        elif(data.axes[2] == -1 and data.axes[5] == -1):
+            controllerInitializationStarted = True
+    elif throttleState:
          throttleVal = map(data.axes[5], 1, -1, 0, 2) + map(data.axes[2], 1, -1, 0, 2) #range is 0 to 4
     else:
          throttleVal = map(data.axes[5], 1, -1, 0, 2) - map(data.axes[2], 1, -1, 0, 2) #range is -2 to 2
+
+    #handle braking if applied (doesn't correlate to anything in simulation)
+    if(data.buttons[4] == 1 or data.buttons[5] == 1):
+        throttleVal = 6 #out of range value triggers active brake in ARC1 firmware
 
     #apply modifications to steering based on steering mode selection
     if fineSteeringState:
