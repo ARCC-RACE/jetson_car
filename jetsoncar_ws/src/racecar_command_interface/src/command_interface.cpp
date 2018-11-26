@@ -13,29 +13,40 @@ ros::Publisher autonomous_pub;
 ros::Publisher cruise_vel_pub;
 ros::Publisher race_pub;
 
+bool stop = false; //Var to stop publishing safety msg to stop contorller
+
 void safetyPing(const ros::TimerEvent&){
-  std_msgs::Empty msg;
-  safety_pub.publish(msg);
+  if(!stop){
+    std_msgs::Empty msg;
+    safety_pub.publish(msg);
+  }
 }
 
 void callback(racecar_command_interface::RacecarCommandInterfaceConfig &config, uint32_t level) {
-  ROS_DEBUG("Reconfigure Request: %s %f %s ", config.cruise_velocity,
+  ROS_DEBUG("Reconfigure Request: %f %s %s %s %s", config.cruise_velocity,
                                               config.autonomous_mode?"True":"False",
                                               config.data_collection_mode?"True":"False",
                                               config.race_mode?"True":"False",
                                               config.STOP?"True":"False");
+
+  std_msgs::Float64 cruise_vel_msg;
+  std_msgs::Bool autonomous_mode_msg;
+  std_msgs::Bool race_mode_msg;
+
+  cruise_vel_msg.data = config.cruise_velocity;
+  autonomous_mode_msg.data = config.autonomous_mode;
+  race_mode_msg.data = config.race_mode;
+
+  cruise_vel_pub.publish(cruise_vel_msg);
+  autonomous_pub.publish(autonomous_mode_msg);
+  race_pub.publish(race_mode_msg);
+
+  stop = static_cast<bool>(config.STOP);
 }
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "racecar_command_interface");
   ros::NodeHandle nh;
-
-  //Setup dynamic reconfigure
-  dynamic_reconfigure::Server<racecar_command_interface::RacecarCommandInterfaceConfig> server;
-  dynamic_reconfigure::Server<racecar_command_interface::RacecarCommandInterfaceConfig>::CallbackType f;
-
-  f = boost::bind(&callback, _1, _2);
-  server.setCallback(f);
 
   //+20Hz publisher to act as safety mechanism for controller (dead mans switch)
   safety_pub = nh.advertise<std_msgs::Empty>("/racecar/safety", 2);
@@ -44,6 +55,13 @@ int main(int argc, char **argv) {
   autonomous_pub = nh.advertise<std_msgs::Bool>("/racecar/autonomous_mode", 2);
   cruise_vel_pub = nh.advertise<std_msgs::Float64>("/racecar/cruise_velocity", 2);
   race_pub = nh.advertise<std_msgs::Bool>("/racecar/race_mode", 2);
+
+  //Setup dynamic reconfigure
+  dynamic_reconfigure::Server<racecar_command_interface::RacecarCommandInterfaceConfig> server;
+  dynamic_reconfigure::Server<racecar_command_interface::RacecarCommandInterfaceConfig>::CallbackType f;
+
+  f = boost::bind(&callback, _1, _2);
+  server.setCallback(f);
 
   ROS_INFO("Racecar Command Interface Launched");
 
