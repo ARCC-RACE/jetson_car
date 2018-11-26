@@ -1,18 +1,18 @@
 <launch>
 
   <!-- connect to ROS master on the racecar ROS_MASTER_URI=http://racecar:11311 -->
-  <!-- you may need to export ROS_IP=ip_of_controller_computer if AF_INET error -->
+  <!-- you may need to `export ROS_IP=ip_of_controller_computer` if AF_INET error -->
 
  <!-- joy node -->
- <node respawn="true" pkg="joy" type="joy_node" name="joy" >
+ <node respawn="true" pkg="joy" type="joy_node" name="joy" ns="racecar" >
    <param name="dev" type="string" value="/dev/input/js0" />
  </node>
 
   <!-- joy teleop node -->
-  <node respawn="true" pkg="racecar_teleop" type="joy_teleop.py" name="joy_teleop" />
+  <node respawn="true" pkg="racecar_teleop" type="joy_teleop.py" name="joy_teleop" output="screen" ns="racecar" />
 
   <!-- command interface node -->
-  <node respawn="true" pkg="racecar_command_interface" type="racecar_command_interface_node" name="racecar_command_interface" />
+  <node respawn="true" pkg="racecar_command_interface" type="racecar_command_interface_node" name="racecar_command_interface" ns="racecar" />
   <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="racecar_command_interface_gui" />
 
 </launch>
