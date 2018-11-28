@@ -68,7 +68,7 @@ with open("../dataset/test_set/tags.csv", 'w') as csvfile: #csv in test folder
 rospy.init_node("data_collector")
 lastRead = rospy.get_time() #get seconds in a float value
 
-lastAckermann = rospy.wait_for_message("/racecar/ackermann_cmd", AckermannDriveStamped)
+lastAckermann = rospy.wait_for_message("/racecar/muxed/ackermann_cmd", AckermannDriveStamped)
 
 rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, newDriveData) #drive control data from user input
 rospy.Subscriber("/front_cam/color/image_raw", Image, newImage) #video
