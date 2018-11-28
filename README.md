@@ -33,6 +33,20 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
 - Install USB driver for some arduino nanos https://devtalk.nvidia.com/default/topic/1032862/jetson-tx2/a-guide-to-solve-usb-serial-driver-problems-on-tx2/
 
+### Raspberry Pi Xbox Controller Setup UNFINISHED
+- Update Apt Repositories
+   - `sudo apt-get update`
+   - `sudo apt-get upgrade`
+- Install xbox drivers `sudo apt-get install xboxdrv`
+- Disable ertm for bluetooth `sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"`
+- Reboot Pi `sudo reboot`
+- Enable bluetooth control `sudo bluetoothctl`
+- Turn on agent
+   - `agent on`
+   - `default-agent`
+- Turn on scanning `scan on`
+   - This should print a list of bluetooth devices in range and their MAC Addresses
+
 ### Prerequisites
 
 ### Network Setup
