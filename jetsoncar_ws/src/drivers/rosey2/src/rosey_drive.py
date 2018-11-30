@@ -18,7 +18,7 @@ def newImage(new_image):
     global lastRead
     global steering_prediction
     global rosey #CNN model
-    if(timeStamp - lastRead > 0.0666666667): # ~15 fps desired data flow (1/desired fps)
+    if(timeStamp - lastRead > 0.033333333): # ~30 fps desired data flow (1/desired fps)
 
         try:
             bridge = CvBridge() # convert ros image to cv compatible image
