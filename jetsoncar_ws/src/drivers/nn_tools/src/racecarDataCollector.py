@@ -22,7 +22,7 @@ def newImage(new_image):
     global isRecording
     global lastRead
     global dir
-
+	
     if(isRecording and timeStamp - lastRead > 0.0666666667): # ~15 fps data recording (1/desired fps)
 
         try:
@@ -67,7 +67,6 @@ def updateRecordStatus(data):
     global isRecording
     isRecording = data.data
 
-
 #program starts running here
 rospy.init_node("data_collector")
 lastRead = rospy.get_time() #get seconds in a float value
@@ -99,7 +98,7 @@ else:
 
 rospy.Subscriber("/racecar/record_data", Bool, updateRecordStatus) #status on whether to record data or not
 
-lastAckermann = rospy.wait_for_message("/racecar/ackermann_cmd", AckermannDriveStamped)
+lastAckermann = rospy.wait_for_message("/racecar/muxed/ackermann_cmd", AckermannDriveStamped)
 
 rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, newDriveData) #drive control data from user input
 rospy.Subscriber("/front_cam/color/image_raw", Image, newImage) #video
