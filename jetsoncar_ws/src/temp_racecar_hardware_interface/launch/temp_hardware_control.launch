@@ -4,7 +4,7 @@
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racecar_description)/urdf/racecar.xacro'" />
 
   <!-- Start hardware communication controllers (interface) -->
-  <node name="racecar_hardware_interface" pkg="temp_racecar_hardware_interface" type="temp_racecar_hardware_interface_node" output="screen" ns="/racecar"/>
+  <node name="racecar_hardware_interface" pkg="temp_racecar_hardware_interface" type="temp_racecar_hardware_interface_node" output="screen" ns="/racecar" respawn="true"/>
 
   <!-- Start the command mux -->
   <node name="cmd_mux" type="cmd_mux.py" pkg="racecar_command_controllers" ns="/racecar" />

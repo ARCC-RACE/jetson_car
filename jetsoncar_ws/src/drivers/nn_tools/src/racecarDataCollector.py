@@ -22,8 +22,6 @@ def newImage(new_image):
     global isRecording
     global lastRead
     global dir
-
-    print("Hello")
 	
     if(isRecording and timeStamp - lastRead > 0.0666666667): # ~15 fps data recording (1/desired fps)
 
