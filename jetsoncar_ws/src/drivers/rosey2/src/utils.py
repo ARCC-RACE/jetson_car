@@ -4,8 +4,8 @@ import cv2, os
 import numpy as np
 import matplotlib.image as mpimg
 
-#Rosey
-IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 480, 640, 3
+#Rosey2
+IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 
 def load_image(data_dir, image_file):
@@ -19,7 +19,7 @@ def crop(image):
     """
     Crop the image (removing the sky at the top and the car front at the bottom)
     """
-    return image[60:-1, :, :] # remove the sky
+    return image[220:-1, :, :] # remove the sky
 
 
 def resize(image):
@@ -76,9 +76,10 @@ def random_shadow(image):
     """
     # (x1, y1) and (x2, y2) forms a line
     # xm, ym gives all the locations of the image
-    x1, y1 = IMAGE_WIDTH * np.random.rand(), 0
-    x2, y2 = IMAGE_WIDTH * np.random.rand(), IMAGE_HEIGHT
-    xm, ym = np.mgrid[0:IMAGE_HEIGHT, 0:IMAGE_WIDTH]
+    height, width, channels = image.shape
+    x1, y1 = width * np.random.rand(), 0
+    x2, y2 = width * np.random.rand(), height
+    xm, ym = np.mgrid[0:height, 0:width]
 
     # mathematically speaking, we want to set 1 below the line and zero otherwise
     # Our coordinate is up side down.  So, the above the line:
