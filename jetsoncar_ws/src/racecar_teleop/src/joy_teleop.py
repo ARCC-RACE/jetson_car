@@ -110,6 +110,6 @@ def JoyCB(data):
 
 rospy.init_node("joy_teleop")
 rospy.Subscriber("joy", Joy, JoyCB)
-pub = rospy.Publisher('/racecar/controller/ackermann_cmd', AckermannDriveStamped, queue_size=1)
+pub = rospy.Publisher('controller/ackermann_cmd', AckermannDriveStamped, queue_size=1)
 
 rospy.spin() #keep node from closing

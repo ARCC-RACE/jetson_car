@@ -103,8 +103,8 @@ class Rosey:
 if __name__ == "__main__":
     dir = "/media/" + getpass.getuser() + "/racecarDataset/dataset" #directory of expected USB flashdrive
     rosey = Rosey(data_directory=dir,
-        batch_size=40, validation_steps=2000, nb_epochs=20,
-        steps_per_epoch=5000)
+        batch_size=40, validation_steps=1000, nb_epochs=20,
+        steps_per_epoch=1000)
     rosey.load_data()
     rosey.build_model()
     rosey.train_model()
