@@ -46,6 +46,20 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
    - `sudo pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
 `
 
+### Raspberry Pi Xbox Controller Setup UNFINISHED
+- Update Apt Repositories
+   - `sudo apt-get update`
+   - `sudo apt-get upgrade`
+- Install xbox drivers `sudo apt-get install xboxdrv`
+- Disable ertm for bluetooth `sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"`
+- Reboot Pi `sudo reboot`
+- Enable bluetooth control `sudo bluetoothctl`
+- Turn on agent
+   - `agent on`
+   - `default-agent`
+- Turn on scanning `scan on`
+   - This should print a list of bluetooth devices in range and their MAC Addresses
+
 ### Prerequisites
 
 ### Network Setup
