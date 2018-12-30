@@ -7,7 +7,7 @@
     </plugin>
   </gazebo>
 
-  <xacro:include filename="$(find realsense2_camera)/urdf/_d415.urdf.xacro"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_d415.urdf.xacro"/>
 
   <link name="base_link" />
   <sensor_d415 parent="base_link" camera_name="front_cam">

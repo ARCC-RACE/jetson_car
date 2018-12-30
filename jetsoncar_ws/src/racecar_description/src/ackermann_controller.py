@@ -1,7 +1,19 @@
 #!/usr/bin/env python
+
+#For simulation only
+
 import rospy
 from std_msgs.msg import Float64
 from ackermann_msgs.msg import AckermannDriveStamped
+from std_msgs.msg import Empty #for safety system
+
+#start as true in order to wait for control systems connection
+#also could indicated and emergency STOP command
+deadMan = True #deadmans switch (if true then man is "dead")
+
+def safetyCheck(data): #update last ping time
+    global lastSafetyPing
+    lastSafetyPing = rospy.get_time()
 
 def set_throttle_steer(data):
 
@@ -13,8 +25,13 @@ def set_throttle_steer(data):
     pub_pos_left_steering_hinge = rospy.Publisher('/racecar/left_steering_hinge_position_controller/command', Float64, queue_size=1)
     pub_pos_right_steering_hinge = rospy.Publisher('/racecar/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
-    throttle = data.drive.speed/0.1
+    throttle = data.drive.speed*10 #simulation needs values to be increased for descent speed
     steer = data.drive.steering_angle
+
+    global deadMan
+    if deadMan:
+        throttle = 0 #turn the engine off
+        #keep steering functionality open in case autonomous system can avoid obstacles
 
     pub_vel_left_rear_wheel.publish(throttle)
     pub_vel_right_rear_wheel.publish(throttle)
@@ -24,13 +41,27 @@ def set_throttle_steer(data):
     pub_pos_right_steering_hinge.publish(steer)
 
 def control_commands():
+    global lastSafetyPing
+    global deadMan
 
-    rospy.init_node('control_commands', anonymous=True)
+    rospy.init_node("ackermann_controller")
 
-    rospy.Subscriber("/racecar/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
+    lastSafetyPing = rospy.get_time() #used for checking frequency of safety pinger
+    rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
+    rospy.Subscriber("/racecar/safety", Empty, safetyCheck)
 
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+    loopRate = rospy.Rate(50)
+    while not rospy.is_shutdown():
+        rate = rospy.get_time() - lastSafetyPing
+        #check to see if rate is bellow 5Hz
+        if((rate > 0.2) and not deadMan): #1/5hz = 0.2
+            deadMan = not deadMan #deadMan is dead
+            rospy.logerr("Deadmans switch triggered!")
+        elif((rate < 0.2) and deadMan): #if man is dead but the publishing rate is now above 5Hz
+            deadMan = not deadMan #deadMan is alive
+            rospy.loginfo("Deadman switch reset!")
+        loopRate.sleep()
+
 
 if __name__ == '__main__':
     try:

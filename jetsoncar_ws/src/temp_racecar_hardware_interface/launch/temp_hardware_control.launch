@@ -4,15 +4,18 @@
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racecar_description)/urdf/racecar.xacro'" />
 
   <!-- Start hardware communication controllers (interface) -->
-  <node name="racecar_hardware_interface" pkg="temp_racecar_hardware_interface" type="temp_racecar_hardware_interface_node" output="screen" ns="/racecar"/>
+  <node name="racecar_hardware_interface" pkg="temp_racecar_hardware_interface" type="temp_racecar_hardware_interface_node" output="screen" ns="/racecar" respawn="true"/>
 
-  <!-- Start the software ackermann to joint_command controller -->
-  <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_description" />
+  <!-- Start the command mux -->
+  <node name="cmd_mux" type="cmd_mux.py" pkg="racecar_command_controllers" ns="/racecar" />
+
+  <!-- Start the software ackermann to joint_command controller (make sure this is not the SIMULATION ONLY ackermann_controller) -->
+  <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_command_controllers" ns="/racecar" />
 
   <!-- joy node -->
   <!-- <node pkg="joy" type="joy_node" name="joy"/> -->
 
   <!-- xbox one joy teleop -->
-  <node pkg="racecar_description" type="joy_teleop.py" name="joy_teleop"/>
+  <!-- <node pkg="racecar_description" type="joy_teleop.py" name="joy_teleop"/> -->
 
 </launch>

@@ -8,6 +8,8 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - If running on a Desktop computer run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
 - If you want to run the realsense2 ROS node on a desktop use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws
 - Download Xbox One Controller Driver https://github.com/paroj/xpad (Try controller without downloading this first)
+- On the user interface ("remote" control machine) add `192.168.1.100 racecar` to the `/etc/hosts`
+- When communicating with the jetson run `export ROS_MASTER_URI=http://racecar:11311`
 
 ### Simulation Setup
 - Install the intel realsense 2 SDK (needed to catkin_make the catkin workspace)
@@ -21,6 +23,11 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
  - `catkin_make` (even if this fails)
  - `soruce devel/setup.bash`
  - `rosdep install racecar_description`
+ - Install Tensor Flow https://www.tensorflow.org/install/ (download GPU version if you have one)
+    - `sudo pip install tensorflow-gpu`
+    - If running python program fails with error `ImportError: libcudnn.so.7: cannot open shared object file: No such file or directory` see https://stackoverflow.com/questions/41991101/importerror-libcudnn-when-running-a-tensorflow-program but make sure to download proper version of cuDNN (version 9.0) (https://developer.nvidia.com/rdp/cudnn-download)
+ - Install Keras `sudo pip install keras`
+ - `sudo pip install h5py`
 
 ### Nvidia Jetson Setup without full setup script
 - Follow Nvidia Jetson setup and run as user nvidia (password nvidia)
@@ -32,6 +39,12 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
 - clone https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
 - Run these scripts in this order: installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
 - Install USB driver for some arduino nanos https://devtalk.nvidia.com/default/topic/1032862/jetson-tx2/a-guide-to-solve-usb-serial-driver-problems-on-tx2/
+- Run the `/scripts/jetson.sh` script to setup network
+- Setup pip and download keras and tensorflow for python
+   - `sudo apt-get install -y python-pip`
+   - `pip install keras`
+   - `sudo pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
+`
 
 ### Raspberry Pi Xbox Controller Setup UNFINISHED
 - Update Apt Repositories
