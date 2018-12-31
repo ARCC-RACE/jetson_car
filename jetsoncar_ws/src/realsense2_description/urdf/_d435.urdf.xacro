@@ -135,9 +135,9 @@ aluminum peripherial evaluation case.
         <camera name='${camera_name}'>
           <horizontal_fov>1.487</horizontal_fov>
           <image> <!-- Values can be changed in physical version -->
-            <width>640</width>
+            <width>848</width>
             <height>480</height>
-            <format>R8G8B8</format>
+            <format>B8G8R8</format>
           </image>
           <depth_camera>
             <output>depths</output>
@@ -173,7 +173,7 @@ aluminum peripherial evaluation case.
           <CxPrime>0</CxPrime>
           <Cx>0</Cx>
           <Cy>0</Cy>
-          <focalLength>0</focalLength>
+          <focalLength>0.00193</focalLength>
           <hackBaseline>0</hackBaseline>
         </plugin>
       </sensor>
