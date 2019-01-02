@@ -6,7 +6,7 @@
   <!-- BNO055 IMU -->
   <node name="imu" pkg="bno055" type="bno055_ros.py"/>
 
-  <!-- Realsense D415 launch -->
+  <!-- Realsense D435 launch -->
   <arg name="serial_no"    default=""/>
   <arg name="json_file_path"  default=""/>
 
@@ -14,10 +14,10 @@
     <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
       <arg name="serial_no"         value="$(arg serial_no)"/>
       <arg name="json_file_path"    value="$(arg json_file_path)"/>
-      <arg name="depth_width"       value="640"/>
+      <arg name="depth_width"       value="848"/>
       <arg name="depth_height"      value="480"/>
       <arg name="depth_fps"         value="15"/>
-      <arg name="color_width"       value="640"/>
+      <arg name="color_width"       value="848"/>
       <arg name="color_height"      value="480"/>
       <arg name="color_fps"         value="30"/>
       <arg name="enable_depth"      value="true"/>

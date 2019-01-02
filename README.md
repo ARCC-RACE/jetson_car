@@ -35,6 +35,8 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
    - `sudo apt-get install librealsense2-dbg`
    - `sudo apt-get install librealsense2-dkms`  For demo
    - `sudo apt-get install librealsense2-utils` Tools for viewing physical camera data (See `/usr/bin/realsense-viewer`)
+- When ready plug in the realsense camera and test it using the `/usr/bin/realsense-viewer`
+   - If needed update the firmware using the instruction found here https://www.intel.com/content/dam/support/us/en/documents/emerging-technologies/intel-realsense-technology/Linux-RealSense-D400-DFU-Guide.pdf
 
 
 ### Nvidia Jetson Setup without full setup script
@@ -52,27 +54,36 @@ Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-
    - `sudo apt-get install -y python-pip`
    - `pip install keras`
    - `sudo pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
+- `sudo usermod -a -G dialout $USER` to give proper permissions to the USB peripherals
+- Add a udev rule for i2c-1 so that the IMU interface program can acces it
+   - Go to `/etc/udev/rules.d`
+   - Add a file called `50-i2c.rules`
+   - Add the line `ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"` to the `50-i2c.rules` file
+   - See https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions for additional information
 
 
-### DualShock 4 Controller Setup
+### DualShock 4 Controller Setup (Ubuntnu 16.04)
+- Connect to the controller by pressing and holding the `playstation button` and the `share` button until the light begins flashing white
+- Go into Bluetooth settings and add the controller named `wireless controller`
+- Test the connection by making sure the `/dev/input/js0` file exits
+- Run the `joy_node` ROS node and echo the `/joy` topic to confirm data is being sent properly from the controller to the computer
 
-### Raspberry Pi Xbox Controller Setup UNFINISHED OUTDATED (DualShock used instead)
-- Update Apt Repositories
-   - `sudo apt-get update`
-   - `sudo apt-get upgrade`
-- Install xbox drivers `sudo apt-get install xboxdrv`
-- Disable ertm for bluetooth `sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"`
-- Reboot Pi `sudo reboot`
-- Enable bluetooth control `sudo bluetoothctl`
-- Turn on agent
-   - `agent on`
-   - `default-agent`
-- Turn on scanning `scan on`
-   - This should print a list of bluetooth devices in range and their MAC Addresses
+
+### DualShock 4 Controller Setup (Ubuntu MATE RPI 3)
+- Install `bluez` driver `sudo apt-get install bluez`
+- https://github.com/macunixs/dualshock4-pi/blob/master/README.md
+- Follow the steps for Ubutnu 16.04 above
+
 
 ### Prerequisites
+- Realsense drivers installed on the jetson TX2
+-
 
 ### Network Setup
+- The `/etc/hosts` file should contain the following in addition to the default hostnames
+      - `192.168.1.100   racecar`
+- `export ROS_MASTER_URI=http://racecar:11311`
+- `export ROS_IP=ip_of_comptuer`
 
 #### Network Setup DEBUG
 
