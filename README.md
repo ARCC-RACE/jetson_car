@@ -3,6 +3,12 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 
 Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-BQ1HAR4U3CumyJK
 
+Master
+[![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=master)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
+
+Development
+[![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=development)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
+
 ## Getting Started
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - If running on a Desktop computer without realsense packages installed run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
