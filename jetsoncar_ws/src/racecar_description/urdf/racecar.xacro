@@ -180,13 +180,13 @@
 
   <xacro:wheel_transmission name="right_front_wheel" />
 
-  <!-- RealSense D415 Camera -->
+  <!-- RealSense D435 Camera -->
 
-  <xacro:include filename="$(find realsense2_description)/urdf/_d415.urdf.xacro"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
 
-  <sensor_d415 parent="chassis" camera_name="front_cam">
+  <sensor_d435 parent="chassis" camera_name="front_cam">
     <origin xyz="0.350 0 0.04" rpy="0 0 0"/>
-  </sensor_d415>
+  </sensor_d435>
 
   <!-- IMU -->
 
