@@ -40,7 +40,7 @@ def set_throttle_steer(data):
     # |----|
     #
     # Given:
-    # steering angle input in radians = ϕc
+    # steering angle input in radians = Lc
     # velocity = desired speed in m/s = v
     # acceleration = desired acceleration in m/s^2 = a
     # jerk = desired jerk in m/s^3 = j
@@ -50,24 +50,33 @@ def set_throttle_steer(data):
     # First we will work out steering angle for the car in simulation
     # The lines perpendicular to the wheels should always intersect at the Instantaneous Center of Curvature (ICC)
     # The wheel base (Wwb) of the car is 0.33m
+    Wwb = 0.33
     # The distance between kingpins (Wkp) is approx 0.2m
-    # ϕc = arctan(Wwb/Rc)
-    # Wwb/tan(ϕc) = Rc
+    Wkp = 0.2
+    # Lc = arctan(Wwb/Rc)
+    # Wwb/tan(Lc) = Rc
     # Rc = turn radius = linear velocity / angular velocity
-    # ϕL = arctan(Wwb/(Rc-(Wkp/2)))
-    # ϕR = arctan(Wwb/(Rc-(Wkp/2)))
+    # Ll = arctan(Wwb/(Rc-(Wkp/2)))
+    # Lr = arctan(Wwb/(Rc-(Wkp/2)))
     # Substituting we get:
-    #   ϕL = arctan(Wwb/(Wwb/tan(ϕc)-(Wkp/2)))
-    #   ϕR = arctan(Wwb/(Wwb/tan(ϕc)-(Wkp/2)))
+    #   Ll = arctan(Wwb/(Wwb/tan(Lc)-(Wkp/2)))
+    #   Lr = arctan(Wwb/(Wwb/tan(Lc)-(Wkp/2)))
 
+    if steer != 0:
+        pub_pos_left_steering_hinge.publish(math.atan(Wwb/(Wwb/math.tan(steer)-(Wkp/2))))
+        pub_pos_right_steering_hinge.publish(math.atan(Wwb/(Wwb/math.tan(steer)+(Wkp/2))))
+    else:
+        pub_pos_left_steering_hinge.publish(steer)
+        pub_pos_right_steering_hinge.publish(steer)
 
-    pub_vel_left_rear_wheel.publish(throttle)
-    pub_vel_right_rear_wheel.publish(throttle)
-    pub_vel_left_front_wheel.publish(throttle)
-    pub_vel_right_front_wheel.publish(throttle)
+    # For wheel velocity we will need to simulate a differential
+    # Wheel diameter = 0.1m
+    # Not yet implemented
 
-    pub_pos_left_steering_hinge.publish(steer)
-    pub_pos_right_steering_hinge.publish(steer)
+    pub_vel_left_rear_wheel.publish(velocity)
+    pub_vel_right_rear_wheel.publish(velocity)
+    pub_vel_left_front_wheel.publish(velocity)
+    pub_vel_right_front_wheel.publish(velocity)
 
 def control_commands():
     global lastSafetyPing
