@@ -3,6 +3,7 @@
 #For simulation only
 
 import rospy
+import math
 from std_msgs.msg import Float64
 from ackermann_msgs.msg import AckermannDriveStamped
 from std_msgs.msg import Empty #for safety system
@@ -25,7 +26,7 @@ def set_throttle_steer(data):
     pub_pos_left_steering_hinge = rospy.Publisher('/racecar/left_steering_hinge_position_controller/command', Float64, queue_size=1)
     pub_pos_right_steering_hinge = rospy.Publisher('/racecar/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
-    throttle = data.drive.speed*10 #simulation needs values to be increased for descent speed
+    velocity = data.drive.speed
     steer = data.drive.steering_angle
 
     global deadMan
@@ -33,10 +34,38 @@ def set_throttle_steer(data):
         throttle = 0 #turn the engine off
         #keep steering functionality open in case autonomous system can avoid obstacles
 
+    #Ackermann calculations
+    # |----|
+    #   ||
+    # |----|
+    #
+    # Given:
+    # steering angle input in radians = ϕc
+    # velocity = desired speed in m/s = v
+    # acceleration = desired acceleration in m/s^2 = a
+    # jerk = desired jerk in m/s^3 = j
+    #
+    # See https://www.auto.tuwien.ac.at/bib/pdf_TR/TR0183.pdf for calculations and guidance on concepts
+    #
+    # First we will work out steering angle for the car in simulation
+    # The lines perpendicular to the wheels should always intersect at the Instantaneous Center of Curvature (ICC)
+    # The wheel base (Wwb) of the car is 0.33m
+    # The distance between kingpins (Wkp) is approx 0.2m
+    # ϕc = arctan(Wwb/Rc)
+    # Wwb/tan(ϕc) = Rc
+    # Rc = turn radius = linear velocity / angular velocity
+    # ϕL = arctan(Wwb/(Rc-(Wkp/2)))
+    # ϕR = arctan(Wwb/(Rc-(Wkp/2)))
+    # Substituting we get:
+    #   ϕL = arctan(Wwb/(Wwb/tan(ϕc)-(Wkp/2)))
+    #   ϕR = arctan(Wwb/(Wwb/tan(ϕc)-(Wkp/2)))
+
+
     pub_vel_left_rear_wheel.publish(throttle)
     pub_vel_right_rear_wheel.publish(throttle)
     pub_vel_left_front_wheel.publish(throttle)
     pub_vel_right_front_wheel.publish(throttle)
+
     pub_pos_left_steering_hinge.publish(steer)
     pub_pos_right_steering_hinge.publish(steer)
 
