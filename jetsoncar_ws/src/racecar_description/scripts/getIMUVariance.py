@@ -19,7 +19,9 @@ rospy.loginfo("Please make sure that the IMU is reading as close to 0m/s^2 in th
 rospy.loginfo("Make sure that the IMU is level (orientation = 0, 0, 0, 1)")
 rospy.loginfo("Keep the IMU level and with minimal acceleration for 30 seconds")
 
-start = rospy.Time.now().secs
+# helper function to turn vector3 x,y,z into an array
+def toArray(vector3):
+    return vector3.x, vector3.y, vector3.z #returning a tuple
 
 #IMU Message
 # Header header
@@ -43,23 +45,28 @@ def cb(data):
     global numDataPoints
     global dataPoints
 
-    rpy = tf.transformations.euler_from_quaternion(data.orientation.x, data.orientation.y,
-                                                    data.orientation.z, data.orientation.w)
+    rpy = tf.transformations.euler_from_quaternion((data.orientation.x, data.orientation.y,
+                                                    data.orientation.z, data.orientation.w))
 
     # First we need to calulate the mean (these should optimally be as close to 0 or 9.8 as possible)
     for i in range(3):
         mean[i] = (mean[i]+rpy[i])/2
+        print(numDataPoints)
         dataPoints[numDataPoints][i] = rpy[i]
 
     for i in range(3):
-        mean[i+3] = (mean[i+3]+data.angular_velocity[i])/2
-        dataPoints[numDataPoints][i+3] = data.angular_velocity[i]
+        mean[i+3] = (mean[i+3]+toArray(data.angular_velocity)[i])/2
+        dataPoints[numDataPoints][i+3] = toArray(data.angular_velocity)[i]
 
     for i in range(3):
-        mean[i+6] = (mean[i+6]+data.linear_acceleration[i])/2
-        dataPoints[numDataPoints][i+6] = data.linear_acceleration[i]
+        mean[i+6] = (mean[i+6]+toArray(data.linear_acceleration)[i])/2
+        dataPoints[numDataPoints][i+6] = toArray(data.linear_acceleration)[i]
 
     numDataPoints += 1
+
+rospy.wait_for_message(imuTopic, Imu) #updates the ros time
+
+start = rospy.Time.now().secs
 
 #collect IMU data points (this line prevents the program from closing while data is colected and averaged)
 while 30 > rospy.Time.now().secs - start and not rospy.is_shutdown():
