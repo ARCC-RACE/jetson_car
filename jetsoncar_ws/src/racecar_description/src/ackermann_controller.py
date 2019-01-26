@@ -26,7 +26,7 @@ def set_throttle_steer(data):
     pub_pos_left_steering_hinge = rospy.Publisher('/racecar/left_steering_hinge_position_controller/command', Float64, queue_size=1)
     pub_pos_right_steering_hinge = rospy.Publisher('/racecar/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
-    velocity = data.drive.speed
+    velocity = data.drive.speed*10
     steer = data.drive.steering_angle
 
     global deadMan

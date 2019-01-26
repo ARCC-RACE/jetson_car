@@ -36,9 +36,7 @@ Development
    - `sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCDE`
    - `sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u`
    - `sudo apt-get update`
-   - `sudo apt-get install librealsense2`
-   - `sudo apt-get install librealsense2-dev`
-   - `sudo apt-get install librealsense2-dbg`
+   - `sudo apt-get install librealsense2 librealsense2-dev librealsense2-dbg`
    - `sudo apt-get install librealsense2-dkms`  For demo
    - `sudo apt-get install librealsense2-utils` Tools for viewing physical camera data (See `/usr/bin/realsense-viewer`)
 - When ready plug in the realsense camera and test it using the `/usr/bin/realsense-viewer`
@@ -67,6 +65,9 @@ Development
    - Add the line `ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"` to the `50-i2c.rules` file
    - See https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions for additional information
 
+### RTAB Mapping setup
+- https://github.com/introlab/rtabmap_ros#installation
+- `sudo apt-get install ros-kinetic-rtabmap-ros ros-kinetic-robot-localization ros-kinetic-pointcloud-to-laserscan ros-kinetic-depthimage-to-laserscan`
 
 ### DualShock 4 Controller Setup (Ubuntnu 16.04)
 - Connect to the controller by pressing and holding the `playstation button` and the `share` button until the light begins flashing white
