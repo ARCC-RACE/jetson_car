@@ -36,7 +36,7 @@ def toArray(vector3):
 # float64[9] linear_acceleration_covariance # Row major x, y z
 
 numDataPoints = 0
-dataPoints    = [[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]] # store data points so that we can compute the variance once we know the mean
+dataPoints    = [] # store data points so that we can compute the variance once we know the mean
 mean          = [0,0,0,0,0,0,0,0,0] # array of len 9
 var           = [0,0,0,0,0,0,0,0,0] # variance (the average of the square of the difference from the mean)
 
@@ -46,12 +46,13 @@ def cb(data):
     global dataPoints
 
     rpy = tf.transformations.euler_from_quaternion((data.orientation.x, data.orientation.y,
-                                                    data.orientation.z, data.orientation.w))
+                                                    data.orientation.z, data.orientation.w))\
+
+    dataPoints.append([0,0,0,0,0,0,0,0,0]) #increase number of data points stored by 1
 
     # First we need to calulate the mean (these should optimally be as close to 0 or 9.8 as possible)
     for i in range(3):
         mean[i] = (mean[i]+rpy[i])/2
-        print(numDataPoints)
         dataPoints[numDataPoints][i] = rpy[i]
 
     for i in range(3):
@@ -77,9 +78,29 @@ rospy.loginfo("Number of points collected = " + str(numDataPoints))
 rospy.loginfo("Calculating variance... ")
 
 #Compute the IMU variance
+#Sum the squares of the deviation from the mean
 for data in dataPoints:
     for i in range(9):
-        var[i] += (data[i]-mean[i])**2/2
+        var[i] += (data[i]-mean[i])**2 #should we also put this against "ground truth"
+#divide the sum by the number of data points
+for i in range(9):
+    var[i] /= numDataPoints
 
-rospy.loginfo("IMU variance x,y,z,r,p,y: " + str(var))
+rospy.loginfo("IMU variance r,p,y,rv,pv,yv,x,y,z: " + str(var))
+
+###############################################################################
+#running against ground truth
+for data in dataPoints:
+    for i in range(9):
+        if i == 8:
+            var[i] += (data[i]-9.80665)**2
+        else:
+            var[i] += (data[i])**2
+#divide the sum by the number of data points
+for i in range(9):
+    var[i] /= numDataPoints
+
+rospy.loginfo("IMU variance against ground truth r,p,y,rv,pv,yv,x,y,z: " + str(var))
+###############################################################################
+
 rospy.loginfo("Program Complete!")

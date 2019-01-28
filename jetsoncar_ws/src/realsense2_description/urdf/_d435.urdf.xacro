@@ -173,7 +173,7 @@ aluminum peripherial evaluation case.
           <CxPrime>0</CxPrime>
           <Cx>0</Cx>
           <Cy>0</Cy>
-          <focalLength>0.00193</focalLength>
+          <focalLength>0.0</focalLength>
           <hackBaseline>0</hackBaseline>
         </plugin>
       </sensor>
