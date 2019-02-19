@@ -1,0 +1,3 @@
+[submodule "jetsoncar_ws/src/racecar_worlds"]
+	path = jetsoncar_ws/src/racecar_worlds
+	url = http://github.com/JHS-ARCC-Club/racecar_worlds

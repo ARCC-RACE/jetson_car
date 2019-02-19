@@ -88,4 +88,9 @@ while not rospy.is_shutdown():
     # msg.drive.steering_angle_velocity = 0 #angle velocity unknown
 
     pub.publish(msg)
-    rate.sleep()
+
+    #Catch time going backwards error that occurs when Gazebo simulation is reset
+    try:
+        rate.sleep()
+    except rospy.ROSInterruptException:
+        pass
