@@ -1,11 +1,11 @@
 <launch>
 
   <node name="racecar_localization" pkg="robot_localization" type="ekf_localization_node" ns="racecar">
-    <rosparam command="load" file="$(find racecar_description)/config/robot_localization.yaml"/>
+    <rosparam command="load" file="$(find racecar_description)/config/racecar_localization.yaml"/>
   </node>
 
   <node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" output="screen" ns="racecar">
-    <remap from="image"       to="/front_cam/depth/image_raw"/>
+    <remap from="image" to="/front_cam/depth/image_raw"/>
     <remap from="/front_cam/depth/camera_info" to="/front_cam/color/camera_info"/>
 
     <param name="min_height" value="0.0"/>
