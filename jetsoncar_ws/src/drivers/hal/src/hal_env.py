@@ -10,10 +10,8 @@ import numpy as np
 
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
-from geometry_msgs.msg import Twist
-from std_srvs.srv import Empty
-
-from sensor_msgs.msg import LaserScan
+from ackermann_msgs.msg import AckermannDriveStamped
+from sensor_msgs.msg import Imu, Image
 
 from gym.utils import seeding
 
@@ -21,27 +19,27 @@ from gym.envs.registration import register
 
 reg = register(
     id="HAL-v0",
-    entry_point="my_custom_env:MyCustomEnv",
+    entry_point="hal_env:HALenv",
     timestep_limit=5000,
 
     )
 
-class MyCustomEnv(gazebo_env.GazeboEnv):
+class HALenv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
 
-        self.vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=5)
+        self.vel_pub = rospy.Publisher('/racecar/autonomous/ackermann_cmd', AckermannDriveStamped, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
 
-        self.action_space = spaces.Discrete(4) #F,L,R,B
+        self.action_space = spaces.Discrete(3) #Go Strait, Turn Left, Turn Right
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
 
-    def discretize_observation(self,data,new_ranges):
+    def discretize_observation(self, camera_data):
         discretized_ranges = []
         min_range = 0.4
         done = False
@@ -72,7 +70,7 @@ class MyCustomEnv(gazebo_env.GazeboEnv):
 
         if action == 0: #FORWARD
             vel_cmd = Twist()
-            vel_cmd.linear.x = 1.0
+            vel_cmd.linear.x = 2
             vel_cmd.angular.z = 0.0
             self.vel_pub.publish(vel_cmd)
         elif action == 1: #LEFT
@@ -91,21 +89,21 @@ class MyCustomEnv(gazebo_env.GazeboEnv):
             vel_cmd.angular.z = 0
             self.vel_pub.publish(vel_cmd)
 
-        data = None
-        while data is None:
+        cameraData = None
+        while cameraData is None:
             try:
-                data = rospy.wait_for_message('/kobuki/laser/scan', LaserScan, timeout=5)
+                #imuData = rospy.wait_for_message('/racecar/imu', Imu, timeout=5)
+                cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
             except:
                 pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
-            #resp_pause = pause.call()
             self.pause()
         except rospy.ServiceException, e:
             print ("/gazebo/pause_physics service call failed")
 
-        state,done = self.discretize_observation(data,5)
+        state,done = self.discretize_observation(cameraData)
 
         if not done:
             if action == 0:
@@ -124,7 +122,6 @@ class MyCustomEnv(gazebo_env.GazeboEnv):
         # Resets the state of the environment and returns an initial observation.
         rospy.wait_for_service('/gazebo/reset_simulation')
         try:
-            #reset_proxy.call()
             self.reset_proxy()
         except rospy.ServiceException, e:
             print ("/gazebo/reset_simulation service call failed")
@@ -132,26 +129,24 @@ class MyCustomEnv(gazebo_env.GazeboEnv):
         # Unpause simulation to make observation
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
-            #resp_pause = pause.call()
             self.unpause()
         except rospy.ServiceException, e:
             print ("/gazebo/unpause_physics service call failed")
 
-        #read laser data
+        #read camera data
         data = None
         while data is None:
             try:
-                data = rospy.wait_for_message('/kobuki/laser/scan', LaserScan, timeout=5)
+                data = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
             except:
                 pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
-            #resp_pause = pause.call()
             self.pause()
         except rospy.ServiceException, e:
             print ("/gazebo/pause_physics service call failed")
 
-        state = self.discretize_observation(data,5)
+        state = self.discretize_observation(cameraData)
 
         return state

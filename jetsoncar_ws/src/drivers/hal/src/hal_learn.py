@@ -29,8 +29,8 @@ def render():
 
 if __name__ == '__main__':
 
-    rospy.init_node("turtle_gym", anonymous=True)
-    env = gym.make('MyCustom-v0')
+    rospy.init_node("hal_gym", anonymous=True)
+    env = gym.make('HALenv-v0')
 
     print "Gym Make done"
     outdir = '/tmp/gazebo_gym_experiments'

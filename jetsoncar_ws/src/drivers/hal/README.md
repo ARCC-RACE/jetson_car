@@ -1,4 +1,6 @@
-Setup Instrucitons:
+Setup Instructions:
+
+IS PYTHON 3 Needed? If python 2 is usable then it should be preferred. 
 
 Install Open AI Gym + Gazebo extension:
 Does this need to be python 3?
