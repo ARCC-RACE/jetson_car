@@ -4,3 +4,6 @@
 [submodule "jetsoncar_ws/src/realsense2_description"]
 	path = jetsoncar_ws/src/realsense2_description
 	url = https://github.com/Michael-Equi/realsense2_description.git
+[submodule "jetsoncar_ws/src/drivers/gym-gazebo"]
+	path = jetsoncar_ws/src/drivers/gym-gazebo
+	url = https://github.com/erlerobot/gym-gazebo.git
