@@ -144,7 +144,7 @@ aluminum peripherial evaluation case.
           </depth_camera>
           <clip>
             <near>0.1</near>
-            <far>100</far>
+            <far>200</far>
           </clip>
           <noise>
             <type>gaussian</type>
