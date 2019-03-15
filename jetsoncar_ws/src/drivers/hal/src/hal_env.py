@@ -48,7 +48,7 @@ class HALenv(gazebo_env.GazeboEnv):
         self.lastPose = self._getModelPose()
         self.lastStepTime = rospy.get_time()
 
-        self.targets = [[174,2],[6,2]]
+        self.targets = [[174,0],[6,0]]
         self.currentTarget = 0
         # two different targets at each end of the track
         # once one target is hit the target will switch to the next one
@@ -151,7 +151,6 @@ class HALenv(gazebo_env.GazeboEnv):
         done = False
         if pose[1] > 49 or pose[1] < -49:
             done = True
-            print("general y violation")
         if pose[0] > 44 and pose[0] < 125: #if the car is in the area between turns and out of bounds
             if pose[1] < 0 and pose[1] > -35:  #on left side
                 done = True
@@ -160,17 +159,15 @@ class HALenv(gazebo_env.GazeboEnv):
         #       ro          x      offset    y              ri          x       offset   y               Make sure that the car is in the bounds of the turn
         if not (49**2 > ((pose[0]-44.5)**2+pose[1]**2) and 37**2 < ((pose[0]-44.5)**2+pose[1]**2)) and pose[0] < 44:    #Upper turn
             done = True
-            print("x violation upper")
         if not (49**2 > ((pose[0]-125.6)**2+pose[1]**2) and 37**2 < ((pose[0]-125.6)**2+pose[1]**2)) and pose[0] > 125: #Lower turn
             done = True
-            print("x violation lower")
 
 
         if not done:
             #dz/dt: change in distance / change in time to compute reward (want to get closer to target faster)
             if not stepTime-self.lastStepTime == 0: # make sure we dont do any dividing by zero
-                reward = 2*((dist(self.lastPose[0], self.targets[self.currentTarget][0], self.lastPose[1], self.targets[self.currentTarget][1])-
-                            dist(pose[0], self.targets[self.currentTarget][0], pose[1], self.targets[self.currentTarget][1]))/(stepTime-self.lastStepTime))
+                reward = 2*((dist(self.lastPose[0], self.lastPose[1], self.targets[self.currentTarget][0], self.targets[self.currentTarget][1])-
+                            dist(pose[0], pose[1], self.targets[self.currentTarget][0], self.targets[self.currentTarget][1]))/(stepTime-self.lastStepTime))
             else:
                 reward = 0
 

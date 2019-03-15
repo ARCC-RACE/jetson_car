@@ -174,4 +174,5 @@ if __name__ == "__main__":
     env.reset()
     while not rospy.is_shutdown():
         state, reward, done, _ = env.step(0)
-        print(reward, done)
+        if(done):
+            env.reset()

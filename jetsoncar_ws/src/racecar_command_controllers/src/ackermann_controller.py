@@ -11,19 +11,9 @@ from std_msgs.msg import Empty #for safety system
 #also could indicated and emergency STOP command
 deadMan = True #deadmans switch (if true then man is "dead")
 
-def getTime(): #Fix time went backwards problem and provide error correction
-    try:
-        return rospy.get_time()
-    except rospy.ROSInterruptException:
-        try:
-            return rospy.get_time()
-        except rospy.ROSInterruptException:
-            pass
-        pass
-
 def safetyCheck(data): #update last ping time
     global lastSafetyPing
-    lastSafetyPing = getTime()
+    lastSafetyPing = rospy.get_time()
 
 def set_throttle_steer(data):
 
@@ -56,13 +46,13 @@ def control_commands():
 
     rospy.init_node("ackermann_controller")
 
-    lastSafetyPing = getTime() #used for checking frequency of safety pinger
+    lastSafetyPing = rospy.get_time() #used for checking frequency of safety pinger
     rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
     rospy.Subscriber("/racecar/safety", Empty, safetyCheck)
 
     loopRate = rospy.Rate(50)
     while not rospy.is_shutdown():
-        rate = getTime() - lastSafetyPing
+        rate = rospy.get_time() - lastSafetyPing
         #check to see if rate is bellow 5Hz
         if((rate > 0.2) and not deadMan): #1/5hz = 0.2
             deadMan = not deadMan #deadMan is dead
@@ -70,14 +60,13 @@ def control_commands():
         elif((rate < 0.2) and deadMan): #if man is dead but the publishing rate is now above 5Hz
             deadMan = not deadMan #deadMan is alive
             rospy.loginfo("Deadman switch reset!")
-    try:
+
         loopRate.sleep()
-    except rospy.ROSInterruptException:
-        pass
 
 
 if __name__ == '__main__':
     try:
         control_commands()
-    except rospy.ROSInterruptException:
+    except Exception as e:
+        rospy.logerr(e)
         pass

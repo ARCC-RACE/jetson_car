@@ -13,3 +13,8 @@ Does this need to be python 3? No
 
 Read the getting started docs:
 * https://gym.openai.com/docs/
+
+
+You may need to install these packages as well if you receive warnings when running the learn script:
+* `sudo pip install -U pyopenssl`
+* `sudo pip install --upgrade cryptography`
