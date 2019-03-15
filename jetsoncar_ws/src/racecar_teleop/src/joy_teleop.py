@@ -157,7 +157,7 @@ def JoyCB(data):
 
 def watchdogTimer(event):
     global lastUpdate
-    if rospy.get_time() - lastUpdate > 0.75:
+    if rospy.get_time() - lastUpdate > 0.15:
         msg = AckermannDriveStamped();
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
@@ -166,6 +166,6 @@ def watchdogTimer(event):
 
 rospy.Subscriber("joy", Joy, JoyCB)
 pub = rospy.Publisher('controller/ackermann_cmd', AckermannDriveStamped, queue_size=1)
-rospy.Timer(rospy.Duration(0.75),watchdogTimer) #duration time = 1/Hz (added some leeway for the system)
+rospy.Timer(rospy.Duration(0.15),watchdogTimer) #duration time = 1/Hz (added some leeway for the system)
 
 rospy.spin() #keep node from closing
