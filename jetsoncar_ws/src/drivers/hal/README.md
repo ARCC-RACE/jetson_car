@@ -1,9 +1,9 @@
 Setup Instructions:
 
-IS PYTHON 3 Needed? If python 2 is usable then it should be preferred. 
+IS PYTHON 3 Needed? If python 2 is usable then it should be preferred.
 
 Install Open AI Gym + Gazebo extension:
-Does this need to be python 3?
+Does this need to be python 3? No
 * Use setup.sh for Ubuntu 16.04 if desired
 * Use docker to run Gazebo 8.1.1 or greater with ROS kinetic?
 * Make sure to do the install for python 3.5.2 or greater (pip3)

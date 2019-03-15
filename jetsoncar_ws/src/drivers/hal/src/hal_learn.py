@@ -120,7 +120,7 @@ class DeepQ:
                 if sample["isFinal"]:
                     X_batch = np.append(X_batch, np.array([newState.copy()]), axis=0) #Why use new state?
                     #instead of appending discounted reward from bellman equation use final reward
-                    Y_batch = np.append(Y_batch, np.array([sample['reward']]*3]), axis=0) # 3 = number of output neurons
+                    Y_batch = np.append(Y_batch, np.array([sample['reward']*3]), axis=0) # 3 = number of output neurons
 
         self.model.fit(X_batch, Y_batch, batch_size=len(batch), epochs=1, verbose=1)
 
@@ -166,7 +166,12 @@ class DeepQ:
 
 if __name__ == "__main__":
 
-    rospy.init_node("hal_gym",anonymous=True)
+    rospy.init_node("hal_gym", anonymous=True)
     env = gym.make("HAL-v0")
 
     print("Open AI gym made")
+
+    env.reset()
+    while not rospy.is_shutdown():
+        state, reward, done, _ = env.step(0)
+        print(reward, done)

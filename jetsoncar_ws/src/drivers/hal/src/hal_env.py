@@ -7,12 +7,14 @@ import rospy
 import roslaunch
 import time
 import numpy as np
+import math
 
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
 from std_srvs.srv import Empty
 from ackermann_msgs.msg import AckermannDriveStamped
 from sensor_msgs.msg import Imu, Image
+from gazebo_msgs.msg import ModelStates
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import utils
@@ -27,6 +29,9 @@ reg = register(
     timestep_limit=5000,
     )
 
+def dist(x1, y1, x2, y2):
+    return math.sqrt((x1-x2)**2+(y1-y2)**2)
+
 class HALenv(gazebo_env.GazeboEnv):
 
     def __init__(self):
@@ -40,11 +45,52 @@ class HALenv(gazebo_env.GazeboEnv):
         self.action_space = spaces.Discrete(3) #Go Strait, Turn Left, Turn Right
         self.reward_range = (-np.inf, np.inf)
 
+        self.lastPose = self._getModelPose()
+        self.lastStepTime = rospy.get_time()
+
+        self.targets = [[174,2],[6,2]]
+        self.currentTarget = 0
+        # two different targets at each end of the track
+        # once one target is hit the target will switch to the next one
+        # target 0 is on the far side of the track while target 1 is near the starting location
+        # target range should be x+-4.5
+
+
+        self.state = np.zeros((utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS*4), dtype=int)
+
         self._seed()
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+
+    def _getModelPose(self):
+        modelState = None
+        while modelState is None:
+            try:
+                modelState = rospy.wait_for_message('/gazebo/model_states', ModelStates, timeout=1)
+                modelStateIndex = 0
+                for i in range(len(modelState.name)):
+                    if modelState.name[i] == "racecar":
+                        modelStateIndex = i
+                        break
+            except:
+                pass
+        return modelState.pose[modelStateIndex].position.x, modelState.pose[modelStateIndex].position.y
+
+    def _updateState(self):
+        cameraData = None
+        #state array contains 4 RGB images stacked in the 3rd dimension
+        for i in range(4):
+            while cameraData is None:
+                try:
+                    cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=1)
+                    image = utils.rgb2yuv(utils.resize(utils.crop(cameraData)))
+                    for rgbLayer in range(3):
+                        self.state[:, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
+                except:
+                    pass
+
 
     def step(self, action):
         #input action : return new state, reward, done, and info
@@ -63,8 +109,6 @@ class HALenv(gazebo_env.GazeboEnv):
         #new state
         #compute reward and check if DONE
 
-        state = np.zeros(utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS*4, dtype=int)
-
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
             self.unpause()
@@ -74,30 +118,25 @@ class HALenv(gazebo_env.GazeboEnv):
         ackermann_cmd = AckermannDriveStamped()
 
         if action == 0: #FORWARD
-            ackermann_cmd.speed = 6
-            ackermann_cmd.steering_angle = 0.0
+            ackermann_cmd.drive.speed = 6
+            ackermann_cmd.drive.steering_angle = 0.0
 
         elif action == 1: #LEFT
-            ackermann_cmd.speed = 6
-            ackermann_cmd.steering_angle = 0.5
+            ackermann_cmd.drive.speed = 6
+            ackermann_cmd.drive.steering_angle = 0.5
 
         elif action == 2: #RIGHT
-            ackermann_cmd.speed = 6
-            ackermann_cmd.steering_angle = -0.5
+            ackermann_cmd.drive.speed = 6
+            ackermann_cmd.drive.steering_angle = -0.5
 
         self.ackermann_pub.publish(ackermann_cmd)
 
-        cameraData = None
-        #state array contains 4 RGB images stacked in the 3rd dimension
-        for i in range(4):
-            while cameraData is None:
-                try:
-                    cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=2)
-                    image = utils.rgb2yuv(utils.resize(utils.crop(cameraData)))
-                    for rgbLayer in range(3):
-                        state[:, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
-                except:
-                    pass
+        self._updateState()
+
+        pose = self._getModelPose()
+        #pose[0] = x, pose[1] = y
+
+        stepTime = rospy.get_time()
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -105,20 +144,48 @@ class HALenv(gazebo_env.GazeboEnv):
         except rospy.ServiceException, e:
             print ("/gazebo/pause_physics service call failed")
 
-        #determine if the episode is done
-        #for track 1
+        # determine if the episode is done
+        # for track 1
+        # X and Y bounds defined below
+        #(x-offset)^2+y^2=r^2
+        done = False
+        if pose[1] > 49 or pose[1] < -49:
+            done = True
+            print("general y violation")
+        if pose[0] > 44 and pose[0] < 125: #if the car is in the area between turns and out of bounds
+            if pose[1] < 0 and pose[1] > -35:  #on left side
+                done = True
+            elif pose[1] > 0 and pose[1] < 35: #on right side
+                done = True
+        #       ro          x      offset    y              ri          x       offset   y               Make sure that the car is in the bounds of the turn
+        if not (49**2 > ((pose[0]-44.5)**2+pose[1]**2) and 37**2 < ((pose[0]-44.5)**2+pose[1]**2)) and pose[0] < 44:    #Upper turn
+            done = True
+            print("x violation upper")
+        if not (49**2 > ((pose[0]-125.6)**2+pose[1]**2) and 37**2 < ((pose[0]-125.6)**2+pose[1]**2)) and pose[0] > 125: #Lower turn
+            done = True
+            print("x violation lower")
+
 
         if not done:
-            if action == 0:
-                reward = 8
-            elif action == 0:
-                reward = 1
+            #dz/dt: change in distance / change in time to compute reward (want to get closer to target faster)
+            if not stepTime-self.lastStepTime == 0: # make sure we dont do any dividing by zero
+                reward = 2*((dist(self.lastPose[0], self.targets[self.currentTarget][0], self.lastPose[1], self.targets[self.currentTarget][1])-
+                            dist(pose[0], self.targets[self.currentTarget][0], pose[1], self.targets[self.currentTarget][1]))/(stepTime-self.lastStepTime))
             else:
-                reward = 2
+                reward = 0
+
+            #switch targets if needed
+            #When the sign changes on pose then power*lastPose will be negative
+            if (pose[1]-2)*(self.lastPose[1]-2) < 0:
+                reward = 500
+                self.currentTarget = self.currentTarget ^ 1 #XOR
+
+            self.lastPose = pose
+            self.lastStepTime = stepTime
         else:
             reward = -200
 
-        return state, reward, done, {}
+        return self.state, reward, done, {}
 
     def reset(self):
 
@@ -140,13 +207,7 @@ class HALenv(gazebo_env.GazeboEnv):
         except rospy.ServiceException, e:
             print ("/gazebo/unpause_physics service call failed")
 
-        #read camera data
-        data = None
-        while data is None:
-            try:
-                data = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
-            except:
-                pass
+        #self._updateState()
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -154,6 +215,4 @@ class HALenv(gazebo_env.GazeboEnv):
         except rospy.ServiceException, e:
             print ("/gazebo/pause_physics service call failed")
 
-        state = self.discretize_observation(cameraData)
-
-        return state
+        return self.state
