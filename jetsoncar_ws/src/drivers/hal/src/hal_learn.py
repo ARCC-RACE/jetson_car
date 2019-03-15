@@ -10,101 +10,163 @@ import random
 import time
 import matplotlib
 import matplotlib.pyplot as plt
-import qlearn
 import rospy
 from geometry_msgs.msg import Twist
-# import liveplot
 from gym import wrappers
 from liveplot import LivePlot
 
-def render():
-    render_skip = 0 #Skip first X episodes.
-    render_interval = 50 #Show render Every Y episodes.
-    render_episodes = 10 #Show Z episodes every rendering.
+#utils from Dave2 net Rosey was modeled after
+import utils
 
-    if (x%render_interval == 0) and (x != 0) and (x > render_skip):
-        env.render()
-    elif ((x-render_episodes)%render_interval == 0) and (x != 0) and (x > render_skip) and (render_episodes < x):
-        env.render(close=True)
+from memory import Memory
 
-if __name__ == '__main__':
+from keras import Sequential, optimizers
+from keras.layers import Dense, Flatten, Conv2D
+from keras.models import load_model
 
-    rospy.init_node("hal_gym", anonymous=True)
-    env = gym.make('HALenv-v0')
+"""
+init replay memory
+init action-value function Q with ranfom weights
 
-    print "Gym Make done"
-    outdir = '/tmp/gazebo_gym_experiments'
-    #outdir = '/home/user/catkin_ws/src/gym_construct/src/gazebo_gym_experiments'
-    # env.monitor.start(outdir, force=True, seed=None)       # I had to comment this and
-    env = wrappers.Monitor(env, outdir, force=True)          # use this to avoid warnings
-    #plotter = LivePlot(outdir)
-    print "Monitor Wrapper started"
-    last_time_steps = numpy.ndarray(0)
+repeat
+    select action a, with probability e select one at random otherwise do a = argmax'Q(s,a')
+    carry out action a
+    observe reward and new state s'
+    store experience <s, a, r, s'> into replay memory
 
-    qlearn = qlearn.QLearn(actions=range(env.action_space.n),
-                    alpha=0.1, gamma=0.8, epsilon=0.9)
+    sample random transitions <ss, aa, rr, ss'> from replay memory
+    calculate target for each miniBatch transition
+        if ss' is terminal state then tt = rr
+        otherwise tt = rr + gamma*maxa'Q(ss',aa')
+    train the Q network using (tt - Q(ss, aa))^2 as loss function
 
-    initial_epsilon = qlearn.epsilon
+    s = s'
+until terminated
 
-    epsilon_discount = 0.999 # 1098 eps to reach 0.1
+"""
 
-    start_time = time.time()
-    total_episodes = 50
-    highest_reward = 0
+"""
 
-    for x in range(total_episodes):
-        done = False
+Convolutional Neural Network based off DeepMind Architecture
+Convert image to YUV encoding (see Rosey)
+W = (W-F+2P)/S+1 -> calc convolutional layer output
 
-        cumulated_reward = 0 #Should going forward give more reward then L/R ?
-        print ("Episode = "+str(x))
-        observation = env.reset()
-        if qlearn.epsilon > 0.05:
-            qlearn.epsilon *= epsilon_discount
+       input       kernel  stride  num_filters    activation   output
+conv1  212x60x12   8x8     4       32             ReLU         52x14x32
+conv2  52x14x32    4x4     2       64             ReLU
+conv3              3x3     1       64             ReLU
+fc4                4x4     2       512            ReLU
+fc5                4x4     2       18             Linear
 
-        #render()
-        print "Starting Render"
-        env.render()
-        print "End Render"
-        state = ''.join(map(str, observation))
-        max_range = 1000
-        for i in range(max_range):
+"""
 
-            # Pick an action based on the current state
-            action = qlearn.chooseAction(state)
-            # Execute the action and get feedback
-            observation, reward, done, info = env.step(action)
+#My simplified Deep Q class
+class DeepQ:
+    def __init__(self, outputs, memorySize, discountFactor, learningRate, learnStart):
+        """
+        Parameters:
+            - outputs: output size
+            - memorySize: size of the memory that will store each state
+            - discountFactor: the discount factor (gamma)
+            - learningRate: learning rate
+            - learnStart: steps to happen before for learning. Set to 128
+        """
+        self.input_size = inputs
+        self.output_size = outputs
+        self.memory = memory.Memory(memorySize)
+        self.discountFactor = discountFactor
+        self.learnStart = learnStart
+        self.learningRate = learningRate
 
-            cumulated_reward += reward
+    def createModel(self, input_width, input_height):
+        self.model = Sequential()
+        #normalize the image  to avoid saturation and make the gradients work better
+        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
+        #32 8x8 convolution kernels with 4x4 stride and activation function ReLU
+        self.model.add(Conv2D(32, 8, stride=4, activation="relu"))
+        self.model.add(Conv2D(64, 4, stride=2, activation="relu"))
+        self.model.add(Conv2D(64, 3, stride=1, activation="relu"))
+        self.model.add(Flatten())
+        self.model.add(Dense(512,activation="relu"))
+        self.model.add(Dense(3, activation="linear"))  # 3 outputs for the 3 different actions
 
-            if highest_reward < cumulated_reward:
-                highest_reward = cumulated_reward
+        optimizer = optimizers.RMSprop(lr=learningRate, rho=0.9, epsilon=1e-06) # From deepq.py
+        self.model.compile(loss="mean_squared_error", optimizer=optimizer)
+        self.model.summary()
 
-            nextState = ''.join(map(str, observation))
+    #train the network to approximate the bellman equation `r + ymax2a'Q(s',a')`
+    #use miniBatch / Experience Replay
+    def learn(self, size):
+        #X = numpy list of arrays of input data
+        #Y = numpy list of arrays of target data
+        # Batch size = samples per gradient udpate
+        # Do not learn until we've got self.learnStart samples
+        if self.memory.getCurrentSize() > self.learnStart:
+            # learn in batches of 128
+            batch = self.memory.getMiniBatch(size)
+            for sample in batch:
+                qValues = self.getQValues(state) #model predicted Q(s,a)
+                targetValue = self.calculateTarget(sample['newState'], sample['reward'], sample['isFinal'])
 
-            qlearn.learn(state, action, reward, nextState)
+                X_batch = np.append(X_batch, np.array([state.copy()]), axis=0) #inuput states with corresponding actions w/ rewards for training
+                # We are teaching the network to predict to the discounted reward of taking the optimal action at state s
+                Y_sample = qValues.copy()
+                Y_sample[sample['action']] = targetValue
+                # Every action should be Q(s,a) except for the action taken so that the error on the other action stays 0
+                Y_batch = np.append(Y_batch, np.array([Y_sample]), axis=0)
+                # X provides the state to feed into the network to calc error based on Y
 
-            #env.monitor.flush(force=True)
+                #Not sure why this exists???????????????????????
+                if sample["isFinal"]:
+                    X_batch = np.append(X_batch, np.array([newState.copy()]), axis=0) #Why use new state?
+                    #instead of appending discounted reward from bellman equation use final reward
+                    Y_batch = np.append(Y_batch, np.array([sample['reward']]*3]), axis=0) # 3 = number of output neurons
 
-            if not(done):
-                state = nextState
-            else:
-                print "DONE"
-                last_time_steps = numpy.append(last_time_steps, [int(i + 1)])
-                break
+        self.model.fit(X_batch, Y_batch, batch_size=len(batch), epochs=1, verbose=1)
 
-        m, s = divmod(int(time.time() - start_time), 60)
-        h, m = divmod(m, 60)
-        print ("EP: "+str(x+1)+" - [alpha: "+str(round(qlearn.alpha,2))+" - gamma: "+str(round(qlearn.gamma,2))+" - epsilon: "+str(round(qlearn.epsilon,2))+"] - Reward: "+str(cumulated_reward)+"     Time: %d:%02d:%02d" % (h, m, s))
+    def saveModel(self, filepath):
+        self.model.save(filepath)
 
-    #Github table content
-    print ("\n|"+str(total_episodes)+"|"+str(qlearn.alpha)+"|"+str(qlearn.gamma)+"|"+str(initial_epsilon)+"*"+str(epsilon_discount)+"|"+str(highest_reward)+"| PICTURE |")
+    def loadModel(self, filepath):
+        self.model = load_model(filepath)
 
-    l = last_time_steps.tolist()
-    l.sort()
+    def loadWeights(self, filepath):
+        self.model.set_weights(load_model(filepath).get_weights())
 
-    #print("Parameters: a="+str)
-    print("Overall score: {:0.2f}".format(last_time_steps.mean()))
-    print("Best 100 score: {:0.2f}".format(reduce(lambda x, y: x + y, l[-100:]) / len(l[-100:])))
+    def getMaxQ(self, qValues):
+        return np.max(qValues)
 
-    #env.monitor.close()
-    #env.close()
+    # calculate the target function
+    def calculateTarget(self, qValuesNewState, reward, isFinal):
+        """
+        Target = reward(s,a) + gamma * max(Q(s')
+        Bellman equation
+        """
+        if isFinal:
+            return reward
+        else:
+            return reward + self.discountFactor * self.getMaxQ(qValuesNewState)
+
+    # predict Q values for all the actions
+    def getQValues(self, state):
+        predicted = self.model.prdeict(state)
+        return predicted
+
+    # select the action with the highest Q value
+    def selectAction(self, qValues, explorationRate): #rate from 0-1
+        rand = random.random()
+        if rand < explorationRate :
+            action = np.random.randint(0, self.output_size)
+        else :
+            action = self.getMaxIndex(qValues)
+        return action
+
+    def addMemory(self, state, action, reward, newState, isFinal):
+        self.memory.addMemory(state, action, reward, newState, isFinal)
+
+if __name__ == "__main__":
+
+    rospy.init_node("hal_gym",anonymous=True)
+    env = gym.make("HAL-v0")
+
+    print("Open AI gym made")

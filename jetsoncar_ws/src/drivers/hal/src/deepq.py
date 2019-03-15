@@ -17,7 +17,7 @@ class DeepQ:
         traditional Q-learning:
             Q(s, a) += alpha * (reward(s,a) + gamma * max(Q(s') - Q(s,a))
         DQN:
-            target = reward(s,a) + gamma * max(Q(s')
+            target = reward(s,a) + gamma * max(Q(s'))
 
         gamma = discout factor (0 = only immediate rewards, 1 = only long term rewards)
 

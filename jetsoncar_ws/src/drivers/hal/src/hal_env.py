@@ -10,8 +10,12 @@ import numpy as np
 
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
+from std_srvs.srv import Empty
 from ackermann_msgs.msg import AckermannDriveStamped
 from sensor_msgs.msg import Imu, Image
+import cv2
+from cv_bridge import CvBridge, CvBridgeError
+import utils
 
 from gym.utils import seeding
 
@@ -21,7 +25,6 @@ reg = register(
     id="HAL-v0",
     entry_point="hal_env:HALenv",
     timestep_limit=5000,
-
     )
 
 class HALenv(gazebo_env.GazeboEnv):
@@ -29,7 +32,7 @@ class HALenv(gazebo_env.GazeboEnv):
     def __init__(self):
         # Launch the simulation with the given launchfile name
 
-        self.vel_pub = rospy.Publisher('/racecar/autonomous/ackermann_cmd', AckermannDriveStamped, queue_size=5)
+        self.ackermann_pub = rospy.Publisher('/racecar/autonomous/ackermann_cmd', AckermannDriveStamped, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
@@ -39,28 +42,28 @@ class HALenv(gazebo_env.GazeboEnv):
 
         self._seed()
 
-    def discretize_observation(self, camera_data):
-        discretized_ranges = []
-        min_range = 0.4
-        done = False
-        mod = len(data.ranges)/new_ranges
-        for i, item in enumerate(data.ranges):
-            if (i%mod==0):
-                if data.ranges[i] == float ('Inf'):
-                    discretized_ranges.append(6)
-                elif np.isnan(data.ranges[i]):
-                    discretized_ranges.append(0)
-                else:
-                    discretized_ranges.append(int(data.ranges[i]))
-            if (min_range > data.ranges[i] > 0):
-                done = True
-        return discretized_ranges,done
-
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def _step(self, action):
+    def step(self, action):
+        #input action : return new state, reward, done, and info
+        #define what done is here
+        #unpause and pause physics while taking the step
+
+
+        #image preproccessing
+        # image = utils.crop(image)
+        # image = utils.resize(image)
+        # image = utils.rgb2yuv(image)
+
+
+        #unpause
+        #take action
+        #new state
+        #compute reward and check if DONE
+
+        state = np.zeros(utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS*4, dtype=int)
 
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
@@ -68,34 +71,33 @@ class HALenv(gazebo_env.GazeboEnv):
         except rospy.ServiceException, e:
             print ("/gazebo/unpause_physics service call failed")
 
+        ackermann_cmd = AckermannDriveStamped()
+
         if action == 0: #FORWARD
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 2
-            vel_cmd.angular.z = 0.0
-            self.vel_pub.publish(vel_cmd)
+            ackermann_cmd.speed = 6
+            ackermann_cmd.steering_angle = 0.0
+
         elif action == 1: #LEFT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.1
-            vel_cmd.angular.z = 0.2
-            self.vel_pub.publish(vel_cmd)
+            ackermann_cmd.speed = 6
+            ackermann_cmd.steering_angle = 0.5
+
         elif action == 2: #RIGHT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.1
-            vel_cmd.angular.z = -0.2
-            self.vel_pub.publish(vel_cmd)
-        elif action == 3: #BACK
-            vel_cmd = Twist()
-            vel_cmd.linear.x = -0.5
-            vel_cmd.angular.z = 0
-            self.vel_pub.publish(vel_cmd)
+            ackermann_cmd.speed = 6
+            ackermann_cmd.steering_angle = -0.5
+
+        self.ackermann_pub.publish(ackermann_cmd)
 
         cameraData = None
-        while cameraData is None:
-            try:
-                #imuData = rospy.wait_for_message('/racecar/imu', Imu, timeout=5)
-                cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
-            except:
-                pass
+        #state array contains 4 RGB images stacked in the 3rd dimension
+        for i in range(4):
+            while cameraData is None:
+                try:
+                    cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=2)
+                    image = utils.rgb2yuv(utils.resize(utils.crop(cameraData)))
+                    for rgbLayer in range(3):
+                        state[:, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
+                except:
+                    pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -103,7 +105,8 @@ class HALenv(gazebo_env.GazeboEnv):
         except rospy.ServiceException, e:
             print ("/gazebo/pause_physics service call failed")
 
-        state,done = self.discretize_observation(cameraData)
+        #determine if the episode is done
+        #for track 1
 
         if not done:
             if action == 0:
@@ -117,9 +120,13 @@ class HALenv(gazebo_env.GazeboEnv):
 
         return state, reward, done, {}
 
-    def _reset(self):
+    def reset(self):
 
         # Resets the state of the environment and returns an initial observation.
+        # Move car to a new random starting location in the valid track area
+        # Adjust lighting randomly for domain randomization
+        # Add obstacles randomly??? -> will need to add in depth point cloud which may make nn to big
+
         rospy.wait_for_service('/gazebo/reset_simulation')
         try:
             self.reset_proxy()
