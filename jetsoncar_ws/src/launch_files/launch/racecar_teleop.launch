@@ -6,11 +6,13 @@
  <!-- joy node -->
  <node respawn="true" pkg="joy" type="joy_node" name="joy" ns="racecar">
    <param name="dev" type="string" value="/dev/input/js0" />
+   <param name="autorepeat_rate" value="2"/>
  </node>
 
   <!-- joy teleop node -->
-  <param name="/controller_mapping" type="str" value="ds4"/>
-  <node respawn="true" pkg="racecar_teleop" type="joy_teleop.py" name="joy_teleop" output="screen" ns="racecar"/>
+  <node respawn="true" pkg="racecar_teleop" type="joy_teleop.py" name="joy_teleop" output="screen" ns="racecar">
+    <param name="controller_mapping" type="str" value="ds4"/>
+  </node>
 
   <!-- command interface node -->
   <node respawn="true" pkg="racecar_command_interface" type="racecar_command_interface_node" name="racecar_command_interface" ns="racecar" />

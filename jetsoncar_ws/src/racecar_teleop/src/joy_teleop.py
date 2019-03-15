@@ -5,6 +5,7 @@ import math
 from sensor_msgs.msg import Joy
 from ackermann_msgs.msg import AckermannDriveStamped
 
+#The joystick will auto repeat values at 2Hz so we can start a watchdog timer
 
 #Xbox One Controller BUTTON MAPPING
 # X [2]  = Flip steering                                             flipSteering
@@ -32,7 +33,8 @@ from ackermann_msgs.msg import AckermannDriveStamped
 # L [0]  = steering control (-1 to 1)          steeringLR
 # L [1]  = No function                         A4
 
-controllerMap = rospy.get_param("/controller_mapping") # "xbox" or "ds4"
+rospy.init_node("joy_teleop")
+controllerMap = rospy.get_param("~controller_mapping") # "xbox" or "ds4"
 
 #default = ds4
 if controllerMap == "xbox":
@@ -73,6 +75,9 @@ throttleState = True  #true means adding throttles (no reverse), false means rev
 lastFineSteeringState = 0
 fineSteeringState = True #true means -1 to 1, false means -0.5 to 0.5 (rads in simulation)
 
+#for watchdog
+lastUpdate = 0
+
 #helper function to map values
 def map(input, inMin, inMax, outMin, outMax):
     output = (input - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
@@ -92,6 +97,10 @@ def JoyCB(data):
 
     global lastFineSteeringState
     global fineSteeringState
+
+    #For watchdog timer
+    global lastUpdate
+    lastUpdate = rospy.get_time()
 
     #steering direction
     if(data.buttons[flipSteering] != lastSteeringState and lastSteeringState == 0):
@@ -146,8 +155,17 @@ def JoyCB(data):
 
     pub.publish(msg)
 
-rospy.init_node("joy_teleop")
+def watchdogTimer(event):
+    global lastUpdate
+    if rospy.get_time() - lastUpdate > 0.75:
+        msg = AckermannDriveStamped();
+        msg.header.stamp = rospy.Time.now()
+        msg.header.frame_id = "base_link"
+
+        pub.publish(msg)
+
 rospy.Subscriber("joy", Joy, JoyCB)
 pub = rospy.Publisher('controller/ackermann_cmd', AckermannDriveStamped, queue_size=1)
+rospy.Timer(rospy.Duration(0.75),watchdogTimer) #duration time = 1/Hz (added some leeway for the system)
 
 rospy.spin() #keep node from closing
