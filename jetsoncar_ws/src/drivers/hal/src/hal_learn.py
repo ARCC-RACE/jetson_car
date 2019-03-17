@@ -5,8 +5,9 @@ import hal_env
 import gym
 import gym_gazebo
 import time
-import numpy
+import numpy as np
 import random
+import os
 import time
 import matplotlib
 import matplotlib.pyplot as plt
@@ -21,12 +22,13 @@ import utils
 from memory import Memory
 
 from keras import Sequential, optimizers
-from keras.layers import Dense, Flatten, Conv2D
+from keras.layers import Dense, Flatten, Conv2D, Lambda
 from keras.models import load_model
+from keras.callbacks import TensorBoard
 
 """
 init replay memory
-init action-value function Q with ranfom weights
+init action-value function Q with random weights
 
 repeat
     select action a, with probability e select one at random otherwise do a = argmax'Q(s,a')
@@ -71,27 +73,32 @@ class DeepQ:
             - learningRate: learning rate
             - learnStart: steps to happen before for learning. Set to 128
         """
-        self.input_size = inputs
         self.output_size = outputs
-        self.memory = memory.Memory(memorySize)
+        self.memory = Memory(memorySize)
         self.discountFactor = discountFactor
         self.learnStart = learnStart
         self.learningRate = learningRate
 
-    def createModel(self, input_width, input_height):
+    def createModel(self):
         self.model = Sequential()
         #normalize the image  to avoid saturation and make the gradients work better
-        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
+        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=utils.INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
         #32 8x8 convolution kernels with 4x4 stride and activation function ReLU
-        self.model.add(Conv2D(32, 8, stride=4, activation="relu"))
-        self.model.add(Conv2D(64, 4, stride=2, activation="relu"))
-        self.model.add(Conv2D(64, 3, stride=1, activation="relu"))
+        self.model.add(Conv2D(32, 8, strides=4, activation="relu"))
+        self.model.add(Conv2D(64, 4, strides=2, activation="relu"))
+        self.model.add(Conv2D(64, 3, strides=1, activation="relu"))
         self.model.add(Flatten())
         self.model.add(Dense(512,activation="relu"))
         self.model.add(Dense(3, activation="linear"))  # 3 outputs for the 3 different actions
 
-        optimizer = optimizers.RMSprop(lr=learningRate, rho=0.9, epsilon=1e-06) # From deepq.py
-        self.model.compile(loss="mean_squared_error", optimizer=optimizer)
+        optimizer = optimizers.RMSprop(lr=self.learningRate, rho=0.9, epsilon=1e-06) # From deepq.py
+        self.model.compile(loss="mean_squared_error", optimizer=optimizers.Adam(self.learningRate))
+        #Try: optimizer=optimizers.Adam(self.learningRate)
+        timeStamp = time.time()
+        self.tensorboard = TensorBoard(log_dir="logs/{}".format(timeStamp))
+        print("Tensorboard initialized to logs/{}".format(timeStamp))
+        path = os.path.dirname(os.path.realpath(__file__)) #get python file path
+        print("Run `tensorboard --logdir={}/logs/{}` to see CNN status".format(path, timeStamp))
         self.model.summary()
 
     #train the network to approximate the bellman equation `r + ymax2a'Q(s',a')`
@@ -104,25 +111,35 @@ class DeepQ:
         if self.memory.getCurrentSize() > self.learnStart:
             # learn in batches of 128
             batch = self.memory.getMiniBatch(size)
+            X_batch = np.empty((0, utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS), dtype = np.float64)
+            Y_batch = np.empty((0, self.output_size), dtype = np.float64)
             for sample in batch:
+                state = sample['state']
                 qValues = self.getQValues(state) #model predicted Q(s,a)
-                targetValue = self.calculateTarget(sample['newState'], sample['reward'], sample['isFinal'])
+                targetValue = self.calculateTarget(sample['newState'], sample['reward'], sample['isFinal']) #est. bellman equation
 
-                X_batch = np.append(X_batch, np.array([state.copy()]), axis=0) #inuput states with corresponding actions w/ rewards for training
+                X_batch = np.append(X_batch, np.array(state.copy()), axis=0) #inuput states with corresponding actions w/ rewards for training
                 # We are teaching the network to predict to the discounted reward of taking the optimal action at state s
                 Y_sample = qValues.copy()
-                Y_sample[sample['action']] = targetValue
+                Y_sample[0][sample['action']] = targetValue
                 # Every action should be Q(s,a) except for the action taken so that the error on the other action stays 0
-                Y_batch = np.append(Y_batch, np.array([Y_sample]), axis=0)
+                Y_batch = np.append(Y_batch, np.array(Y_sample), axis=0)
                 # X provides the state to feed into the network to calc error based on Y
 
                 #Not sure why this exists???????????????????????
                 if sample["isFinal"]:
-                    X_batch = np.append(X_batch, np.array([newState.copy()]), axis=0) #Why use new state?
+                    X_batch = np.append(X_batch, np.array(newState.copy()), axis=0) #Why use new state?
                     #instead of appending discounted reward from bellman equation use final reward
-                    Y_batch = np.append(Y_batch, np.array([sample['reward']*3]), axis=0) # 3 = number of output neurons
+                    Y_batch = np.append(Y_batch, np.full((1,3), sample['reward']), axis=0) # 3 = number of output neurons
 
-        self.model.fit(X_batch, Y_batch, batch_size=len(batch), epochs=1, verbose=1)
+            history = self.model.fit(X_batch, Y_batch, batch_size=len(batch), epochs=1, verbose=0, callbacks=[self.tensorboard])
+            print("Loss: " + str(history.history['loss']))
+            #monitor progress via tensorboard --logdir=logs/hal
+
+    # predict Q values for all the actions
+    def getQValues(self, state):
+        predicted = self.model.predict(state)
+        return predicted
 
     def saveModel(self, filepath):
         self.model.save(filepath)
@@ -134,7 +151,7 @@ class DeepQ:
         self.model.set_weights(load_model(filepath).get_weights())
 
     def getMaxQ(self, qValues):
-        return np.max(qValues)
+        return np.argmax(qValues)
 
     # calculate the target function
     def calculateTarget(self, qValuesNewState, reward, isFinal):
@@ -146,19 +163,15 @@ class DeepQ:
             return reward
         else:
             return reward + self.discountFactor * self.getMaxQ(qValuesNewState)
-
-    # predict Q values for all the actions
-    def getQValues(self, state):
-        predicted = self.model.prdeict(state)
-        return predicted
+            #`self.discountFactor * self.getMaxQ(qValuesNewState)` is an approximation but will improve as the network is trained
 
     # select the action with the highest Q value
     def selectAction(self, qValues, explorationRate): #rate from 0-1
         rand = random.random()
-        if rand < explorationRate :
+        if rand < explorationRate:
             action = np.random.randint(0, self.output_size)
-        else :
-            action = self.getMaxIndex(qValues)
+        else:
+            action = self.getMaxQ(qValues)
         return action
 
     def addMemory(self, state, action, reward, newState, isFinal):
@@ -171,8 +184,46 @@ if __name__ == "__main__":
 
     print("Open AI gym made")
 
-    env.reset()
-    while not rospy.is_shutdown():
-        state, reward, done, _ = env.step(0)
-        if(done):
-            env.reset()
+    #Set starting state varaibles that will influence learning process
+    totalEpisodes = 5
+    timeStepLimit = 5000
+    explorationRate = 0.9 #starting epsilon
+    epsilon_discount = 0.999 #2301 steps to reach 0.1 w/ starting rate = 1 -> ln(0.1)/(ln(discount)*starting _exploration_rate)
+    learning_size = 128 #how many memory samples to train on per step
+
+    print("Running %d episodes with up to %d time steps..." % (totalEpisodes, timeStepLimit))
+
+    deepq = DeepQ(outputs=env.action_space.n, memorySize=1028, discountFactor=0.9, learningRate=1.0e-4, learnStart=128)
+    deepq.createModel()
+
+    highest_cumulative_reward = 0
+    for i in range(totalEpisodes):
+        cumulative_reward = 0
+        print ("Episode = "+str(i))
+        state = env.reset()
+
+        #decay epsilon exploration rate
+        if explorationRate > 0.05:
+            explorationRate *= epsilon_discount
+
+        for x in range(timeStepLimit):
+            action = deepq.selectAction(deepq.getQValues(state), explorationRate)
+            newState, reward, done, info = env.step(action)
+
+            #print(reward)
+
+            cumulative_reward += reward
+
+            deepq.addMemory(state, action, reward, newState, done)
+
+            if not(done):
+                state = newState
+            else:
+                deepq.learn(learning_size)
+                if(cumulative_reward > highest_cumulative_reward):
+                    highest_cumulative_reward = cumulative_reward
+                print("Episode finished with cumulative reward: " + str(cumulative_reward) + " and exploration rate: " + str(explorationRate) + "\n")
+                break
+
+    print("Training done\nHighest cumulative reward = " + str(highest_cumulative_reward))
+    deepq.saveModel("hal_" + str(highest_cumulative_reward) + ".h5")

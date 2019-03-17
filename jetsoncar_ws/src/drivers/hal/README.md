@@ -18,3 +18,10 @@ Read the getting started docs:
 You may need to install these packages as well if you receive warnings when running the learn script:
 * `sudo pip install -U pyopenssl`
 * `sudo pip install --upgrade cryptography`
+
+Reminder that you will need to manually close the program due to how Open AI Gym scripts are constructed
+* `ps faux | grep python`
+* `kill -9 id__your_script_process`
+ex
+   * `michael  17175 10.4 0.8 3970596 291424 pts/21 Tl 10:49 0:02 | | \_ python ./hal_learn.py`
+   * `kill -9 17175`

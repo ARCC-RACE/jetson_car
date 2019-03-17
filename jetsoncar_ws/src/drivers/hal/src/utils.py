@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 #Hal
 #inmage depth channels will need to be mutliplied by 4 for past frame processing (context)
 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 60, 212, 3
-INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*4)
+INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 
 def load_image(data_dir, image_file):
     """

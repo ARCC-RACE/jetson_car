@@ -56,7 +56,8 @@ class HALenv(gazebo_env.GazeboEnv):
         # target range should be x+-4.5
 
 
-        self.state = np.zeros((utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS*4), dtype=int)
+        self.state = np.zeros((1, utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS), dtype=int)
+        #4D required for keras conv net
 
         self._seed()
 
@@ -78,19 +79,23 @@ class HALenv(gazebo_env.GazeboEnv):
                 pass
         return modelState.pose[modelStateIndex].position.x, modelState.pose[modelStateIndex].position.y
 
+    def _stopCar(self):
+        ackermann_cmd = AckermannDriveStamped()
+        self.ackermann_pub.publish(ackermann_cmd)
+
     def _updateState(self):
         cameraData = None
-        #state array contains 4 RGB images stacked in the 3rd dimension
-        for i in range(4):
-            while cameraData is None:
-                try:
-                    cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=1)
-                    image = utils.rgb2yuv(utils.resize(utils.crop(cameraData)))
-                    for rgbLayer in range(3):
-                        self.state[:, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
-                except:
-                    pass
-
+        bridge = CvBridge()
+        # for i in range(4):
+        #     while cameraData is None:
+        #         cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=1)
+        #         image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
+        #         image = utils.preprocess(image)
+        #         for rgbLayer in range(3):
+        #             self.state[:, :, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
+        cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=1)
+        image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
+        self.state = np.expand_dims(utils.preprocess(image), axis=0) #4D
 
     def step(self, action):
         #input action : return new state, reward, done, and info
@@ -117,6 +122,7 @@ class HALenv(gazebo_env.GazeboEnv):
 
         ackermann_cmd = AckermannDriveStamped()
 
+        #Make this non-discrete in the future
         if action == 0: #FORWARD
             ackermann_cmd.drive.speed = 6
             ackermann_cmd.drive.steering_angle = 0.0
@@ -166,7 +172,7 @@ class HALenv(gazebo_env.GazeboEnv):
         if not done:
             #dz/dt: change in distance / change in time to compute reward (want to get closer to target faster)
             if not stepTime-self.lastStepTime == 0: # make sure we dont do any dividing by zero
-                reward = 2*((dist(self.lastPose[0], self.lastPose[1], self.targets[self.currentTarget][0], self.targets[self.currentTarget][1])-
+                reward = ((dist(self.lastPose[0], self.lastPose[1], self.targets[self.currentTarget][0], self.targets[self.currentTarget][1])-
                             dist(pose[0], pose[1], self.targets[self.currentTarget][0], self.targets[self.currentTarget][1]))/(stepTime-self.lastStepTime))
             else:
                 reward = 0
@@ -174,8 +180,13 @@ class HALenv(gazebo_env.GazeboEnv):
             #switch targets if needed
             #When the sign changes on pose then power*lastPose will be negative
             if (pose[1]-2)*(self.lastPose[1]-2) < 0:
-                reward = 500
-                self.currentTarget = self.currentTarget ^ 1 #XOR
+                #85 = minor axis of symmetry
+                if pose[0] > 85 and self.currentTarget == 0:
+                    reward = 500
+                    self.currentTarget = 1 #switch reward to top
+                elif pose[1] < 85 and self.currentTarget == 1:
+                    reward = 500
+                    self.currentTarget = 0 #switch reward to bottom
 
             self.lastPose = pose
             self.lastStepTime = stepTime
@@ -191,6 +202,8 @@ class HALenv(gazebo_env.GazeboEnv):
         # Adjust lighting randomly for domain randomization
         # Add obstacles randomly??? -> will need to add in depth point cloud which may make nn to big
 
+        self._stopCar()
+
         rospy.wait_for_service('/gazebo/reset_simulation')
         try:
             self.reset_proxy()
@@ -204,7 +217,9 @@ class HALenv(gazebo_env.GazeboEnv):
         except rospy.ServiceException, e:
             print ("/gazebo/unpause_physics service call failed")
 
-        #self._updateState()
+        time.sleep(1) #Wait for simulation to fully reset
+
+        self._updateState()
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
