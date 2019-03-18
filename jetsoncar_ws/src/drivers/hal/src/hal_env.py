@@ -69,15 +69,27 @@ class HALenv(gazebo_env.GazeboEnv):
         modelState = None
         while modelState is None:
             try:
-                modelState = rospy.wait_for_message('/gazebo/model_states', ModelStates, timeout=1)
+                modelState = rospy.wait_for_message('/gazebo/model_states', ModelStates, timeout=5)
                 modelStateIndex = 0
                 for i in range(len(modelState.name)):
                     if modelState.name[i] == "racecar":
                         modelStateIndex = i
                         break
             except:
-                pass
+                #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
+                print("Model pose timed out")
+                self._respawnCar()
+
         return modelState.pose[modelStateIndex].position.x, modelState.pose[modelStateIndex].position.y
+
+    def _respawnCar(self):
+        spawner = roslaunch.core.Node("gazebo_ros", "spawn_model", name="racecar_spawn", args='-urdf -param robot_description -model racecar -z 0.05 -Y -1.5707')
+        controllers = roslaunch.core.Node("controller_manager", "spawner", namespace="/racecar", name="controller_manager",
+            args='left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller left_front_wheel_velocity_controller right_front_wheel_velocity_controller left_steering_hinge_position_controller right_steering_hinge_position_controller joint_state_controller')
+        launch = roslaunch.scriptapi.ROSLaunch()
+        launch.start()
+        process = launch.launch(spawner)
+        process = launch.launch(controllers)
 
     def _stopCar(self):
         ackermann_cmd = AckermannDriveStamped()
@@ -93,9 +105,15 @@ class HALenv(gazebo_env.GazeboEnv):
         #         image = utils.preprocess(image)
         #         for rgbLayer in range(3):
         #             self.state[:, :, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
-        cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=1)
-        image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
-        self.state = np.expand_dims(utils.preprocess(image), axis=0) #4D
+        while cameraData == None:
+            try:
+                cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
+                image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
+                self.state = np.expand_dims(utils.preprocess(image), axis=0) #4D
+            except:
+                #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
+                print("Camera timed out")
+                self._respawnCar()
 
     def step(self, action):
         #input action : return new state, reward, done, and info
@@ -114,11 +132,11 @@ class HALenv(gazebo_env.GazeboEnv):
         #new state
         #compute reward and check if DONE
 
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            self.unpause()
-        except rospy.ServiceException, e:
-            print ("/gazebo/unpause_physics service call failed")
+        rospy.wait_for_service('/gazebo/unpause_physics', timeout=5)
+        #try:
+        self.unpause()
+        #except rospy.ServiceException, e:
+        #    print ("/gazebo/unpause_physics service call failed")
 
         ackermann_cmd = AckermannDriveStamped()
 
@@ -144,11 +162,11 @@ class HALenv(gazebo_env.GazeboEnv):
 
         stepTime = rospy.get_time()
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            self.pause()
-        except rospy.ServiceException, e:
-            print ("/gazebo/pause_physics service call failed")
+        rospy.wait_for_service('/gazebo/pause_physics', timeout=5)
+        #try:
+        self.pause()
+        #except rospy.ServiceException, e:
+        #    print ("/gazebo/pause_physics service call failed")
 
         # determine if the episode is done
         # for track 1
@@ -204,27 +222,27 @@ class HALenv(gazebo_env.GazeboEnv):
 
         self._stopCar()
 
-        rospy.wait_for_service('/gazebo/reset_simulation')
-        try:
-            self.reset_proxy()
-        except rospy.ServiceException, e:
-            print ("/gazebo/reset_simulation service call failed")
+        rospy.wait_for_service('/gazebo/reset_simulation', timeout=5)
+        #try:
+        self.reset_proxy()
+        #except rospy.ServiceException, e:
+        #    print ("/gazebo/reset_simulation service call failed")
 
         # Unpause simulation to make observation
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            self.unpause()
-        except rospy.ServiceException, e:
-            print ("/gazebo/unpause_physics service call failed")
+        rospy.wait_for_service('/gazebo/unpause_physics', timeout=5)
+        #try:
+        self.unpause()
+        #except rospy.ServiceException, e:
+        #    print ("/gazebo/unpause_physics service call failed")
 
         time.sleep(1) #Wait for simulation to fully reset
 
         self._updateState()
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            self.pause()
-        except rospy.ServiceException, e:
-            print ("/gazebo/pause_physics service call failed")
+        rospy.wait_for_service('/gazebo/pause_physics', timeout=5)
+        #try:
+        self.pause()
+        #except rospy.ServiceException, e:
+        #    print ("/gazebo/pause_physics service call failed")
 
         return self.state

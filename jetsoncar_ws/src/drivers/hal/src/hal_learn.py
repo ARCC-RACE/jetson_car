@@ -185,7 +185,7 @@ if __name__ == "__main__":
     print("Open AI gym made")
 
     #Set starting state varaibles that will influence learning process
-    totalEpisodes = 5
+    totalEpisodes = 2000
     timeStepLimit = 5000
     explorationRate = 0.9 #starting epsilon
     epsilon_discount = 0.999 #2301 steps to reach 0.1 w/ starting rate = 1 -> ln(0.1)/(ln(discount)*starting _exploration_rate)
@@ -193,14 +193,14 @@ if __name__ == "__main__":
 
     print("Running %d episodes with up to %d time steps..." % (totalEpisodes, timeStepLimit))
 
-    deepq = DeepQ(outputs=env.action_space.n, memorySize=1028, discountFactor=0.9, learningRate=1.0e-4, learnStart=128)
+    deepq = DeepQ(outputs=env.action_space.n, memorySize=4096, discountFactor=0.9, learningRate=1.0e-4, learnStart=128)
     deepq.createModel()
 
     highest_cumulative_reward = 0
     for i in range(totalEpisodes):
         cumulative_reward = 0
-        print ("Episode = "+str(i))
         state = env.reset()
+        print ("Episode = "+str(i))
 
         #decay epsilon exploration rate
         if explorationRate > 0.05:
