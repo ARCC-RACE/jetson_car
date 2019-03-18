@@ -78,7 +78,7 @@ class HALenv(gazebo_env.GazeboEnv):
             except:
                 #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
                 print("Model pose timed out")
-                self._respawnCar()
+                #self._respawnCar()
 
         return modelState.pose[modelStateIndex].position.x, modelState.pose[modelStateIndex].position.y
 
@@ -113,7 +113,7 @@ class HALenv(gazebo_env.GazeboEnv):
             except:
                 #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
                 print("Camera timed out")
-                self._respawnCar()
+                #self._respawnCar()
 
     def step(self, action):
         #input action : return new state, reward, done, and info
