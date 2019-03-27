@@ -5,6 +5,7 @@
 import gym
 import rospy
 import roslaunch
+import rospkg
 import time
 import numpy as np
 import math
@@ -36,6 +37,8 @@ class HALenv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
+        #For respawning the simulation if it crashes
+        self.launch = roslaunch.scriptapi.ROSLaunch()
 
         self.ackermann_pub = rospy.Publisher('/racecar/autonomous/ackermann_cmd', AckermannDriveStamped, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
@@ -48,13 +51,12 @@ class HALenv(gazebo_env.GazeboEnv):
         self.lastPose = self._getModelPose()
         self.lastStepTime = rospy.get_time()
 
-        self.targets = [[174,0],[6,0]]
-        self.currentTarget = 0
         # two different targets at each end of the track
         # once one target is hit the target will switch to the next one
         # target 0 is on the far side of the track while target 1 is near the starting location
         # target range should be x+-4.5
-
+        self.targets = [[174,0],[6,0]]
+        self.currentTarget = 0
 
         self.state = np.zeros((1, utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS), dtype=int)
         #4D required for keras conv net
@@ -78,18 +80,25 @@ class HALenv(gazebo_env.GazeboEnv):
             except:
                 #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
                 print("Model pose timed out")
-                #self._respawnCar()
+                self._respawnCar()
 
         return modelState.pose[modelStateIndex].position.x, modelState.pose[modelStateIndex].position.y
 
     def _respawnCar(self):
-        spawner = roslaunch.core.Node("gazebo_ros", "spawn_model", name="racecar_spawn", args='-urdf -param robot_description -model racecar -z 0.05 -Y -1.5707')
-        controllers = roslaunch.core.Node("controller_manager", "spawner", namespace="/racecar", name="controller_manager",
-            args='left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller left_front_wheel_velocity_controller right_front_wheel_velocity_controller left_steering_hinge_position_controller right_steering_hinge_position_controller joint_state_controller')
-        launch = roslaunch.scriptapi.ROSLaunch()
-        launch.start()
-        process = launch.launch(spawner)
-        process = launch.launch(controllers)
+
+        #Stop the last
+        # while launch:
+        #     self.launch.stop()
+
+        rospy.sleep(10)
+        # spawner = roslaunch.core.Node("gazebo_ros", "spawn_model", name="racecar_spawn", args='-urdf -param robot_description -model racecar -z 0.05 -Y -1.5707')
+        # controllers = roslaunch.core.Node("controller_manager", "spawner", namespace="/racecar", name="controller_manager",
+        #     args='left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller left_front_wheel_velocity_controller right_front_wheel_velocity_controller left_steering_hinge_position_controller right_steering_hinge_position_controller joint_state_controller')
+        r = rospkg.RosPack()
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        self.launch.parent = roslaunch.parent.ROSLaunchParent(uuid, [r.get_path('racecar_worlds') + "/launch/track_1_world.launch", r.get_path('racecar_description') + "/launch/spawn_racecar.launch"] )
+        #self.launch.parent = roslaunch.parent.ROSLaunchParent(uuid, r.get_path('racecar_description') + "/launch/racecar_spawn.launch")
+        self.launch.start()
 
     def _stopCar(self):
         ackermann_cmd = AckermannDriveStamped()
@@ -113,7 +122,7 @@ class HALenv(gazebo_env.GazeboEnv):
             except:
                 #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
                 print("Camera timed out")
-                #self._respawnCar()
+                self._respawnCar()
 
     def step(self, action):
         #input action : return new state, reward, done, and info
