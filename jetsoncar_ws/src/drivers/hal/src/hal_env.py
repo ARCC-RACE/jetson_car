@@ -14,6 +14,7 @@ from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
 from std_srvs.srv import Empty
 from ackermann_msgs.msg import AckermannDriveStamped
+from std_msgs.msg import Bool
 from sensor_msgs.msg import Imu, Image
 from gazebo_msgs.msg import ModelStates
 import cv2
@@ -40,6 +41,7 @@ class HALenv(gazebo_env.GazeboEnv):
         #For respawning the simulation if it crashes
         self.launch = roslaunch.scriptapi.ROSLaunch()
 
+        self.autonomous_mode_pub = rospy.Publisher('racecar/autonomous_mode', Bool, queue_size=2)
         self.ackermann_pub = rospy.Publisher('/racecar/autonomous/ackermann_cmd', AckermannDriveStamped, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -84,21 +86,26 @@ class HALenv(gazebo_env.GazeboEnv):
 
         return modelState.pose[modelStateIndex].position.x, modelState.pose[modelStateIndex].position.y
 
+    #Start or resurect a simulation instance
     def _respawnCar(self):
 
-        #Stop the last
-        # while launch:
-        #     self.launch.stop()
+        #Stop the last crashed simulation
+        try: #prevents declaration issue at start of system
+            self.launch.stop()
+        except:
+            pass
 
-        rospy.sleep(10)
-        # spawner = roslaunch.core.Node("gazebo_ros", "spawn_model", name="racecar_spawn", args='-urdf -param robot_description -model racecar -z 0.05 -Y -1.5707')
-        # controllers = roslaunch.core.Node("controller_manager", "spawner", namespace="/racecar", name="controller_manager",
-        #     args='left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller left_front_wheel_velocity_controller right_front_wheel_velocity_controller left_steering_hinge_position_controller right_steering_hinge_position_controller joint_state_controller')
+        time.sleep(10) #wait for system to stop cleanly
+
         r = rospkg.RosPack()
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-        self.launch.parent = roslaunch.parent.ROSLaunchParent(uuid, [r.get_path('racecar_worlds') + "/launch/track_1_world.launch", r.get_path('racecar_description') + "/launch/spawn_racecar.launch"] )
-        #self.launch.parent = roslaunch.parent.ROSLaunchParent(uuid, r.get_path('racecar_description') + "/launch/racecar_spawn.launch")
-        self.launch.start()
+        self.launch.parent = roslaunch.parent.ROSLaunchParent(uuid, [r.get_path('racecar_worlds') + "/launch/track_1_world_no_gui.launch", r.get_path('racecar_description') + "/launch/spawn_racecar.launch"] )
+        self.launch.start() #start simulation and spawn the car
+
+        time.sleep(10) #wait for system to start cleanly
+
+        self.autonomous_mode_pub.publish(True) #Put system into autonomous mode without need for teleop interface (node)
+
 
     def _stopCar(self):
         ackermann_cmd = AckermannDriveStamped()
