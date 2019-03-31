@@ -79,27 +79,50 @@ class DeepQ:
         self.learnStart = learnStart
         self.learningRate = learningRate
 
-    def createModel(self):
-        self.model = Sequential()
+        self.model = self.createModel(True)
+        self.targetModel = self.createModel() #To add stability to training
+
+    def createModel(self, record=False):
+        model = Sequential()
         #normalize the image  to avoid saturation and make the gradients work better
-        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=utils.INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
+        model.add(Lambda(lambda x: x/127.5-1.0, input_shape=utils.INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
         #32 8x8 convolution kernels with 4x4 stride and activation function ReLU
-        self.model.add(Conv2D(32, 8, strides=4, activation="relu"))
-        self.model.add(Conv2D(64, 4, strides=2, activation="relu"))
-        self.model.add(Conv2D(64, 3, strides=1, activation="relu"))
-        self.model.add(Flatten())
-        self.model.add(Dense(512,activation="relu"))
-        self.model.add(Dense(3, activation="linear"))  # 3 outputs for the 3 different actions
+        model.add(Conv2D(32, 8, strides=4, activation="relu", kernel_initializer='lecun_uniform'))
+        model.add(Conv2D(64, 4, strides=2, activation="relu", kernel_initializer='lecun_uniform'))
+        model.add(Conv2D(64, 3, strides=1, activation="relu", kernel_initializer='lecun_uniform'))
+        model.add(Flatten())
+        model.add(Dense(512,activation="relu", kernel_initializer='lecun_uniform'))
+        model.add(Dense(3, activation="linear"))  # 3 outputs for the 3 different actions
 
         optimizer = optimizers.RMSprop(lr=self.learningRate, rho=0.9, epsilon=1e-06) # From deepq.py
-        self.model.compile(loss="mean_squared_error", optimizer=optimizers.Adam(self.learningRate))
+        model.compile(loss="mean_squared_error", optimizer=optimizers.Adam(self.learningRate))
         #Try: optimizer=optimizers.Adam(self.learningRate)
 
-        timeStamp = time.time()
-        path = os.path.dirname(os.path.realpath(__file__)) #get python file path
-        self.tensorboard = TensorBoard(log_dir="{}/logs/{}".format(path, timeStamp))
-        print("Run `tensorboard --logdir={}/logs/{}` to see CNN status".format(path, timeStamp))
-        self.model.summary()
+        if record:
+            timeStamp = time.time()
+            path = os.path.dirname(os.path.realpath(__file__)) #get python file path
+            self.tensorboard = TensorBoard(log_dir="{}/logs/{}".format(path, timeStamp))
+            print("Run `tensorboard --logdir={}/logs/{}` to see CNN status".format(path, timeStamp))
+            model.summary()
+
+        return model
+
+    #In order to have a stable training session we must back up a target network so that we can use it to provide a consistent policy at training time
+    def backupNetwork(self, model, backup):
+        weightMatrix = []
+        for layer in model.layers:
+            weights = layer.get_weights()
+            weightMatrix.append(weights)
+        i = 0
+        for layer in backup.layers:
+            weights = weightMatrix[i]
+            layer.set_weights(weights)
+            i += 1
+
+    def updateTargetNetwork(self):
+        self.backupNetwork(self.model, self.targetModel)
+        print("Taget Model Updated...")
+
 
     #train the network to approximate the bellman equation `r + ymax2a'Q(s',a')`
     #use miniBatch / Experience Replay
@@ -116,7 +139,8 @@ class DeepQ:
             for sample in batch:
                 state = sample['state']
                 qValues = self.getQValues(state) #model predicted Q(s,a)
-                targetValue = self.calculateTarget(sample['newState'], sample['reward'], sample['isFinal']) #est. bellman equation
+                qTargetValues = self.getTargetQValues(sample['newState']) #model predicted Q'(s',a')
+                targetValue = self.calculateTarget(qTargetValues, sample['reward'], sample['isFinal']) #est. bellman equation
 
                 X_batch = np.append(X_batch, np.array(state.copy()), axis=0) #inuput states with corresponding actions w/ rewards for training
                 # We are teaching the network to predict to the discounted reward of taking the optimal action at state s
@@ -141,6 +165,10 @@ class DeepQ:
         predicted = self.model.predict(state)
         return predicted
 
+    def getTargetQValues(self, state):
+        predicted = self.targetModel.predict(state)
+        return predicted
+
     def saveModel(self, filepath):
         self.model.save(filepath)
 
@@ -156,7 +184,7 @@ class DeepQ:
     # calculate the target function
     def calculateTarget(self, qValuesNewState, reward, isFinal):
         """
-        Target = reward(s,a) + gamma * max(Q(s')
+        Target = reward(s,a) + gamma * max(Q(s'))
         Bellman equation
         """
         if isFinal:
@@ -185,7 +213,8 @@ if __name__ == "__main__":
     print("Open AI gym made")
 
     #Set starting state varaibles that will influence learning process
-    totalEpisodes = 1000
+    totalEpisodes = 2000
+    updateTargetNetwork = 10000 #number of steps until the target network is updated
     timeStepLimit = 5000
     explorationRate = 0.9 #starting epsilon
     epsilon_discount = 0.999 #2301 steps to reach 0.1 w/ starting rate = 1 -> ln(0.1)/(ln(discount)*starting _exploration_rate)
@@ -194,10 +223,13 @@ if __name__ == "__main__":
     print("Running %d episodes with up to %d time steps..." % (totalEpisodes, timeStepLimit))
 
     deepq = DeepQ(outputs=env.action_space.n, memorySize=4096, discountFactor=0.9, learningRate=1.0e-4, learnStart=128)
-    deepq.createModel()
 
     highest_cumulative_reward = 0
+    stepCounter = 0
     for i in range(totalEpisodes):
+        if stepCounter > updateTargetNetwork:
+            stepCounter = 0
+            deeq.updateTargetNetwork()
         cumulative_reward = 0
         state = env.reset()
         print ("Episode = "+str(i))
@@ -218,6 +250,8 @@ if __name__ == "__main__":
             cumulative_reward += reward
 
             deepq.addMemory(state, action, reward, newState, done)
+
+            stepCounter += 1
 
             if not(done):
                 state = newState
