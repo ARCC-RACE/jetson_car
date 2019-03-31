@@ -94,10 +94,10 @@ class DeepQ:
         optimizer = optimizers.RMSprop(lr=self.learningRate, rho=0.9, epsilon=1e-06) # From deepq.py
         self.model.compile(loss="mean_squared_error", optimizer=optimizers.Adam(self.learningRate))
         #Try: optimizer=optimizers.Adam(self.learningRate)
+
         timeStamp = time.time()
-        self.tensorboard = TensorBoard(log_dir="logs/{}".format(timeStamp))
-        print("Tensorboard initialized to logs/{}".format(timeStamp))
         path = os.path.dirname(os.path.realpath(__file__)) #get python file path
+        self.tensorboard = TensorBoard(log_dir="{}/logs/{}".format(path, timeStamp))
         print("Run `tensorboard --logdir={}/logs/{}` to see CNN status".format(path, timeStamp))
         self.model.summary()
 
@@ -111,7 +111,7 @@ class DeepQ:
         if self.memory.getCurrentSize() > self.learnStart:
             # learn in batches of 128
             batch = self.memory.getMiniBatch(size)
-            X_batch = np.empty((0, utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS), dtype = np.float64)
+            X_batch = np.empty((0, utils.INPUT_SHAPE[0], utils.INPUT_SHAPE[1], utils.INPUT_SHAPE[2]), dtype = np.float64)
             Y_batch = np.empty((0, self.output_size), dtype = np.float64)
             for sample in batch:
                 state = sample['state']
@@ -185,7 +185,7 @@ if __name__ == "__main__":
     print("Open AI gym made")
 
     #Set starting state varaibles that will influence learning process
-    totalEpisodes = 2000
+    totalEpisodes = 1000
     timeStepLimit = 5000
     explorationRate = 0.9 #starting epsilon
     epsilon_discount = 0.999 #2301 steps to reach 0.1 w/ starting rate = 1 -> ln(0.1)/(ln(discount)*starting _exploration_rate)
@@ -207,11 +207,14 @@ if __name__ == "__main__":
             explorationRate *= epsilon_discount
 
         for x in range(timeStepLimit):
+            #print(deepq.getQValues(state))
+            #print(np.argmax(deepq.getQValues(state)))
             action = deepq.selectAction(deepq.getQValues(state), explorationRate)
+
+            #print("action = " + str(action))
             newState, reward, done, info = env.step(action)
 
-            #print(reward)
-
+            #print("reward = " + str(reward) + "\n")
             cumulative_reward += reward
 
             deepq.addMemory(state, action, reward, newState, done)

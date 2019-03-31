@@ -118,7 +118,6 @@ class HALenv(gazebo_env.GazeboEnv):
         #get the state variable setup
         try:
             cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
-            print(cameraData.shape)
             image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
             state = np.expand_dims(utils.preprocess(image), axis=0) #4D for keras input
         except:
@@ -127,7 +126,7 @@ class HALenv(gazebo_env.GazeboEnv):
             self._respawnCar()
 
         #Compare the number of channels of the state array with that of a stack of 4 images
-        while state.shape[3] < utils.SHAPE[2]:
+        while state.shape[3] < utils.INPUT_SHAPE[2]:
             try:
                 cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
                 image = utils.preprocess(bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8"))
@@ -137,7 +136,6 @@ class HALenv(gazebo_env.GazeboEnv):
                 print("Camera timed out")
                 self._respawnCar()
         self.state = state
-        print(self.state.shape)
 
     def step(self, action):
         #input action : return new state, reward, done, and info
