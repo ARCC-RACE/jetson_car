@@ -60,7 +60,7 @@ class HALenv(gazebo_env.GazeboEnv):
         self.targets = [[174,0],[6,0]]
         self.currentTarget = 0
 
-        self.state = np.zeros((1, utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS), dtype=int)
+        #self.state = np.zeros((1, utils.IMAGE_HEIGHT, utils.IMAGE_WIDTH, utils.IMAGE_CHANNELS), dtype=int)
         #4D required for keras conv net
 
         self._seed()
@@ -114,34 +114,40 @@ class HALenv(gazebo_env.GazeboEnv):
     def _updateState(self):
         cameraData = None
         bridge = CvBridge()
-        # for i in range(4):
-        #     while cameraData is None:
-        #         cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=1)
-        #         image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
-        #         image = utils.preprocess(image)
-        #         for rgbLayer in range(3):
-        #             self.state[:, :, :, 4*i-rgbLayer] = image[:, :, rgbLayer] #;)
-        while cameraData == None:
+
+        #get the state variable setup
+        try:
+            cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
+            print(cameraData.shape)
+            image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
+            state = np.expand_dims(utils.preprocess(image), axis=0) #4D for keras input
+        except:
+            #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
+            print("Camera timed out")
+            self._respawnCar()
+
+        #Compare the number of channels of the state array with that of a stack of 4 images
+        while state.shape[3] < utils.SHAPE[2]:
             try:
                 cameraData = rospy.wait_for_message('/front_cam/color/image_raw', Image, timeout=5)
-                image = bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8")
-                self.state = np.expand_dims(utils.preprocess(image), axis=0) #4D
+                image = utils.preprocess(bridge.imgmsg_to_cv2(cameraData, desired_encoding="bgr8"))
+                state = np.append(state, [image], axis=3)
             except:
                 #If this fails there is a good chance that gazebo restarted, launching a new car fixes this
                 print("Camera timed out")
                 self._respawnCar()
+        self.state = state
+        print(self.state.shape)
 
     def step(self, action):
         #input action : return new state, reward, done, and info
         #define what done is here
         #unpause and pause physics while taking the step
 
-
-        #image preproccessing
+        # image preproccessing
         # image = utils.crop(image)
         # image = utils.resize(image)
         # image = utils.rgb2yuv(image)
-
 
         #unpause
         #take action
