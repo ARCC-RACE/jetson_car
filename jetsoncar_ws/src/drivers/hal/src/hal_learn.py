@@ -121,7 +121,7 @@ class DeepQ:
 
     def updateTargetNetwork(self):
         self.backupNetwork(self.model, self.targetModel)
-        print("Taget Model Updated...")
+        print("Taget model updated")
 
 
     #train the network to approximate the bellman equation `r + ymax2a'Q(s',a')`
@@ -229,7 +229,7 @@ if __name__ == "__main__":
     for i in range(totalEpisodes):
         if stepCounter > updateTargetNetwork:
             stepCounter = 0
-            deeq.updateTargetNetwork()
+            deepq.updateTargetNetwork()
         cumulative_reward = 0
         state = env.reset()
         print ("Episode = "+str(i))
