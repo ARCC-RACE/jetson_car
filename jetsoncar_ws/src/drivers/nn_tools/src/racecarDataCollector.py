@@ -22,12 +22,12 @@ def newImage(new_image):
     global isRecording
     global lastRead
     global dir
-	
+
     if(isRecording and timeStamp - lastRead > 0.0666666667): # ~15 fps data recording (1/desired fps)
 
         try:
             bridge = CvBridge() #convert ros image to cv compatible image
-            image = bridge.imgmsg_to_cv2(new_image, desired_encoding="rgb8")  #throws out non-rgb8 images
+            image = bridge.imgmsg_to_cv2(new_image, desired_encoding="bgr8")  #throws out non-rgb8 images
         except CvBridgeError as e:
             rospy.logdebug(e)
             return
