@@ -13,6 +13,6 @@
   <node name="cmd_mux" type="cmd_mux.py" pkg="racecar_command_controllers" ns="/racecar" />
 
   <!-- Start the software ackermann to joint_command controller -->
-  <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_description" />
+  <node name="ackermann_controller" type="ackermann_controller.py" pkg="racecar_description" respawn="true"/>
 
 </launch>

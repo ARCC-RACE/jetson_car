@@ -60,11 +60,13 @@ def control_commands():
         elif((rate < 0.2) and deadMan): #if man is dead but the publishing rate is now above 5Hz
             deadMan = not deadMan #deadMan is alive
             rospy.loginfo("Deadman switch reset!")
-	loopRate.sleep()
+
+        loopRate.sleep()
 
 
 if __name__ == '__main__':
     try:
         control_commands()
-    except rospy.ROSInterruptException:
+    except Exception as e:
+        rospy.logerr(e)
         pass

@@ -3,11 +3,18 @@
 
 <!-- Gazebo references -->
 
+<!-- http://answers.gazebosim.org/question/17639/questions-about-gazebo-element-for-links/ -->
+
+<arg name="minDepth" default="0.01"/>
+<arg name="maxVel"    default="10"/>
+
 <gazebo reference="chassis">
   <mu1 value="0.0"/>
   <mu2 value="0.0"/>
   <kp  value="10000000.0" />
   <kd  value="1.0" />
+  <minDepth value="$(arg minDepth)"/>
+  <maxVel value="$(arg maxVel)"/>
   <material>Gazebo/Red</material>
 </gazebo>
 
@@ -17,6 +24,8 @@
   <kp  value="10000000.0" />
   <kd  value="1.0" />
   <fdir1 value="1 0 0"/>
+  <minDepth value="$(arg minDepth)"/>
+  <maxVel value="$(arg maxVel)"/>
   <material>Gazebo/Black</material>
 </gazebo>
 
@@ -26,6 +35,8 @@
   <kp  value="10000000.0" />
   <kd  value="1.0" />
   <fdir1 value="1 0 0"/>
+  <minDepth value="$(arg minDepth)"/>
+  <maxVel value="$(arg maxVel)"/>
   <material>Gazebo/Black</material>
 </gazebo>
 
@@ -35,6 +46,8 @@
   <kp  value="10000000.0" />
   <kd  value="1.0" />
   <fdir1 value="0 0 1"/>
+  <minDepth value="$(arg minDepth)"/>
+  <maxVel value="$(arg maxVel)"/>
   <material>Gazebo/Black</material>
 </gazebo>
 
@@ -44,6 +57,8 @@
   <kp  value="10000000.0" />
   <kd  value="1.0" />
   <fdir1 value="0 0 1"/>
+  <minDepth value="0.0001"/>
+  <maxVel value="10"/>
   <material>Gazebo/Black</material>
 </gazebo>
 

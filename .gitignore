@@ -98,7 +98,3 @@ CTestTestfile.cmake
 # Ignore large training and testing datasets
 jetsoncar_ws/src/drivers/nn_tools/dataset/training_set/*
 jetsoncar_ws/src/drivers/nn_tools/dataset/test_set/*
-
-# Ignore large nn model definition files
-jetsoncar_ws/src/drivers/rosey/models/rosey.h5
-jetsoncar_ws/src/drivers/rosey2/models/rosey.h5

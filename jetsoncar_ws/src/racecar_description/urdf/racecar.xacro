@@ -7,6 +7,7 @@
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/racecar</robotNamespace>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>false</legacyModeNS> 
     </plugin>
   </gazebo>
 
@@ -180,13 +181,13 @@
 
   <xacro:wheel_transmission name="right_front_wheel" />
 
-  <!-- RealSense D415 Camera -->
+  <!-- RealSense D435 Camera -->
 
-  <xacro:include filename="$(find realsense2_description)/urdf/_d415.urdf.xacro"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
 
-  <sensor_d415 parent="chassis" camera_name="front_cam">
+  <sensor_d435 parent="chassis" camera_name="front_cam">
     <origin xyz="0.350 0 0.04" rpy="0 0 0"/>
-  </sensor_d415>
+  </sensor_d435>
 
   <!-- IMU -->
 
@@ -215,7 +216,7 @@
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
         <topicName>/racecar/imu</topicName>
         <bodyName>imu_link</bodyName>
-        <updateRateHZ>10.0</updateRateHZ>
+        <updateRateHZ>60.0</updateRateHZ>
         <gaussianNoise>0.0</gaussianNoise>
         <xyzOffset>0 0 0</xyzOffset>
         <rpyOffset>0 0 0</rpyOffset>

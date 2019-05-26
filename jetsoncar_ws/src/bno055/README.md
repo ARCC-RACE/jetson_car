@@ -6,7 +6,7 @@ ROS node for publishing BNO055 IMU data. Uses the adafruit BNO055 python library
 
 ## Goal
 
-Easy integration of BNO055 sensors into a ROS software enviroment.
+Easy integration of BNO055 sensors into a ROS software environment.
 
 ## Build Instructions
 
