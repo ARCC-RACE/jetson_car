@@ -1,7 +1,7 @@
 # jetson_car
 Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson Car (TX2) with RealSense D400 series 3D camera
 
-Check out system flowcharts: https://drive.google.com/open?id=1oScZmCizjCHx7lIW-BQ1HAR4U3CumyJK
+Check out system [flowcharts](https://drive.google.com/open?id=1oScZmCizjCHx7lIW-BQ1HAR4U3CumyJK)
 
 Master   
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=master)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
@@ -13,7 +13,7 @@ Development
 - Make sure you have installed git lfs
    - https://git-lfs.github.com/
    - [Install of git lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
-      - This will need to be installed by source on the Jetson TX2
+      - This will need to be installed by source on the [Jetson TX2](https://github.com/Netzeband/JetsonTX1_im2txt/wiki/JetsonBasicSetupGit)
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - If running on a Desktop computer without realsense packages installed run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
 - If you want to run the realsense2 ROS node on a desktop use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws
