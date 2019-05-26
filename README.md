@@ -13,7 +13,8 @@ Development
 - Make sure you have installed git lfs
    - https://git-lfs.github.com/
    - [Install of git lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
-      - This will need to be installed by source on the [Jetson TX2](https://github.com/Netzeband/JetsonTX1_im2txt/wiki/JetsonBasicSetupGit)
+      - This will need to be installed by source on the Jetson TX2
+      - Make sure that the $GOPATH is set to home/$USER/gocode and that Go is version 1.8 or higher `go version`
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - If running on a Desktop computer without realsense packages installed run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
 - If you want to run the realsense2 ROS node on a desktop use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws
