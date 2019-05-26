@@ -10,12 +10,18 @@ Development
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=development)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
 
 ## Getting Started
+- Make sure you have installed git lfs
+   - https://git-lfs.github.com/
+   - [Install of git lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - If running on a Desktop computer without realsense packages installed run `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
 - If you want to run the realsense2 ROS node on a desktop use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws
-- Download Xbox One Controller Driver https://github.com/paroj/xpad (Try controller without downloading this first)
-- On the user interface ("remote" control machine) add `192.168.1.100 racecar` to the `/etc/hosts`
-- When communicating with the jetson run `export ROS_MASTER_URI=http://racecar:11311`
+- When communicating with the jetson run `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311` and `export ROS_HOSTNAME=name_of_machine`
+   - For example you could add the following lines to the end of your bashrc to make things convenient for running the racecar
+   - `#For jetson car: Comment out if not being used`
+   - `source ~/Desktop/Github/jetson_car/jetsoncar_ws/devel/setup.bash`
+   - `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311`
+   - `export ROS_HOSTNAME=michael-XPS-15-9560.local` <- use your own machines name w/ .local added on
 - Install librealsense2 if interested (See steps below)
 
 ### Simulation Setup
@@ -24,9 +30,9 @@ Development
 - `catkin_make` (even if this fails)
 - `soruce devel/setup.bash`
 - `rosdep install racecar_description`
-- Install Tensor Flow https://www.tensorflow.org/install/ (download GPU version if you have one)
+- Install [Tensor Flow](https://www.tensorflow.org/install/) (download GPU version if you have one)
      - `sudo pip install tensorflow-gpu`
-     - If running python program fails with error `ImportError: libcudnn.so.7: cannot open shared object file: No such file or directory` see https://stackoverflow.com/questions/41991101/importerror-libcudnn-when-running-a-tensorflow-program but make sure to download proper version of cuDNN (version 9.0) (https://developer.nvidia.com/rdp/cudnn-download)
+     - If running python program fails with error `ImportError: libcudnn.so.7: cannot open shared object file: No such file or directory` see [this](https://stackoverflow.com/questions/41991101/importerror-libcudnn-when-running-a-tensorflow-program but make sure to download proper version of cuDNN) [version 9.0](https://developer.nvidia.com/rdp/cudnn-download)
 - Install Keras `sudo pip install keras`
 - `sudo pip install h5py`
 
@@ -40,7 +46,7 @@ Development
    - `sudo apt-get install librealsense2-dkms`  For demo
    - `sudo apt-get install librealsense2-utils` Tools for viewing physical camera data (See `/usr/bin/realsense-viewer`)
 - When ready plug in the realsense camera and test it using the `/usr/bin/realsense-viewer`
-   - If needed update the firmware using the instruction found here https://www.intel.com/content/dam/support/us/en/documents/emerging-technologies/intel-realsense-technology/Linux-RealSense-D400-DFU-Guide.pdf
+   - If needed update the firmware using the instruction found [here](https://www.intel.com/content/dam/support/us/en/documents/emerging-technologies/intel-realsense-technology/Linux-RealSense-D400-DFU-Guide.pdf)
 
 
 ### Nvidia Jetson Setup without full setup script
@@ -63,10 +69,9 @@ Development
    - Go to `/etc/udev/rules.d`
    - Add a file called `50-i2c.rules`
    - Add the line `ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"` to the `50-i2c.rules` file
-   - See https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions for additional information
+   - See [here](https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions) for additional information
 
-### RTAB Mapping setup
-- https://github.com/introlab/rtabmap_ros#installation
+### [RTAB Mapping setup](https://github.com/introlab/rtabmap_ros#installation)
 - `sudo apt-get install ros-kinetic-rtabmap-ros ros-kinetic-robot-localization ros-kinetic-pointcloud-to-laserscan ros-kinetic-depthimage-to-laserscan`
 
 ### DualShock 4 Controller Setup (Ubuntnu 16.04)
@@ -87,10 +92,8 @@ Development
 -
 
 ### Network Setup
-- The `/etc/hosts` file should contain the following in addition to the default hostnames
-      - `192.168.1.100   racecar`
-- `export ROS_MASTER_URI=http://racecar:11311`
-- `export ROS_IP=ip_of_comptuer`
+- `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311`
+- `export ROS_IP=ip_of_comptuer` or `export ROS_HOSTNAME=name_of_machine + .local`
 
 #### Network Setup DEBUG
 
