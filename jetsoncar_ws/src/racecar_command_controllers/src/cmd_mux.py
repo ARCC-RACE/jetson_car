@@ -53,6 +53,10 @@ def autonomousAckermann(data):
     global autonomousMsg
     autonomousMsg = data
 
+def steeringTrim(data):
+    global steeringTrimVal
+    steeringTrimVal = data.data
+
 
 
 rospy.init_node("cmd_mux")
@@ -65,6 +69,7 @@ rospy.Subscriber("/racecar/sport_mode", Bool, sportMode)
 #input drive control topics
 rospy.Subscriber("/racecar/controller/ackermann_cmd", AckermannDriveStamped, controllerAckermann)
 rospy.Subscriber("/racecar/autonomous/ackermann_cmd", AckermannDriveStamped, autonomousAckermann)
+rospy.Subscriber("/racecar/steering_trim", Float64, steeringTrim)
 
 
 pub = rospy.Publisher('/racecar/muxed/ackermann_cmd', AckermannDriveStamped, queue_size=1)
