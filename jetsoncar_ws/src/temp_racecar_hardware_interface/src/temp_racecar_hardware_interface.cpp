@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "temp_racecar_hardware_interface");
   ros::NodeHandle nh;
 
-  HardwareCom connection("/dev/ttyUSB0", 115200);
+  HardwareCom connection("/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A907NODW-if00-port0", 115200);
 
   ros::Subscriber left_rear_wheel_pub = nh.subscribe("/racecar/left_front_wheel_velocity_controller/command", 1, updateThrottle);
   ros::Subscriber left_steering_hinge_pub = nh.subscribe("/racecar/left_steering_hinge_position_controller/command", 1, updateSteering);
