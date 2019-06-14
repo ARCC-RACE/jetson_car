@@ -83,7 +83,7 @@ while not rospy.is_shutdown():
     else:
         msg = controllerMsg
 
-    msg.steering_angle += steering_trim
+    msg.drive.steering_angle += steering_trim
     # msg = AckermannDriveStamped();
     # msg.header.stamp = rospy.Time.now()
     # msg.header.frame_id = "base_link"
