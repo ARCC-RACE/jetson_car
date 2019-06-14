@@ -32,9 +32,16 @@ def autonomousMode(data):
     global isAutonomous
     isAutonomous = data.data
 
+steering_trim = 0 #default steering trim is zero
+def steeringTrim(data):
+    global steering_trim
+    steering_trim = data.data
+
 #update drive control inputs
 def controllerAckermann(data):
     global controllerMsg
+    global steering_trim
+    data.drive.steering_angle += steering_trim
     controllerMsg = data
 
     #mux matrix
@@ -51,12 +58,9 @@ def controllerAckermann(data):
 
 def autonomousAckermann(data):
     global autonomousMsg
-    autonomousMsg = data
-
-steering_trim = 0 #default steering trim is zero
-def steeringTrim(data):
     global steering_trim
-    steering_trim = data.data
+    data.drive.steering_angle += steering_trim
+    autonomousMsg = data
 
 
 
@@ -81,7 +85,6 @@ while not rospy.is_shutdown():
         msg = autonomousMsg
     else:
         msg = controllerMsg
-    msg.drive.steering_angle = msg.drive.steering_angle + steering_trim
     # msg = AckermannDriveStamped();
     # msg.header.stamp = rospy.Time.now()
     # msg.header.frame_id = "base_link"
