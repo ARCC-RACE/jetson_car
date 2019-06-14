@@ -53,9 +53,10 @@ def autonomousAckermann(data):
     global autonomousMsg
     autonomousMsg = data
 
+steering_trim = 0 #default steering trim is zero
 def steeringTrim(data):
-    global steeringTrimVal
-    steeringTrimVal = data.data
+    global steering_trim
+    steering_trim = data.data
 
 
 
@@ -82,6 +83,7 @@ while not rospy.is_shutdown():
     else:
         msg = controllerMsg
 
+    msg.steering_angle += steering_trim
     # msg = AckermannDriveStamped();
     # msg.header.stamp = rospy.Time.now()
     # msg.header.frame_id = "base_link"
