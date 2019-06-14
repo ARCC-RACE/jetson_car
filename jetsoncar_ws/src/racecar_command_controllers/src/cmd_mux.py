@@ -77,13 +77,11 @@ pub = rospy.Publisher('/racecar/muxed/ackermann_cmd', AckermannDriveStamped, que
 
 rate = rospy.Rate(50)
 while not rospy.is_shutdown():
-
     if isAutonomous:
         msg = autonomousMsg
     else:
         msg = controllerMsg
-
-    msg.drive.steering_angle += steering_trim
+    msg.drive.steering_angle = msg.drive.steering_angle + steering_trim
     # msg = AckermannDriveStamped();
     # msg.header.stamp = rospy.Time.now()
     # msg.header.frame_id = "base_link"
