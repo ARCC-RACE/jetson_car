@@ -38,7 +38,7 @@ void callback(racecar_command_interface::RacecarCommandInterfaceConfig &config, 
   std_msgs::Bool data_recorder_msg;
 
   cruise_vel_msg.data = config.cruise_velocity;
-  steering_trim_msg.data =  = config.steering_trim;
+  steering_trim_msg.data = config.steering_trim;
   autonomous_mode_msg.data = config.autonomous_mode;
   sport_mode_msg.data = config.sport_mode;
   data_recorder_msg.data = config.data_collection_mode;
