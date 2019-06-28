@@ -5,7 +5,11 @@ import utils # for image preprocessing
 import numpy as np
 import os
 import cv2
+from rosey import Rosey
 
+# Keras imports to create a convolutional neural network using tensorflow on the low level
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Lambda, Dropout
 from keras.models import load_model
 from cv_bridge import CvBridge, CvBridgeError
 from ackermann_msgs.msg import AckermannDriveStamped
@@ -42,7 +46,11 @@ def newImage(new_image):
         rospy.logdebug("Steering prediction from Rosey: %f", steering_prediction)
 
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
-rosey = load_model(dir_path + '/../models/rosey.h5')
+#rosey = load_model(dir_path + '/../models/rosey.h5')
+roseyObj = Rosey()
+roseyObj.build_model()
+rosey = roseyObj.model
+rosey.load_weights(dir_path + '/../models/rosey.h5')
 rosey._make_predict_function() # build and compile the function on the GPU (before threading)
 
 rospy.init_node('rosey')
