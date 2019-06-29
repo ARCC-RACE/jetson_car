@@ -3,6 +3,8 @@
 import numpy as np
 import cv2
 import csv
+import time
+import os
 import getpass #gets username for filepaths
 import platform #determines wether OS in windows or ubuntu
 
@@ -13,17 +15,22 @@ from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Lambda, Dropout
 from keras.callbacks import ModelCheckpoint
 #popular optimization strategy that uses gradient descent
 from keras.optimizers import Adam
+#add regularizer to limit overfitting
+from keras import regularizers
+#Gotta have them graphs
+from keras.callbacks import TensorBoard
 #helper class to define input shape and generate training images given image paths & steering angles
 from utils import INPUT_SHAPE, batch_generator
 
 class Rosey:
 
-    def __init__(self, data_directory = "../data", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500):
+    def __init__(self, data_directory = "../data", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01):
         self.data_dir = data_directory
         self.batch_size = batch_size
         self.validation_steps = validation_steps
         self.nb_epochs = nb_epochs
         self.steps_per_epoch = steps_per_epoch
+        self.regularizer = regularizer
 
     def build_model(self):
         print("Building model...")
@@ -36,19 +43,26 @@ class Rosey:
         #normalize the image  to avoid saturation and make the gradients work better
         self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
         #24 5x5 convolution kernels with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
-        self.model.add(Conv2D(24, 5, activation="elu", strides=2))
-        self.model.add(Conv2D(36, 5, activation="elu", strides=2))
-        self.model.add(Conv2D(48, 5, activation="elu", strides=2))
+        self.model.add(Conv2D(24, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(36, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(48, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Conv2D(64, 3, activation="elu")) #stride = 1x1
         self.model.add(Conv2D(64, 3, activation="elu")) #stride = 1x1
 
         self.model.add(Dropout(0.5)) #magic number from udacity self driving car course
         #turn convolutional feature maps into a fully connected ANN
         self.model.add(Flatten())
-        self.model.add(Dense(100, activation="elu"))
-        self.model.add(Dense(50, activation="elu"))
-        self.model.add(Dense(10, activation="elu"))
+        self.model.add(Dense(100, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Dense(50, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Dense(10, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(1)) #No need for activation function because this is the output and it is not a probability
+
+        #Setup tensorboard for viewing model development
+        timeStamp = time.time()
+        path = os.path.dirname(os.path.realpath(__file__)) #get python file path
+        self.tensorboard = TensorBoard(log_dir="{}/logs/{}".format(path, timeStamp))
+        print("Run `tensorboard --logdir=\"{}/logs/{}\"` and see `http://localhost:6006` to see CNN status".format(path, timeStamp))
+
         self.model.summary() #print a summary representation of model
 
 
@@ -73,7 +87,7 @@ class Rosey:
             validation_data=batch_generator(self.data_dir + "/test_set", self.X_test, self.Y_test, self.batch_size, False),
             #validation_steps=len(self.X_test), #Takes wwwwaaayyyyyy too long
             validation_steps=self.validation_steps,
-            callbacks=[checkpoint],
+            callbacks=[checkpoint, self.tensorboard],
             verbose=1)
 
 
@@ -107,7 +121,7 @@ if __name__ == "__main__":
     else:
         dir = "/media/" + getpass.getuser() + "/racecarDataset/dataset" #directory of expected USB flashdrive on Linux
         print("Linux detected! Searching " + dir + " for dataset")
-        
+
     rosey = Rosey(data_directory=dir,
         batch_size=40, validation_steps=1000, nb_epochs=20,
         steps_per_epoch=1000)
