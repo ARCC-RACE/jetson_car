@@ -2,9 +2,9 @@
 
 import numpy as np
 import cv2
-from cv_bridge import CvBridge, CvBridgeError
 import csv
 import getpass #gets username for filepaths
+import platform #determines wether OS in windows or ubuntu
 
 # Keras imports to create a convolutional neural network using tensorflow on the low level
 from keras.models import Sequential
@@ -101,7 +101,13 @@ class Rosey:
                 self.Y_test += (float(row['Steering_angle']),)
 
 if __name__ == "__main__":
-    dir = "/media/" + getpass.getuser() + "/racecarDataset/dataset" #directory of expected USB flashdrive
+    if(platform.system() == 'Windows'):
+        dir = "E:\\dataset" #directory of expected USB flashdrive on Windows
+        print("Windows detected! Searching " + dir + " for dataset")
+    else:
+        dir = "/media/" + getpass.getuser() + "/racecarDataset/dataset" #directory of expected USB flashdrive on Linux
+        print("Linux detected! Searching " + dir + " for dataset")
+        
     rosey = Rosey(data_directory=dir,
         batch_size=40, validation_steps=1000, nb_epochs=20,
         steps_per_epoch=1000)
