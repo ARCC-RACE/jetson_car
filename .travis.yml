@@ -75,6 +75,7 @@ before_install:
   # Prepare rosdep to install dependencies.
   - sudo rosdep init
   - rosdep update
+  - sudo apt-get update
 
 # Go to the ros_# trigger a build matrix for different ROS distributions if desired.workspace and perform a rosdep install for all package dependencies
 install:
