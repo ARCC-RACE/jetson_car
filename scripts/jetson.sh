@@ -24,11 +24,11 @@ if ! find /etc/udev/rules.d/50-i2c.rules ; then
 fi
 
 # Set the wifi power_save mode off and clock up the nvidia jetson
-if ! grep "sudo iw wlan0 set power_save off" /etc/rc.local ; then
-   sed -n -i 'p;13a sudo iw wlan0 set power_save off' /etc/rc.local
+if ! grep "sudo iw wlan0 set power_save off" ~/.bashrc ; then
+   echo "sudo iw wlan0 set power_save off" >> ~/.bashrc
 fi
-if ! grep "sudo ~/jetson_clocks.sh" /etc/rc.local ; then
-   sed -n -i 'p;13a sudo ~/jetson_clocks.sh' /etc/rc.local
+if ! grep "sudo ~/jetson_clocks.sh" ~/.bashrc ; then
+   echo -e "sudo ~/jetson_clocks.sh\n" >> ~/.bashrc
 fi
 
 echo "Reboot your jetson"
