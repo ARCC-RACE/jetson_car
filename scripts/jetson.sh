@@ -28,7 +28,7 @@ if ! grep "sudo iw wlan0 set power_save off" ~/.bashrc ; then
    echo "sudo iw wlan0 set power_save off" >> ~/.bashrc
 fi
 if ! grep "sudo ~/jetson_clocks.sh" ~/.bashrc ; then
-   echo -e "sudo ~/jetson_clocks.sh\n" >> ~/.bashrc
+   echo "sudo ~/jetson_clocks.sh" >> ~/.bashrc
 fi
 
 echo "Reboot your jetson"
