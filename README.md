@@ -106,10 +106,6 @@ See the travis.yaml for running install/make tests and verifying a proper build.
 * [Git LFS](https://git-lfs.github.com/) - Manage and store trained AI models
 * [Travis CI](https://travis-ci.org/) - Perform build tests
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://github.com/Michael-Equi/ROV_Test_Bench/blob/development/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
 ## Authors
 
 * **Michael Equi** - *Initial work*
