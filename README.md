@@ -29,6 +29,7 @@ Development
 - On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `catkin_make` in the jetsoncar_ws
 - Run the controller.sh or jetson.sh scripts to get the devices setup and communicating with each other OR run `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311` and `export ROS_HOSTNAME=hostname_of_machine.local`
    - It is highly recommended that you run the controller.sh and jetson.sh scripts on their respective devices
+- See `DualShock 4 Controller Setup` section for setting up the controller with the correct platform
 
 #### Important Notes
 - When running the jetson car with WiFi make sure that WiFi power saving mode is off. `sudo iw dev wlan0 set power_save off` and check with `sudo iw dev wlan0 get power_save`. This needs to be done each time the WiFi reconnects to a new network.
@@ -71,12 +72,13 @@ Development
    - `sudo apt-get install -y python-pip`
    - `pip install keras`
    - `sudo pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
-- `sudo usermod -a -G dialout $USER` to give proper permissions to the USB peripherals
-- Add a udev rule for i2c-1 so that the IMU interface program can access it
-   - Go to `/etc/udev/rules.d`
-   - Add a file called `50-i2c.rules`
-   - Add the line `ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"` to the `50-i2c.rules` file
-   - See [here](https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions) for additional information
+- The following are done in the `jetson.sh` script but provided here for reference
+   - `sudo usermod -a -G dialout $USER` to give proper permissions to the USB peripherals
+   - Add a udev rule for i2c-1 so that the IMU interface program can access it
+      - Go to `/etc/udev/rules.d`
+      - Add a file called `50-i2c.rules`
+      - Add the line `ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"` to the `50-i2c.rules` file
+      - See [this](https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions) for additional information
 
 ### [RTAB Mapping setup](https://github.com/introlab/rtabmap_ros#installation)
 - `sudo apt-get install ros-kinetic-rtabmap-ros ros-kinetic-robot-localization ros-kinetic-pointcloud-to-laserscan ros-kinetic-depthimage-to-laserscan`
@@ -88,19 +90,10 @@ Development
 - Run the `joy_node` ROS node and echo the `/joy` topic to confirm data is being sent properly from the controller to the computer
 
 
-### DualShock 4 Controller Setup (Ubuntu MATE RPI 3)
+### DualShock 4 Controller Setup (Ubuntu MATE RPI)
 - Install `bluez` driver `sudo apt-get install bluez`
 - https://github.com/macunixs/dualshock4-pi/blob/master/README.md
 - Follow the steps for Ubutnu 16.04 above
-
-
-### Prerequisites
-- Realsense drivers installed on the jetson TX2
--
-
-### Network Setup
-- `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311`
-- `export ROS_IP=ip_of_comptuer` or `export ROS_HOSTNAME=name_of_machine + .local`
 
 #### Network Setup DEBUG
 
@@ -112,7 +105,7 @@ Development
 
 ## Running the tests
 
-Explain how to run the automated tests for this system (travis CI)
+See the travis.yaml for running install tests and verifying a proper build.
 
 ### Break down into end to end tests
 
@@ -136,9 +129,10 @@ Add additional notes about how to deploy this on a live system (docker)
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [ROS](https://www.ros.org/) - Modern robot framework for running software
+* [librealsense](https://github.com/IntelRealSense/librealsense) - Intel Realsense library for D415/D435
+* [Git LFS](https://git-lfs.github.com/) - Manage and store trained AI models
+* [Travis CI](https://travis-ci.org/) - Perform build tests
 
 ## Contributing
 
