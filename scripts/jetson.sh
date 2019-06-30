@@ -4,6 +4,8 @@ if ! grep "export ROS_HOSTNAME=$(hostname).local" ~/.bashrc ; then
   echo "# Comment out the lines below when using for other applications" >> ~/.bashrc
   echo "export ROS_HOSTNAME=$(hostname).local" >> ~/.bashrc
   echo "export ROS_MASTER_URI=http://$(hostname).local:11311" >> ~/.bashrc
+  echo "Adding ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash in ~/.bashrc -> change if needed!"
+  echo "source ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash" >> ~/.bashrc
 fi
 
 # Make sure all programs have access to the I2C bus devices (primarily for IMU)
