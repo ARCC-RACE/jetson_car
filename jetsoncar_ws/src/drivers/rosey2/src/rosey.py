@@ -24,8 +24,9 @@ from utils import INPUT_SHAPE, batch_generator
 
 class Rosey:
 
-    def __init__(self, data_directory = "../data", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01):
+    def __init__(self, data_directory = "../data", datasets="dataset", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01):
         self.data_dir = data_directory
+        self.datasets = datasets
         self.batch_size = batch_size
         self.validation_steps = validation_steps
         self.nb_epochs = nb_epochs
@@ -61,7 +62,7 @@ class Rosey:
         timeStamp = time.time()
         path = os.path.dirname(os.path.realpath(__file__)) #get python file path
         self.tensorboard = TensorBoard(log_dir="{}/logs/{}".format(path, timeStamp))
-        print("Run `tensorboard --logdir=\"{}/logs/{}\"` and see `http://localhost:6006` to see CNN status".format(path, timeStamp))
+        print("Run `tensorboard --logdir=\"{}/logs/{}\"` and see `http://localhost:6006` to see CNN status".format(path, timeStamp) + "\n\n")
 
         self.model.summary() #print a summary representation of model
 
@@ -82,9 +83,9 @@ class Rosey:
         #batch_generator(data_dir, image_paths, steering_angles, batch_size, is_training):
         #generator, steps_per_epoch=None, epochs=1, verbose=1, callbacks=None, validation_data=None, validation_steps=None,
         # class_weight=None, max_queue_size=10, workers=1, use_multiprocessing=False, shuffle=True, initial_epoch=0
-        self.model.fit_generator(batch_generator(self.data_dir + "/training_set" , self.X_training, self.Y_training, self.batch_size, True),
+        self.model.fit_generator(batch_generator(self.data_dir, self.datasets, self.X_training, self.Y_training, self.batch_size, True),
             self.steps_per_epoch, self.nb_epochs, max_queue_size=1,
-            validation_data=batch_generator(self.data_dir + "/test_set", self.X_test, self.Y_test, self.batch_size, False),
+            validation_data=batch_generator(self.data_dir, self.datasets, self.X_test, self.Y_test, self.batch_size, False),
             #validation_steps=len(self.X_test), #Takes wwwwaaayyyyyy too long
             validation_steps=self.validation_steps,
             callbacks=[checkpoint, self.tensorboard],
@@ -94,37 +95,68 @@ class Rosey:
     def load_data(self):
         #load training set
         print("Loading training set...")
-        with open(self.data_dir + "/training_set/tags.csv") as csvfile:
-            reader = csv.DictReader(csvfile)
-            self.X_training = ()
-            self.Y_training = ()
-            for row in reader:
-                #print(row['Time_stamp'] + ".jpg", row['Steering_angle'])
-                self.X_training += (row['Time_stamp'] + ".jpg",) #get image path
-                self.Y_training += (float(row['Steering_angle']),)
+        #these will be 2D arrays where each row represents a dataset
+        self.X_training = []
+        self.Y_training = []
+        for dataset in self.datasets:
+            X_training = ()
+            Y_training = ()
+            with open(os.path.join(os.path.join(self.data_dir, dataset), "training_set/tags.csv")) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    #print(row['Time_stamp'] + ".jpg", row['Steering_angle'])
+                    X_training += (row['Time_stamp'] + ".jpg",) #get image path
+                    Y_training += (float(row['Steering_angle']),)
+            self.X_training.append(X_training)
+            self.Y_training.append(Y_training)
 
         #load test set
         print("Loading test set...")
-        with open(self.data_dir + "/test_set/tags.csv") as csvfile:
-            reader = csv.DictReader(csvfile)
-            self.X_test = ()
-            self.Y_test = ()
-            for row in reader:
-                #print(row['Time_stamp'] + ".jpg", row['Steering_angle'])
-                self.X_test += (row['Time_stamp'] + ".jpg",) #get image path
-                self.Y_test += (float(row['Steering_angle']),)
+        #these will be 2D arrays where each row represents a dataset
+        self.X_test = []
+        self.Y_test = []
+        for dataset in self.datasets:
+            X_test = ()
+            Y_test = ()
+            with open(os.path.join(os.path.join(self.data_dir, dataset), "test_set/tags.csv")) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    #print(row['Time_stamp'] + ".jpg", row['Steering_angle'])
+                    X_test += (row['Time_stamp'] + ".jpg",) #get image path
+                    Y_test += (float(row['Steering_angle']),)
+            self.X_test.append(X_test)
+            self.Y_test.append(Y_test)
 
 if __name__ == "__main__":
-    if(platform.system() == 'Windows'):
-        dir = "E:\\dataset" #directory of expected USB flashdrive on Windows
-        print("Windows detected! Searching " + dir + " for dataset")
-    else:
-        dir = "/media/" + getpass.getuser() + "/racecarDataset/dataset" #directory of expected USB flashdrive on Linux
-        print("Linux detected! Searching " + dir + " for dataset")
+    #determine which file system to use for reading racecarDataset. It may not always be optimal to read from USB drive
+    dir = input("Enter root dataset directory (i.e. ~/racecarDatasets). If left blank the USB root dataset directory will be used.")
+    if dir.strip() == "":
+        if(platform.system() == 'Windows'):
+            dir = "E:\\" #directory of expected USB flashdrive on Windows
+            print("Windows detected! Searching " + dir + " for dataset")
+        else:
+            dir = "/media/" + getpass.getuser() + "/racecarDataset" #directory of expected USB flashdrive on Linux
+            print("Linux detected! Searching " + dir + " for dataset")
 
-    rosey = Rosey(data_directory=dir,
+    print("Dataset Location: " + dir + "\n")
+
+    #This function lets you combine ex. dataset with dataset1 and dataset2 for a single trainig session. This makes adding in more data easy and seperates data collection periods
+    special_dataset_read = input("Would you like to combine multiple datasets in the root dataset directory for training? (y/n)")
+    if special_dataset_read.lower().strip() == 'y':
+        print("The dataset root should be configured to cotnain files in the format " + os.path.join(dir + "dataset") + ",1,2,3,4,...")
+        datasets = input("Enter in the sufixes for the datasets to read from: (ex.  `,3,5`  will read from "  + os.path.join(dir + "dataset") + ", " +  os.path.join(dir + "dataset") + "3, and " + os.path.join(dir + "dataset") +"5)").split(',')
+        for i,suffix in enumerate(datasets):
+            datasets[i] = "dataset"+suffix
+    else:
+        datasets = "dataset"
+        print("Using default " + os.path.join(dir + "dataset") + " for data")
+
+    print("Datasets to read from: " + str(datasets) + "\n\n")
+
+    rosey = Rosey(data_directory=dir, datasets=datasets,
         batch_size=40, validation_steps=1000, nb_epochs=20,
-        steps_per_epoch=1000)
+        steps_per_epoch=1000, regularizer=0)
+
     rosey.load_data()
     rosey.build_model()
     rosey.train_model()

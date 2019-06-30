@@ -1,6 +1,6 @@
 #https://github.com/llSourcell/How_to_simulate_a_self_driving_car/blob/master/utils.py
 
-import cv2, os
+import cv2, os, random
 import numpy as np
 import matplotlib.image as mpimg
 
@@ -124,7 +124,7 @@ def augument(data_dir, img_path, steering_angle, range_x=100, range_y=10):
     return image, steering_angle
 
 
-def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_training):
+def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size, is_training):
     """
     Generate training image give image paths and associated steering angles
     """
@@ -132,14 +132,17 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
     steers = np.empty(batch_size)
     while True:
         i = 0
-        for index in np.random.permutation(len(image_paths)):
-            img = image_paths[index]
-            steering_angle = steering_angles[index]
+        dataset_index = random.randint(0, len(datasets)-1)
+        for index in np.random.permutation(len(image_paths[dataset_index])):
+            img = image_paths[dataset_index][index]
+            steering_angle = steering_angles[dataset_index][index]
             # argumentation
             if is_training and np.random.rand() < 0.6:
-                image, steering_angle = augument(data_dir, img, steering_angle)
+                image, steering_angle = augument(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), img, steering_angle)
+            elif is_training:
+                image = load_image(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), img)
             else:
-                image = load_image(data_dir, img)
+                image = load_image(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), img)
             # add the image and steering angle to the batch
             images[i] = preprocess(image)
             steers[i] = steering_angle
