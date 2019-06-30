@@ -114,7 +114,7 @@ Please read [CONTRIBUTING.md](https://github.com/Michael-Equi/ROV_Test_Bench/blo
 
 * **Michael Equi** - *Initial work*
 
-See also the list of [contributors](https://github.com/Michael-Equi/ROV_Test_Bench/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/JHS-ARCC-Club/jetson_car/graphs/contributors) who participated in this project.
 
 ## Acknowledgments
 
