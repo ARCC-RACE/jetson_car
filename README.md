@@ -9,6 +9,7 @@ Master
 
 Development   
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=development)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/badge/development)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/overview/development)
 
 ## Getting Started
 - Make sure you have installed git lfs on the jetson, controller, and development computer
