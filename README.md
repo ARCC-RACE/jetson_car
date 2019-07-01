@@ -5,6 +5,7 @@ Check out system [flowcharts](https://drive.google.com/open?id=1oScZmCizjCHx7lIW
 
 Master   
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=master)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/badge)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car)
 
 Development   
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=development)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
