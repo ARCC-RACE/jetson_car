@@ -62,8 +62,8 @@ rosey._make_predict_function() # build and compile the function on the GPU (befo
 
 rospy.init_node('rosey')
 
-drive_speed = rospy.get_param('speed', 2)
-use_cruise_velocity = rospy.get_param('use_cruise_velocity', False)
+drive_speed = rospy.get_param('~speed', 2)
+use_cruise_velocity = rospy.get_param('~use_cruise_velocity', False)
 
 lastRead = rospy.get_time()
 steering_prediction = 0
