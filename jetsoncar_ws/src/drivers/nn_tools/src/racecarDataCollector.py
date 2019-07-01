@@ -95,18 +95,18 @@ class RacecarDataCollector():
             fileSelector = random.randint(0, 10) #random number between 0 and 9 inclusive
             #put new_data into csv
             if(fileSelector < 8): #send data to train folder
-                cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/training_set/"), str(timeStamp) + ".jpg", image); #write image into train folder
+                cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/training_set/"), str(timeStamp) + ".jpg"), image) #write image into train folder
                 if self.include_depth:
-                    cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/training_set/"), str(timeStamp) + "_depth.jpg"), depth); #write depth image into train folder
+                    cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/training_set/"), str(timeStamp) + "_depth.jpg"), depth) #write depth image into train folder
                 #update csv file
                 with open(os.path.join(self.dir, "/dataset/training_set/tags.csv"), 'a') as csvfile: # append to csv file
                     csv_writer = csv.writer(csvfile, self.feildNames)
                     csv_writer.writerow(new_data)
 
             else: #send data to test folder
-                cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/test_set/"), str(timeStamp) + ".jpg"), image); #write image into test folder
+                cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/test_set/"), str(timeStamp) + ".jpg"), image) #write image into test folder
                 if self.include_depth:
-                    cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/test_set/"), str(timeStamp) + "_depth.jpg"), depth); #write depth image into test folder
+                    cv2.imwrite(os.path.join(os.path.join(self.dir, "/dataset/test_set/"), str(timeStamp) + "_depth.jpg"), depth) #write depth image into test folder
                 #update csv file
                 with open(os.path.join(self.dir, "/dataset/test_set/tags.csv"), 'a') as csvfile: # append to csv file
                     csv_writer = csv.writer(csvfile, self.feildNames)
@@ -135,13 +135,16 @@ class RacecarDataCollector():
     def newDepth(self, image):
         self.depth_data = image
 
-if __name__=="main":
+if __name__=="__main__":
     #program starts running here
+    print(":)")
     rospy.init_node("data_collector")
+    print("Hi")
     include_imu = rospy.get_param('~include_imu', False)
     include_depth = rospy.get_param('~include_depth', False)
     collection_fps = rospy.get_param('~collection_fps', 15)
     image_color_encoding = rospy.get_param('~image_color_encoding', "bgr8")
-
+    print("Hello")
     data_collector = RacecarDataCollector(collection_fps, include_depth, include_imu, image_color_encoding=image_color_encoding)
+    print("Here")
     rospy.spin() #keep node running while callbacks are handled
