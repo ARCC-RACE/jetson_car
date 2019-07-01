@@ -8,8 +8,8 @@
 
   <!-- Data Collector -->
   <node name="racecar_data_collector" pkg="nn_tools" type="racecarDataCollector.py" respawn="true" respawn_delay="45">
-    <param name="include_imu" value="False"/>
-    <param name="include_depth" value="False"/>
+    <param name="include_imu" value="True"/>
+    <param name="include_depth" value="True"/>
     <param name="collection_fps" value="15"/>
   </node>
 
