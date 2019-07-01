@@ -14,6 +14,7 @@ from keras.models import load_model
 from cv_bridge import CvBridge, CvBridgeError
 from ackermann_msgs.msg import AckermannDriveStamped
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float64
 
 # callback that runs when a new image is recieved from realsense camera
 def newImage(new_image):
@@ -45,6 +46,12 @@ def newImage(new_image):
 #        print(processTime) # prints time to process image and make prediction in seconds
         rospy.logdebug("Steering prediction from Rosey: %f", steering_prediction)
 
+def newVel(data):
+    global drive_speed
+    global use_cruise_velocity
+    if(use_cruise_velocity):
+        drive_speed = data.data
+
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
 #rosey = load_model(dir_path + '/../models/rosey.h5')
 roseyObj = Rosey()
@@ -55,15 +62,17 @@ rosey._make_predict_function() # build and compile the function on the GPU (befo
 
 rospy.init_node('rosey')
 
+drive_speed = rospy.get_param('speed', 2)
+use_cruise_velocity = rospy.get_param('use_cruise_velocity', False)
+
 lastRead = rospy.get_time()
 steering_prediction = 0
 
 pub = rospy.Publisher("/racecar/autonomous/ackermann_cmd", AckermannDriveStamped, queue_size=1) # drive control publisher
 rospy.Subscriber("/front_cam/color/image_raw", Image, newImage)  # input video
+rospy.Subscriber("/racecar/cruise_velocity", Float64, newVel)  # input video
 
 rate = rospy.Rate(50) #50Hz publshing rate
-
-drive_speed = rospy.get_param('speed', 2)
 
 while not rospy.is_shutdown():
     drive_msg = AckermannDriveStamped()

@@ -8,14 +8,15 @@
 
   <!-- Data Collector -->
   <node name="racecar_data_collector" pkg="nn_tools" type="racecarDataCollector.py" respawn="true" respawn_delay="45">
-    <param name="include_imu" value="True"/>
-    <param name="include_depth" value="True"/>
+    <param name="include_imu" value="False"/>
+    <param name="include_depth" value="False"/>
     <param name="collection_fps" value="15"/>
   </node>
 
   <!-- rosey the driver (with smaller FOV) -->
   <node name="rosey" pkg="rosey2" type="rosey_drive.py" respawn="true" respawn_delay="60">
     <param name="speed" value="2"/>
+    <param name="use_cruise_velocity" value="False"/>
   </node>
 
   <!-- Realsense D435 launch -->

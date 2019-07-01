@@ -10,6 +10,7 @@ from keras.models import load_model
 from cv_bridge import CvBridge, CvBridgeError
 from ackermann_msgs.msg import AckermannDriveStamped
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float64
 
 # callback that runs when a new image is recieved from realsense camera
 def newImage(new_image):
