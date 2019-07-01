@@ -5,9 +5,11 @@ Check out system [flowcharts](https://drive.google.com/open?id=1oScZmCizjCHx7lIW
 
 Master   
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=master)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/badge/master)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/overview/master)
 
 Development   
 [![Build Status](https://travis-ci.com/JHS-ARCC-Club/jetson_car.svg?branch=development)](https://travis-ci.com/JHS-ARCC-Club/jetson_car)
+[![CodeFactor](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/badge/development)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/overview/development)
 
 ## Getting Started
 - Make sure you have installed git lfs on the jetson, controller, and development computer
@@ -95,37 +97,9 @@ Development
 - https://github.com/macunixs/dualshock4-pi/blob/master/README.md
 - Follow the steps for Ubutnu 16.04 above
 
-#### Network Setup DEBUG
-
-### Installing OS
-
-
-##UPDATES NEEDED BELOW THIS POINT
---------------------------------
-
 ## Running the tests
 
-See the travis.yaml for running install tests and verifying a proper build.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why (coveralls)
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system (docker)
+See the travis.yaml for running install/make tests and verifying a proper build.
 
 ## Built With
 
@@ -134,22 +108,12 @@ Add additional notes about how to deploy this on a live system (docker)
 * [Git LFS](https://git-lfs.github.com/) - Manage and store trained AI models
 * [Travis CI](https://travis-ci.org/) - Perform build tests
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://github.com/Michael-Equi/ROV_Test_Bench/blob/development/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
 ## Authors
 
 * **Michael Equi** - *Initial work*
 
-See also the list of [contributors](https://github.com/Michael-Equi/ROV_Test_Bench/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/JHS-ARCC-Club/jetson_car/graphs/contributors) who participated in this project.
 
 ## Acknowledgments
 
 * README Tempalte source https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
-* Inspiration
-* etc
