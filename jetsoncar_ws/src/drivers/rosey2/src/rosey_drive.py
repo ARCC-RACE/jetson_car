@@ -63,10 +63,12 @@ rospy.Subscriber("/front_cam/color/image_raw", Image, newImage)  # input video
 
 rate = rospy.Rate(50) #50Hz publshing rate
 
+drive_speed = rospy.get_param('speed', 2)
+
 while not rospy.is_shutdown():
     drive_msg = AckermannDriveStamped()
     drive_msg.drive.steering_angle = steering_prediction
-    drive_msg.drive.speed = 2 # constant speed for now, safety controlled in mux node
+    drive_msg.drive.speed = drive_speed # constant speed for now, safety controlled in mux node
     drive_msg.header.stamp = rospy.Time.now()
     pub.publish(drive_msg)
     rate.sleep()

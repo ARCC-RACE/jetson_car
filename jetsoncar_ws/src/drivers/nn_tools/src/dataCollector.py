@@ -9,6 +9,8 @@ from sensor_msgs.msg import Image
 import csv
 import random #To randomly sort files into test and train folders (20% test, 80% train)
 
+################## UPDATES REQUIRED! OUT OF DATE WITH racecarDataCollector.py
+
 #record data with time stamp
 def newImage(new_image):
     timeStamp = rospy.get_time()
