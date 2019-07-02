@@ -110,8 +110,8 @@ class Rosey:
         #option to save the generated numpy so it can be reused later by train_model_from_old_npy()
         if save_dataset:
             print("Saving dataset npy...")
-            np.save(os.path.join(self.dir, 'x_images.npy'), x_images)
-            np.save(os.path.join(self.dir, 'y_steers.npy'), y_steers)
+            np.save(os.path.join(self.data_dir, 'x_images.npy'), x_images)
+            np.save(os.path.join(self.data_dir, 'y_steers.npy'), y_steers)
             print("Dataset saved!")
 
         print("Finished building, beginning training of neural network")
@@ -130,8 +130,8 @@ class Rosey:
         print("\nLoading FAT numpy array of augmented datatset... (this may take a while)")
 
         #option to save the generated numpy so it can be reused later
-        x_images = np.load(os.path.join(self.dir, 'x_images.npy'))
-        y_steers = np.load(os.path.join(self.dir, 'y_steers.npy'))
+        x_images = np.load(os.path.join(self.data_dir, 'x_images.npy'))
+        y_steers = np.load(os.path.join(self.data_dir, 'y_steers.npy'))
 
         print("Finished loading, beginning training of neural network")
         model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
