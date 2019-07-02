@@ -8,11 +8,14 @@ import matplotlib.image as mpimg
 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 
-def load_image(data_dir, image_file):
+def load_images(data_dir, image_files):
     """
     Load RGB images from a file
     """
-    return mpimg.imread(os.path.join(data_dir, image_file.strip()))
+    images = []
+    for i, image_path in enumerate(image_files):
+         images.append(mpimg.imread(os.path.join(data_dir, image_path.strip())))
+    return images
 
 
 def crop(image):
@@ -36,92 +39,110 @@ def rgb2yuv(image):
     return cv2.cvtColor(image, cv2.COLOR_RGB2YUV)
 
 
-def preprocess(image):
+def preprocess(images, num_stacked_images):
     """
-    Combine all preprocess functions into one
+    Combine all preprocess functions into one and stack the images to create the X (input data for the CNN)
     """
-    image = crop(image)
-    image = resize(image)
-    image = rgb2yuv(image)
-    return image
+    #numpy array to hold the stacked images
+    output_stack = np.empty([])
+    for i in range(len(images)):
+        images[i] = crop(images[i])
+        images[i] = resize(images[i])
+        images[i] = rgb2yuv(images[i])
+        output_stack = output_stack.append(images[i], axis=2)
+    print(output_stack.shape)
+    return output_stack
 
-
-def choose_image(data_dir, img_path, steering_angle):
-    return load_image(data_dir, img_path), steering_angle
-
-
-def random_flip(image, steering_angle):
+def random_flip(images, steering_angle):
     if np.random.rand() < 0.5:
-        image = cv2.flip(image, 1)
+        for i, image in enumerate(images):
+            images[i] = cv2.flip(image, 1)
         steering_angle = -steering_angle
-    return image, steering_angle
+    return images, steering_angle
 
 
-def random_translate(image, steering_angle, range_x, range_y):
+def random_translate(images, steering_angle, range_x, range_y):
     """
     Randomly shift the image virtially and horizontally (translation).
     """
-    trans_x = range_x * (np.random.rand() - 0.5)
-    trans_y = range_y * (np.random.rand() - 0.5)
+    #Store all the random variables so the same shadows are applied to all the images
+    trans_x_random = np.random.rand()
+    trans_y_random = np.random.rand()
+
     steering_angle += trans_x * 0.002
-    trans_m = np.float32([[1, 0, trans_x], [0, 1, trans_y]])
-    height, width = image.shape[:2]
-    image = cv2.warpAffine(image, trans_m, (width, height))
-    return image, steering_angle
+    for i, image in enumerate(images):
+        trans_x = range_x * (trans_x_random - 0.5)
+        trans_y = range_y * (trans_y_random - 0.5)
+        trans_m = np.float32([[1, 0, trans_x], [0, 1, trans_y]])
+        height, width = image.shape[:2]
+        images[i] = cv2.warpAffine(image, trans_m, (width, height))
+    return images, steering_angle
 
 
-def random_shadow(image):
+def random_shadow(images):
     """
     Generates and adds random shadow
     """
-    # (x1, y1) and (x2, y2) forms a line
-    # xm, ym gives all the locations of the image
-    height, width, channels = image.shape
-    x1, y1 = width * np.random.rand(), 0
-    x2, y2 = width * np.random.rand(), height
-    xm, ym = np.mgrid[0:height, 0:width]
+    #Store all the random variables so the same shadows are applied to all the images
+    random_1 = np.random.rand()
+    random_2 = np.random.rand()
+    random_3 = np.random.randint(2)
+    random_4 = np.random.uniform(low=0.2, high=0.5)
 
-    # mathematically speaking, we want to set 1 below the line and zero otherwise
-    # Our coordinate is up side down.  So, the above the line:
-    # (ym-y1)/(xm-x1) > (y2-y1)/(x2-x1)
-    # as x2 == x1 causes zero-division problem, we'll write it in the below form:
-    # (ym-y1)*(x2-x1) - (y2-y1)*(xm-x1) > 0
-    mask = np.zeros_like(image[:, :, 1])
-    mask[(ym - y1) * (x2 - x1) - (y2 - y1) * (xm - x1) > 0] = 1
+    for i, image in enumerate(images):
+        # (x1, y1) and (x2, y2) forms a line
+        # xm, ym gives all the locations of the image
+        height, width, channels = image.shape
+        x1, y1 = width * random_1, 0
+        x2, y2 = width * random_2, height
+        xm, ym = np.mgrid[0:height, 0:width]
 
-    # choose which side should have shadow and adjust saturation
-    cond = mask == np.random.randint(2)
-    s_ratio = np.random.uniform(low=0.2, high=0.5)
+        # mathematically speaking, we want to set 1 below the line and zero otherwise
+        # Our coordinate is up side down.  So, the above the line:
+        # (ym-y1)/(xm-x1) > (y2-y1)/(x2-x1)
+        # as x2 == x1 causes zero-division problem, we'll write it in the below form:
+        # (ym-y1)*(x2-x1) - (y2-y1)*(xm-x1) > 0
+        mask = np.zeros_like(image[:, :, 1])
+        mask[(ym - y1) * (x2 - x1) - (y2 - y1) * (xm - x1) > 0] = 1
 
-    # adjust Saturation in HLS(Hue, Light, Saturation)
-    hls = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
-    hls[:, :, 1][cond] = hls[:, :, 1][cond] * s_ratio
-    return cv2.cvtColor(hls, cv2.COLOR_HLS2RGB)
+        # choose which side should have shadow and adjust saturation
+        cond = mask == random_3
+        s_ratio = random_4
+
+        # adjust Saturation in HLS(Hue, Light, Saturation)
+        hls = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
+        hls[:, :, 1][cond] = hls[:, :, 1][cond] * s_ratio
+        images[i] = cv2.cvtColor(hls, cv2.COLOR_HLS2RGB)
+    return images
 
 
-def random_brightness(image):
+def random_brightness(images):
     """
     Randomly adjust brightness of the image.
     """
-    # HSV (Hue, Saturation, Value) is also called HSB ('B' for Brightness).
-    hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-    ratio = 1.0 + 0.4 * (np.random.rand() - 0.5)
-    hsv[:,:,2] =  hsv[:,:,2] * ratio
-    return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+    #Store all the random variables so the same shadows are applied to all the images
+    random_1 = np.random.rand()
+    for i, image in enumerate(images):
+        # HSV (Hue, Saturation, Value) is also called HSB ('B' for Brightness).
+        hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+        ratio = 1.0 + 0.4 * (random_1 - 0.5)
+        hsv[:,:,2] =  hsv[:,:,2] * ratio
+        images[i] = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+    return images
 
 
-def augument(data_dir, img_path, steering_angle, range_x=100, range_y=10):
+def augument(data_dir, img_paths, steering_angle, range_x=100, range_y=10):
     """
     Generate an augumented image and adjust steering angle.
     (The steering angle is associated with the image)
     """
-    image, steering_angle = choose_image(data_dir, img_path, steering_angle)
-    image, steering_angle = random_flip(image, steering_angle)
-    image, steering_angle = random_translate(image, steering_angle, range_x, range_y)
-    image = random_shadow(image)
-    image = random_brightness(image)
+    images, steering_angle = load_images(data_dir, img_paths, steering_angle)
+    images, steering_angle = random_flip(images, steering_angle)
+    images, steering_angle = random_translate(images, steering_angle, range_x, range_y)
+    images = random_shadow(images)
+    images = random_brightness(images)
 
-    return image, steering_angle
+    return images, steering_angle
 
 
 def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size, is_training, num_stacked_images):
@@ -137,19 +158,19 @@ def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size
             if index < stacked_images-1:
                 index = stacked_images-1
             #get the num_stacked_images file paths to feed into the network
-            img = []
+            imgs = []
             for i in range(num_stacked_images):
-                img.append(image_paths[dataset_index][index-i])
+                imgs.append(image_paths[dataset_index][index-i])
             steering_angle = steering_angles[dataset_index][index]
             # argumentation
             if is_training and np.random.rand() < 0.6:
-                image, steering_angle = augument(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), img, steering_angle)
+                imgs, steering_angle = augument(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), imgs, steering_angle)
             elif is_training:
-                image = load_image(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), img)
+                imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), imgs)
             else:
-                image = load_image(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), img)
+                imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), imgs)
             # add the image and steering angle to the batch
-            images[i] = preprocess(image)
+            images[i] = preprocess(imgs, num_stacked_images)
             steers[i] = steering_angle
             i += 1
             if i == batch_size:
