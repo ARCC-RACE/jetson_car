@@ -24,7 +24,7 @@ from utils import INPUT_SHAPE, batch_generator, fat_npy_builder
 
 class Rosey:
 
-    def __init__(self, data_directory = "../data", datasets="dataset", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01, temporal_size=3):
+    def __init__(self, data_directory = "../data", datasets="dataset", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01, temporal_size=3, nn_size_multiplier=1):
         self.data_dir = data_directory
         self.datasets = datasets
         self.batch_size = batch_size
@@ -33,6 +33,7 @@ class Rosey:
         self.steps_per_epoch = steps_per_epoch
         self.regularizer = regularizer
         self.temporal_size = temporal_size
+        self.nn_size_multiplier = nn_size_multiplier #a variable to increase the size of Rosey by adding more kernals
 
     def build_model(self):
         print("Building model...")
@@ -94,7 +95,7 @@ class Rosey:
             callbacks=[checkpoint, self.tensorboard],
             verbose=1)
 
-    def train_model_from_npy(self):
+    def train_model_from_npy(self, save_dataset=True):
         checkpoint = ModelCheckpoint('rosey.{epoch:03d}-{val_loss:.2f}.h5', # filepath = working directory/
             monitor='val_loss',
             verbose=0,
@@ -103,8 +104,37 @@ class Rosey:
         #compile model with stochastic gradient descent
         self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
         #build the input(x) output(y) arrays
-        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=20000)
-        model.fit(x_images, y_steers, self.batch_size, nb_epoch=20, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
+        print("\nBuilding FAT numpy array of augmented datatset... (this may take a while)")
+        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=25000)
+
+        #option to save the generated numpy so it can be reused later by train_model_from_old_npy()
+        if save_dataset:
+            print("Saving dataset npy...")
+            np.save(os.path.join(self.dir, 'x_images.npy'), x_images)
+            np.save(os.path.join(self.dir, 'y_steers.npy'), y_steers)
+            print("Dataset saved!")
+
+        print("Finished building, beginning training of neural network")
+        self.model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
+
+    #lets you load in an old numpy file that contains the augmented dataset generated in train_model_from_npy()
+    def train_model_from_old_npy(self):
+        checkpoint = ModelCheckpoint('rosey.{epoch:03d}-{val_loss:.2f}.h5', # filepath = working directory/
+            monitor='val_loss',
+            verbose=0,
+            save_best_only=True,
+            mode='auto')
+        #compile model with stochastic gradient descent
+        self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
+        #build the input(x) output(y) arrays
+        print("\nLoading FAT numpy array of augmented datatset... (this may take a while)")
+
+        #option to save the generated numpy so it can be reused later
+        x_images = np.load(os.path.join(self.dir, 'x_images.npy'))
+        y_steers = np.load(os.path.join(self.dir, 'y_steers.npy'))
+
+        print("Finished loading, beginning training of neural network")
+        model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
 
 
     def load_data(self):
@@ -175,4 +205,5 @@ if __name__ == "__main__":
 
     rosey.load_data()
     rosey.build_model()
-    rosey.train_model()
+    #rosey.train_model()
+    rosey.train_model_from_npy()
