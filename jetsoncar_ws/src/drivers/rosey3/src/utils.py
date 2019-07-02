@@ -229,6 +229,6 @@ def fat_npy_builder(data_dir, datasets, image_paths_training, steering_angles_tr
         ram = psutil.virtual_memory()
         print("Loading number: " + str(i) + "/" + str(total_size), end="  ")
         #Note the predicted RAM usage is a very ruff estimate and depends on other programs running on your machine. For greatest accuraccy do not run any other programs or open any new applicaitons while computing estimate
-        print("Total predicted RAM usage: %.3f/%.3fGb"%((total_size*(ram.used-initial_ram_usage)/(i+1))/1000000000,(ram.total-initial_ram_usage)/1000000000), end="  ")
+        print("Total predicted RAM usage: %.3f/%.3fGB"%((total_size*(ram.used-initial_ram_usage)/(i+1))/1000000000,(ram.total-initial_ram_usage)/1000000000), end="  ")
         print(str(ram.percent) + "%", end="\r")
     return images, steers
