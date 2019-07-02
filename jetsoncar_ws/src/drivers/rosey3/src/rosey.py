@@ -20,7 +20,7 @@ from keras import regularizers
 #Gotta have them graphs
 from keras.callbacks import TensorBoard
 #helper class to define input shape and generate training images given image paths & steering angles
-from utils import INPUT_SHAPE, batch_generator
+from utils import INPUT_SHAPE, batch_generator, fat_npy_builder
 
 class Rosey:
 
@@ -43,9 +43,9 @@ class Rosey:
 
         self.model = Sequential() #linear stack of layers
         #normalize the image  to avoid saturation and make the gradients work better
-        input_shape = INPUT_SHAPE
+        input_shape = list(INPUT_SHAPE)
         input_shape[2] = INPUT_SHAPE[2]*self.temporal_size
-        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=input_shape)) #127.5-1.0 = experimental value from udacity self driving car course
+        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=tuple(input_shape))) #127.5-1.0 = experimental value from udacity self driving car course
         #24 5x5 convolution kernels with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
         self.model.add(Conv2D(24, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Conv2D(36, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
@@ -85,14 +85,26 @@ class Rosey:
 
         #batch_generator(data_dir, image_paths, steering_angles, batch_size, is_training):
         #generator, steps_per_epoch=None, epochs=1, verbose=1, callbacks=None, validation_data=None, validation_steps=None,
-        # class_weight=None, max_queue_size=10, workers=1, use_multiprocessing=False, shuffle=True, initial_epoch=0
+        #class_weight=None, max_queue_size=10, workers=1, use_multiprocessing=False, shuffle=True, initial_epoch=0
         self.model.fit_generator(batch_generator(self.data_dir, self.datasets, self.X_training, self.Y_training, self.batch_size, True, num_stacked_images=self.temporal_size),
             self.steps_per_epoch, self.nb_epochs, max_queue_size=1,
-            validation_data=batch_generator(self.data_dir, self.datasets, self.X_test, self.Y_test, self.batch_size, False),
+            validation_data=batch_generator(self.data_dir, self.datasets, self.X_test, self.Y_test, self.batch_size, False, num_stacked_images=self.temporal_size),
             #validation_steps=len(self.X_test), #Takes wwwwaaayyyyyy too long
             validation_steps=self.validation_steps,
             callbacks=[checkpoint, self.tensorboard],
             verbose=1)
+
+    def train_model_from_npy(self):
+        checkpoint = ModelCheckpoint('rosey.{epoch:03d}-{val_loss:.2f}.h5', # filepath = working directory/
+            monitor='val_loss',
+            verbose=0,
+            save_best_only=True,
+            mode='auto')
+        #compile model with stochastic gradient descent
+        self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
+        #build the input(x) output(y) arrays
+        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=20000)
+        model.fit(x_images, y_steers, self.batch_size, nb_epoch=20, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
 
 
     def load_data(self):

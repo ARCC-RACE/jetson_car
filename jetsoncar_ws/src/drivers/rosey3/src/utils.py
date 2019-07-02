@@ -4,7 +4,7 @@ import cv2, os, random
 import numpy as np
 import matplotlib.image as mpimg
 
-#Rosey2
+#Rosey3
 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 
@@ -44,13 +44,16 @@ def preprocess(images, num_stacked_images):
     Combine all preprocess functions into one and stack the images to create the X (input data for the CNN)
     """
     #numpy array to hold the stacked images
-    output_stack = np.empty([])
+    output_stack = np.array([])
     for i in range(len(images)):
         images[i] = crop(images[i])
         images[i] = resize(images[i])
         images[i] = rgb2yuv(images[i])
-        output_stack = output_stack.append(images[i], axis=2)
-    print(output_stack.shape)
+        #make the input into shape (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*num_stacked_images)
+        if i==0:
+            output_stack = images[i]
+        else:
+            output_stack = np.append(output_stack, images[i], axis=2)
     return output_stack
 
 def random_flip(images, steering_angle):
@@ -68,14 +71,13 @@ def random_translate(images, steering_angle, range_x, range_y):
     #Store all the random variables so the same shadows are applied to all the images
     trans_x_random = np.random.rand()
     trans_y_random = np.random.rand()
-
-    steering_angle += trans_x * 0.002
     for i, image in enumerate(images):
         trans_x = range_x * (trans_x_random - 0.5)
         trans_y = range_y * (trans_y_random - 0.5)
         trans_m = np.float32([[1, 0, trans_x], [0, 1, trans_y]])
         height, width = image.shape[:2]
         images[i] = cv2.warpAffine(image, trans_m, (width, height))
+    steering_angle += trans_x * 0.002
     return images, steering_angle
 
 
@@ -88,7 +90,6 @@ def random_shadow(images):
     random_2 = np.random.rand()
     random_3 = np.random.randint(2)
     random_4 = np.random.uniform(low=0.2, high=0.5)
-
     for i, image in enumerate(images):
         # (x1, y1) and (x2, y2) forms a line
         # xm, ym gives all the locations of the image
@@ -136,7 +137,7 @@ def augument(data_dir, img_paths, steering_angle, range_x=100, range_y=10):
     Generate an augumented image and adjust steering angle.
     (The steering angle is associated with the image)
     """
-    images, steering_angle = load_images(data_dir, img_paths, steering_angle)
+    images = load_images(data_dir, img_paths)
     images, steering_angle = random_flip(images, steering_angle)
     images, steering_angle = random_translate(images, steering_angle, range_x, range_y)
     images = random_shadow(images)
@@ -149,18 +150,19 @@ def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size
     """
     Generate training image give image paths and associated steering angles
     """
+    #image with attached steering value occupies channels 0-2
     images = np.empty([batch_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*num_stacked_images])
     steers = np.empty(batch_size)
     while True:
         i = 0
         dataset_index = random.randint(0, len(datasets)-1)
         for index in np.random.permutation(len(image_paths[dataset_index])):
-            if index < stacked_images-1:
-                index = stacked_images-1
+            if index < num_stacked_images-1:
+                index = num_stacked_images-1
             #get the num_stacked_images file paths to feed into the network
             imgs = []
-            for i in range(num_stacked_images):
-                imgs.append(image_paths[dataset_index][index-i])
+            for z in range(num_stacked_images):
+                imgs.append(image_paths[dataset_index][index-z])
             steering_angle = steering_angles[dataset_index][index]
             # argumentation
             if is_training and np.random.rand() < 0.6:
@@ -176,3 +178,32 @@ def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size
             if i == batch_size:
                 break
         yield images, steers
+
+def fat_npy_builder(data_dir, datasets, image_paths_training, steering_angles_training, image_paths_test, steering_angles_test, num_stacked_images, total_size=20000):
+    """
+    Generate two numpy arrays that contain `total_size` number of images and associated steering angles
+    """
+    #image with attached steering value occupies channels 0-2
+    images = np.empty([total_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*num_stacked_images])
+    steers = np.empty(total_size)
+    for i in range(total_size):
+        dataset_index = random.randint(0, len(datasets)-1)
+        index = np.random.randint(0,len(image_paths[dataset_index])):
+        if index < num_stacked_images-1:
+            index = num_stacked_images-1
+        #get the num_stacked_images file paths to feed into the network
+        imgs = []
+        for z in range(num_stacked_images):
+            imgs.append(image_paths[dataset_index][index-z])
+        steering_angle = steering_angles[dataset_index][index]
+        # argumentation
+        if is_training and np.random.rand() < 0.6:
+            imgs, steering_angle = augument(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), imgs, steering_angle)
+        elif is_training:
+            imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), imgs)
+        else:
+            imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), imgs)
+        # add the image and steering angle to the batch
+        images[i] = preprocess(imgs, num_stacked_images)
+        steers[i] = steering_angle
+    return images, steers
