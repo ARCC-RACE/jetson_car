@@ -20,7 +20,7 @@ from std_msgs.msg import Float64
 num_images_to_stack = 3
 input_shape = list(utils.INPUT_SHAPE)
 input_shape[2] = utils.INPUT_SHAPE[2]*num_images_to_stack
-images = np.empty(input_shape)
+images = np.zeros(input_shape)
 
 # callback that runs when a new image is recieved from realsense camera
 def newImage(new_image):
@@ -44,14 +44,13 @@ def newImage(new_image):
 #        startProcessing = rospy.get_time() #DEBUGGING
 #        cv2.imshow("image", image)         #DEBUGGING
 #        cv2.waitKey(0)                     #DEBUGGING
-        image = utils.preprocess(image) # preprocess image (crop, resize, rgb2yuv)
+        image = utils.preprocess_single_image(image) # preprocess image (crop, resize, rgb2yuv)
 #        cv2.imshow("image", image)         #DEBUGGING
 #        cv2.waitKey(0)                     #DEBUGGING
         #remove oldest image and input new one
         images = np.roll(images,3,axis=2)
-        images[:,:,0:2] = image
-        images = np.array([images]) # give the model a 4D array
-        steering_prediction = float(rosey.predict(images, batch_size=1))
+        images[:,:,0:3] = image
+        steering_prediction = float(rosey.predict(np.array([images]), batch_size=1))
 #        processTime = rospy.get_time() - startProcessing #DEBUGGING
 #        print(processTime) # prints time to process image and make prediction in seconds
         rospy.logdebug("Steering prediction from Rosey: %f", steering_prediction)

@@ -39,8 +39,17 @@ def rgb2yuv(image):
     """
     return cv2.cvtColor(image, cv2.COLOR_RGB2YUV)
 
+def preprocess_single_image(image):
+    """
+    Combine all preprocess functions into one
+    """
+    image = crop(image)
+    image = resize(image)
+    image = rgb2yuv(image)
+    return image
 
-def preprocess(images, num_stacked_images):
+
+def preprocess(images):
     """
     Combine all preprocess functions into one and stack the images to create the X (input data for the CNN)
     """
@@ -50,7 +59,7 @@ def preprocess(images, num_stacked_images):
         images[i] = crop(images[i])
         images[i] = resize(images[i])
         images[i] = rgb2yuv(images[i])
-        #make the input into shape (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*num_stacked_images)
+        #make the input into shape (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*len(images))
         if i==0:
             output_stack = images[i]
         else:
