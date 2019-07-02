@@ -64,8 +64,9 @@ def newVel(data):
 
 dir_path = os.path.dirname(os.path.realpath(__file__)) # returns filepath to the location of the python file
 #rosey = load_model(dir_path + '/../models/rosey.h5')
+model_kernel_multiplier = rospy.get_param('~model_kernel_multiplier', 1)
 roseyObj = Rosey()
-roseyObj.build_model()
+roseyObj.build_model(model_kernel_multiplier)
 rosey = roseyObj.model
 rosey.load_weights(dir_path + '/../models/rosey.h5')
 rosey._make_predict_function() # build and compile the function on the GPU (before threading)

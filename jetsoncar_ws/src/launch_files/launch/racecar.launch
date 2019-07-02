@@ -1,5 +1,9 @@
 <launch>
 
+  <!-- take command line arguments for deciding what model to use -->
+  <arg name="model" default="rosey2"/>
+  <arg name="model_kernel_multiplier" default="1"/>
+
   <!-- start all the hardware interface and contorller components -->
   <include file="$(find temp_racecar_hardware_interface)/launch/temp_hardware_control.launch"/>
 
@@ -13,12 +17,20 @@
     <param name="collection_fps" value="15"/>
   </node>
 
-  <!-- rosey the driver (with smaller FOV) -->
-  <node name="rosey" pkg="rosey2" type="rosey_drive.py" respawn="true" respawn_delay="60">
+  <!-- rosey the driver (with smaller input image) -->
+  <node name="rosey" pkg="rosey2" type="rosey_drive.py" respawn="true" respawn_delay="60" if="$(eval model == 'rosey2')">
     <param name="speed" value="2"/>
     <param name="use_cruise_velocity" value="True"/>
+    <param name="kernel_multiplier" value="$(arg model_kernel_multiplier)"/>
   </node>
-
+   
+  <!-- rosey the driver (with smaller input image) -->
+  <node name="rosey" pkg="rosey3" type="rosey_drive.py" respawn="true" respawn_delay="60" if="$(eval model == 'rosey3')">
+    <param name="speed" value="2"/>
+    <param name="use_cruise_velocity" value="True"/>
+    <param name="kernel_multiplier" value="$(arg model_kernel_multiplier)"/>
+  </node>
+   
   <!-- Realsense D435 launch -->
   <arg name="serial_no"    default=""/>
   <arg name="json_file_path"  default=""/>
