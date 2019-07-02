@@ -35,7 +35,7 @@ class Rosey:
         self.temporal_size = temporal_size
         self.nn_size_multiplier = nn_size_multiplier #a variable to increase the size of Rosey by adding more kernals
 
-    def build_model(self):
+    def build_model(self, kernal_multiplier=1):
         print("Building model...")
 
         #based off of Nvidia's Dave 2 system
@@ -48,16 +48,16 @@ class Rosey:
         input_shape[2] = INPUT_SHAPE[2]*self.temporal_size
         self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=tuple(input_shape))) #127.5-1.0 = experimental value from udacity self driving car course
         #24 5x5 convolution kernels with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
-        self.model.add(Conv2D(24, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
-        self.model.add(Conv2D(36, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
-        self.model.add(Conv2D(48, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
-        self.model.add(Conv2D(64, 3, activation="elu")) #stride = 1x1
-        self.model.add(Conv2D(64, 3, activation="elu")) #stride = 1x1
+        self.model.add(Conv2D(24*kernal_multiplier, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(36*kernal_multiplier, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(48*kernal_multiplier, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(64*kernal_multiplier, 3, activation="elu")) #stride = 1x1
+        self.model.add(Conv2D(64*kernal_multiplier, 3, activation="elu")) #stride = 1x1
 
         self.model.add(Dropout(0.5)) #magic number from udacity self driving car course
         #turn convolutional feature maps into a fully connected ANN
         self.model.add(Flatten())
-        self.model.add(Dense(100, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Dense(100*kernal_multiplier, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(50, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(10, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(1)) #No need for activation function because this is the output and it is not a probability
@@ -134,7 +134,7 @@ class Rosey:
         y_steers = np.load(os.path.join(self.data_dir, 'y_steers.npy'))
 
         print("Finished loading, beginning training of neural network")
-        model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
+        self.model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
 
 
     def load_data(self):
@@ -204,6 +204,7 @@ if __name__ == "__main__":
     #temporal_size is the number of images to be stacked togeter
 
     rosey.load_data()
-    rosey.build_model()
+    rosey.build_model(kernal_multiplier=3)
     #rosey.train_model()
-    rosey.train_model_from_npy()
+    #rosey.train_model_from_npy()
+    rosey.train_model_from_old_npy()
