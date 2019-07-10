@@ -150,3 +150,55 @@ def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size
             if i == batch_size:
                 break
         yield images, steers
+
+def fat_npy_builder(data_dir, datasets, image_paths_training, steering_angles_training, image_paths_test, steering_angles_test, num_stacked_images, total_size=20000):
+    """
+    Generate two numpy arrays that contain `total_size` number of images and associated steering angles
+    """
+    #image with attached steering value occupies channels 0-2
+    images = np.empty([total_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS*num_stacked_images])
+    steers = np.empty(total_size)
+    #Get RAM information for usage prediction
+    ram = psutil.virtual_memory()
+    initial_ram_usage = ram.used
+    for i in range(total_size):
+        if np.random.rand() < 0.8: #add set from training data
+            dataset_index = random.randint(0, len(datasets)-1)
+            index = np.random.randint(0,len(image_paths_training[dataset_index]))
+            if index < num_stacked_images-1:
+                index = num_stacked_images-1
+            #get the num_stacked_images file paths to feed into the network
+            imgs = []
+            for z in range(num_stacked_images):
+                imgs.append(image_paths_training[dataset_index][index-z])
+            steering_angle = steering_angles_training[dataset_index][index]
+            # argumentation
+            if np.random.rand() < 0.6:
+                imgs, steering_angle = augument(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), imgs, steering_angle)
+            else:
+                imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "training_set"), imgs)
+        else: #add set from test data
+            dataset_index = random.randint(0, len(datasets)-1)
+            index = np.random.randint(0,len(image_paths_test[dataset_index]))
+            if index < num_stacked_images-1:
+                index = num_stacked_images-1
+            #get the num_stacked_images file paths to feed into the network
+            imgs = []
+            for z in range(num_stacked_images):
+                imgs.append(image_paths_test[dataset_index][index-z])
+            steering_angle = steering_angles_test[dataset_index][index]
+            # argumentation
+            if np.random.rand() < 0.6:
+                imgs, steering_angle = augument(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), imgs, steering_angle)
+            else:
+                imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), imgs)
+
+        # add the image and steering angle to the batch
+        images[i] = preprocess(imgs, num_stacked_images)
+        steers[i] = steering_angle
+        ram = psutil.virtual_memory()
+        #print("Loading number: " + str(i) + "/" + str(total_size), end="  ")
+        #Note the predicted RAM usage is a very ruff estimate and depends on other programs running on your machine. For greatest accuraccy do not run any other programs or open any new applicaitons while computing estimate
+        #print("Total predicted RAM usage: %.3f/%.3fGB"%((total_size*(ram.used-initial_ram_usage)/(i+1))/1000000000,(ram.total-initial_ram_usage)/1000000000), end="  ")
+        #print(str(ram.percent) + "%", end="\r")
+    return images, steers

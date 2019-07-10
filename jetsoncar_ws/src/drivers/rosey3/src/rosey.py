@@ -105,7 +105,7 @@ class Rosey:
         self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
         #build the input(x) output(y) arrays
         print("\nBuilding FAT numpy array of augmented datatset... (this may take a while)")
-        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=25000)
+        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=11000) #changed from 25000
 
         #option to save the generated numpy so it can be reused later by train_model_from_old_npy()
         if save_dataset:
@@ -193,7 +193,7 @@ if __name__ == "__main__":
         for i,suffix in enumerate(datasets):
             datasets[i] = "dataset"+suffix
     else:
-        datasets = "dataset"
+        datasets = ["dataset"]
         print("Using default " + os.path.join(dir + "dataset") + " for data")
 
     print("Datasets to read from: " + str(datasets) + "\n\n")
@@ -204,7 +204,7 @@ if __name__ == "__main__":
     #temporal_size is the number of images to be stacked togeter
 
     rosey.load_data()
-    rosey.build_model(kernal_multiplier=3)
+    rosey.build_model(kernal_multiplier=1)
     #rosey.train_model()
     #rosey.train_model_from_npy()
     rosey.train_model_from_old_npy()

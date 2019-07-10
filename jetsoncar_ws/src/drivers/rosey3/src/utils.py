@@ -182,7 +182,7 @@ def batch_generator(data_dir, datasets, image_paths, steering_angles, batch_size
             else:
                 imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), imgs)
             # add the image and steering angle to the batch
-            images[i] = preprocess(imgs, num_stacked_images)
+            images[i] = preprocess(imgs)
             steers[i] = steering_angle
             i += 1
             if i == batch_size:
@@ -233,11 +233,11 @@ def fat_npy_builder(data_dir, datasets, image_paths_training, steering_angles_tr
                 imgs = load_images(os.path.join(os.path.join(data_dir, datasets[dataset_index]), "test_set"), imgs)
 
         # add the image and steering angle to the batch
-        images[i] = preprocess(imgs, num_stacked_images)
+        images[i] = preprocess(imgs)
         steers[i] = steering_angle
         ram = psutil.virtual_memory()
-        #print("Loading number: " + str(i) + "/" + str(total_size), end="  ")
+        print("Loading number: " + str(i) + "/" + str(total_size), end="  ")
         #Note the predicted RAM usage is a very ruff estimate and depends on other programs running on your machine. For greatest accuraccy do not run any other programs or open any new applicaitons while computing estimate
-        #print("Total predicted RAM usage: %.3f/%.3fGB"%((total_size*(ram.used-initial_ram_usage)/(i+1))/1000000000,(ram.total-initial_ram_usage)/1000000000), end="  ")
-        #print(str(ram.percent) + "%", end="\r")
+        print("Total predicted RAM usage: %.3f/%.3fGB"%((total_size*(ram.used-initial_ram_usage)/(i+1))/1000000000,(ram.total-initial_ram_usage)/1000000000), end="  ")
+        print(str(ram.percent) + "%", end="\r")
     return images, steers

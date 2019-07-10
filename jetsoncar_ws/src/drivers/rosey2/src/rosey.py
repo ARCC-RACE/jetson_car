@@ -66,8 +66,6 @@ class Rosey:
 
         self.model.summary() #print a summary representation of model
 
-
-
     def train_model(self):
         #filepath for save = rosey.epoch-loss.h5 (rosey-{epoch:03d}.h5 is another option)
         #saves epoch with the minimum val_loss
@@ -91,6 +89,46 @@ class Rosey:
             callbacks=[checkpoint, self.tensorboard],
             verbose=1)
 
+    def train_model_from_npy(self, save_dataset=True):
+        checkpoint = ModelCheckpoint('rosey.{epoch:03d}-{val_loss:.2f}.h5', # filepath = working directory/
+            monitor='val_loss',
+            verbose=0,
+            save_best_only=True,
+            mode='auto')
+        #compile model with stochastic gradient descent
+        self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
+        #build the input(x) output(y) arrays
+        print("\nBuilding FAT numpy array of augmented datatset... (this may take a while)")
+        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=25000)
+
+        #option to save the generated numpy so it can be reused later by train_model_from_old_npy()
+        if save_dataset:
+            print("Saving dataset npy...")
+            np.save(os.path.join(self.data_dir, 'x_images.npy'), x_images)
+            np.save(os.path.join(self.data_dir, 'y_steers.npy'), y_steers)
+            print("Dataset saved!")
+
+        print("Finished building, beginning training of neural network")
+        self.model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
+
+    #lets you load in an old numpy file that contains the augmented dataset generated in train_model_from_npy()
+    def train_model_from_old_npy(self):
+        checkpoint = ModelCheckpoint('rosey.{epoch:03d}-{val_loss:.2f}.h5', # filepath = working directory/
+            monitor='val_loss',
+            verbose=0,
+            save_best_only=True,
+            mode='auto')
+        #compile model with stochastic gradient descent
+        self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
+        #build the input(x) output(y) arrays
+        print("\nLoading FAT numpy array of augmented datatset... (this may take a while)")
+
+        #option to save the generated numpy so it can be reused later
+        x_images = np.load(os.path.join(self.data_dir, 'x_images.npy'))
+        y_steers = np.load(os.path.join(self.data_dir, 'y_steers.npy'))
+
+        print("Finished loading, beginning training of neural network")
+        self.model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
 
     def load_data(self):
         #load training set
@@ -148,7 +186,7 @@ if __name__ == "__main__":
         for i,suffix in enumerate(datasets):
             datasets[i] = "dataset"+suffix
     else:
-        datasets = "dataset"
+        datasets = ["dataset"]
         print("Using default " + os.path.join(dir + "dataset") + " for data")
 
     print("Datasets to read from: " + str(datasets) + "\n\n")
@@ -159,4 +197,6 @@ if __name__ == "__main__":
 
     rosey.load_data()
     rosey.build_model()
-    rosey.train_model()
+    #rosey.train_model()
+    #rosey.train_model_from_npy()
+    rosey.train_model_from_old_npy()
