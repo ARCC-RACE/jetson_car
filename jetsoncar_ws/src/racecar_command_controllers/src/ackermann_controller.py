@@ -15,15 +15,9 @@ def safetyCheck(data): #update last ping time
     global lastSafetyPing
     lastSafetyPing = rospy.get_time()
 
-steering_trim = 0 #default steering trim is zero
-def steering_trim_update(data):
-    global steering_trim
-    steering_trim = data.data
-
 
 def set_throttle_steer(data):
-    global steering_trim
-    
+
     pub_vel_left_rear_wheel = rospy.Publisher('/racecar/left_rear_wheel_velocity_controller/command', Float64, queue_size=1)
     pub_vel_right_rear_wheel = rospy.Publisher('/racecar/right_rear_wheel_velocity_controller/command', Float64, queue_size=1)
     pub_vel_left_front_wheel = rospy.Publisher('/racecar/left_front_wheel_velocity_controller/command', Float64, queue_size=1)
@@ -33,7 +27,7 @@ def set_throttle_steer(data):
     pub_pos_right_steering_hinge = rospy.Publisher('/racecar/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
     throttle = data.drive.speed #simulation needs values to be increased for descent speed
-    steer = data.drive.steering_angle + steering_trim
+    steer = data.drive.steering_angle
 
     global deadMan
     if deadMan:
@@ -56,7 +50,6 @@ def control_commands():
     lastSafetyPing = rospy.get_time() #used for checking frequency of safety pinger
     rospy.Subscriber("/racecar/muxed/ackermann_cmd", AckermannDriveStamped, set_throttle_steer)
     rospy.Subscriber("/racecar/safety", Empty, safetyCheck)
-    rospy.Subscriber("/racecar/steering_trim", Float64, steering_trim_update)
 
     loopRate = rospy.Rate(50)
     while not rospy.is_shutdown():

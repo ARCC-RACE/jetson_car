@@ -1,5 +1,9 @@
 <launch>
 
+  <!-- take command line arguments for deciding what model to use -->
+  <arg name="model" default="rosey2"/>
+  <arg name="model_kernel_multiplier" default="1"/>
+
   <!-- start all the hardware interface and contorller components -->
   <include file="$(find temp_racecar_hardware_interface)/launch/temp_hardware_control.launch"/>
 
@@ -7,11 +11,26 @@
   <node name="imu" pkg="bno055" type="bno055_ros.py" respawn="true" respawn_delay="30"/>
 
   <!-- Data Collector -->
-  <node name="racecar_data_collector" pkg="nn_tools" type="racecarDataCollector.py" respawn="true" respawn_delay="45"/>
+  <node name="racecar_data_collector" pkg="nn_tools" type="racecarDataCollector.py" respawn="true" respawn_delay="45">
+    <param name="include_imu" value="False"/>
+    <param name="include_depth" value="False"/>
+    <param name="collection_fps" value="15"/>
+  </node>
 
-  <!-- rosey the driver (with smaller FOV) -->
-  <node name="rosey" pkg="rosey2" type="rosey_drive.py" respawn="true" respawn_delay="60"/>
-
+  <!-- rosey the driver (with smaller input image) -->
+  <node name="rosey" pkg="rosey2" type="rosey_drive.py" respawn="true" respawn_delay="60" if="$(eval model == 'rosey2')">
+    <param name="speed" value="2"/>
+    <param name="use_cruise_velocity" value="True"/>
+    <param name="kernel_multiplier" value="$(arg model_kernel_multiplier)"/>
+  </node>
+   
+  <!-- rosey the driver (with smaller input image) -->
+  <node name="rosey" pkg="rosey3" type="rosey_drive.py" respawn="true" respawn_delay="60" if="$(eval model == 'rosey3')">
+    <param name="speed" value="2"/>
+    <param name="use_cruise_velocity" value="True"/>
+    <param name="kernel_multiplier" value="$(arg model_kernel_multiplier)"/>
+  </node>
+   
   <!-- Realsense D435 launch -->
   <arg name="serial_no"    default=""/>
   <arg name="json_file_path"  default=""/>
@@ -22,7 +41,7 @@
       <arg name="json_file_path"    value="$(arg json_file_path)"/>
       <arg name="depth_width"       value="848"/>
       <arg name="depth_height"      value="480"/>
-      <arg name="depth_fps"         value="15"/>
+      <arg name="depth_fps"         value="30"/>
       <arg name="color_width"       value="848"/>
       <arg name="color_height"      value="480"/>
       <arg name="color_fps"         value="30"/>
@@ -34,6 +53,7 @@
       <arg name="enable_imu"        value="false"/>
       <arg name="enable_pointcloud" value="false"/>
       <arg name="enable_sync"       value="true"/>
+      <arg name="align_depth"       value="true"/>
     </include>
 
     <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find realsense2_camera)/rviz/pointcloud.rviz" required="true" /> -->

@@ -32,16 +32,9 @@ def autonomousMode(data):
     global isAutonomous
     isAutonomous = data.data
 
-steering_trim = 0 #default steering trim is zero
-def steeringTrim(data):
-    global steering_trim
-    steering_trim = data.data
-
 #update drive control inputs
 def controllerAckermann(data):
     global controllerMsg
-    global steering_trim
-    data.drive.steering_angle += steering_trim
     controllerMsg = data
 
     #mux matrix
@@ -58,9 +51,12 @@ def controllerAckermann(data):
 
 def autonomousAckermann(data):
     global autonomousMsg
-    global steering_trim
-    data.drive.steering_angle += steering_trim
     autonomousMsg = data
+
+steering_trim = 0 #default steering trim is zero
+def steeringTrim(data):
+    global steering_trim
+    steering_trim = data.data
 
 
 
@@ -81,10 +77,14 @@ pub = rospy.Publisher('/racecar/muxed/ackermann_cmd', AckermannDriveStamped, que
 
 rate = rospy.Rate(50)
 while not rospy.is_shutdown():
+    print(steering_trim)
+
     if isAutonomous:
         msg = autonomousMsg
     else:
         msg = controllerMsg
+
+    msg.drive.steering_angle += steering_trim
     # msg = AckermannDriveStamped();
     # msg.header.stamp = rospy.Time.now()
     # msg.header.frame_id = "base_link"
@@ -98,7 +98,6 @@ while not rospy.is_shutdown():
     pub.publish(msg)
 
     #Catch time going backwards error that occurs when Gazebo simulation is reset
-    try:
-        rate.sleep()
+    try:        rate.sleep()
     except rospy.ROSInterruptException:
         pass

@@ -1,2 +1,1 @@
-Download models from Google drive
-https://drive.google.com/drive/folders/128RIyyfZ6gFGVfDhojuN9wENw2Z3u_zC
+Loss of 0.05 on epoch 8/20 completes ~95% of the track

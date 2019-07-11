@@ -20,11 +20,11 @@ from keras import regularizers
 #Gotta have them graphs
 from keras.callbacks import TensorBoard
 #helper class to define input shape and generate training images given image paths & steering angles
-from utils import INPUT_SHAPE, batch_generator
+from utils import INPUT_SHAPE, batch_generator, fat_npy_builder
 
 class Rosey:
 
-    def __init__(self, data_directory = "../data", datasets="dataset", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01):
+    def __init__(self, data_directory = "../data", datasets="dataset", batch_size=40, validation_steps=1000, nb_epochs=10, steps_per_epoch=1500, regularizer=0.01, temporal_size=3, nn_size_multiplier=1):
         self.data_dir = data_directory
         self.datasets = datasets
         self.batch_size = batch_size
@@ -32,8 +32,10 @@ class Rosey:
         self.nb_epochs = nb_epochs
         self.steps_per_epoch = steps_per_epoch
         self.regularizer = regularizer
+        self.temporal_size = temporal_size
+        self.nn_size_multiplier = nn_size_multiplier #a variable to increase the size of Rosey by adding more kernals
 
-    def build_model(self):
+    def build_model(self, kernal_multiplier=1):
         print("Building model...")
 
         #based off of Nvidia's Dave 2 system
@@ -42,18 +44,20 @@ class Rosey:
 
         self.model = Sequential() #linear stack of layers
         #normalize the image  to avoid saturation and make the gradients work better
-        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #127.5-1.0 = experimental value from udacity self driving car course
+        input_shape = list(INPUT_SHAPE)
+        input_shape[2] = INPUT_SHAPE[2]*self.temporal_size
+        self.model.add(Lambda(lambda x: x/127.5-1.0, input_shape=tuple(input_shape))) #127.5-1.0 = experimental value from udacity self driving car course
         #24 5x5 convolution kernels with 2x2 stride and activation function Exponential Linear Unit (to avoid vanishing gradient problem)
-        self.model.add(Conv2D(24, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
-        self.model.add(Conv2D(36, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
-        self.model.add(Conv2D(48, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
-        self.model.add(Conv2D(64, 3, activation="elu")) #stride = 1x1
-        self.model.add(Conv2D(64, 3, activation="elu")) #stride = 1x1
+        self.model.add(Conv2D(24*kernal_multiplier, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(36*kernal_multiplier, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(48*kernal_multiplier, 5, activation="elu", strides=2, kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Conv2D(64*kernal_multiplier, 3, activation="elu")) #stride = 1x1
+        self.model.add(Conv2D(64*kernal_multiplier, 3, activation="elu")) #stride = 1x1
 
         self.model.add(Dropout(0.5)) #magic number from udacity self driving car course
         #turn convolutional feature maps into a fully connected ANN
         self.model.add(Flatten())
-        self.model.add(Dense(100, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
+        self.model.add(Dense(100*kernal_multiplier, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(50, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(10, activation="elu", kernel_initializer='he_normal', kernel_regularizer=regularizers.l1(self.regularizer)))
         self.model.add(Dense(1)) #No need for activation function because this is the output and it is not a probability
@@ -65,6 +69,8 @@ class Rosey:
         print("Run `tensorboard --logdir=\"{}/logs/{}\"` and see `http://localhost:6006` to see CNN status".format(path, timeStamp) + "\n\n")
 
         self.model.summary() #print a summary representation of model
+
+
 
     def train_model(self):
         #filepath for save = rosey.epoch-loss.h5 (rosey-{epoch:03d}.h5 is another option)
@@ -80,10 +86,10 @@ class Rosey:
 
         #batch_generator(data_dir, image_paths, steering_angles, batch_size, is_training):
         #generator, steps_per_epoch=None, epochs=1, verbose=1, callbacks=None, validation_data=None, validation_steps=None,
-        # class_weight=None, max_queue_size=10, workers=1, use_multiprocessing=False, shuffle=True, initial_epoch=0
-        self.model.fit_generator(batch_generator(self.data_dir, self.datasets, self.X_training, self.Y_training, self.batch_size, True),
+        #class_weight=None, max_queue_size=10, workers=1, use_multiprocessing=False, shuffle=True, initial_epoch=0
+        self.model.fit_generator(batch_generator(self.data_dir, self.datasets, self.X_training, self.Y_training, self.batch_size, True, num_stacked_images=self.temporal_size),
             self.steps_per_epoch, self.nb_epochs, max_queue_size=1,
-            validation_data=batch_generator(self.data_dir, self.datasets, self.X_test, self.Y_test, self.batch_size, False),
+            validation_data=batch_generator(self.data_dir, self.datasets, self.X_test, self.Y_test, self.batch_size, False, num_stacked_images=self.temporal_size),
             #validation_steps=len(self.X_test), #Takes wwwwaaayyyyyy too long
             validation_steps=self.validation_steps,
             callbacks=[checkpoint, self.tensorboard],
@@ -99,7 +105,7 @@ class Rosey:
         self.model.compile(loss='mean_squared_error', optimizer=Adam(1.0e-4)) #learning rate of 1.0e-4 udacity= magic number from udacity
         #build the input(x) output(y) arrays
         print("\nBuilding FAT numpy array of augmented datatset... (this may take a while)")
-        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=25000)
+        x_images, y_steers = fat_npy_builder(self.data_dir, self.datasets, self.X_training, self.Y_training, self.X_test, self.Y_test, self.temporal_size, total_size=11000) #changed from 25000
 
         #option to save the generated numpy so it can be reused later by train_model_from_old_npy()
         if save_dataset:
@@ -129,6 +135,7 @@ class Rosey:
 
         print("Finished loading, beginning training of neural network")
         self.model.fit(x_images, y_steers, self.batch_size, nb_epoch=50, verbose=1, validation_split=0.2, shuffle=True, callbacks=[checkpoint, self.tensorboard])
+
 
     def load_data(self):
         #load training set
@@ -193,10 +200,11 @@ if __name__ == "__main__":
 
     rosey = Rosey(data_directory=dir, datasets=datasets,
         batch_size=40, validation_steps=1000, nb_epochs=20,
-        steps_per_epoch=1000, regularizer=0)
+        steps_per_epoch=1000, regularizer=0, temporal_size=3)
+    #temporal_size is the number of images to be stacked togeter
 
     rosey.load_data()
-    rosey.build_model()
+    rosey.build_model(kernal_multiplier=1)
     #rosey.train_model()
     #rosey.train_model_from_npy()
     rosey.train_model_from_old_npy()
