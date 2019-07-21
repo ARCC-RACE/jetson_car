@@ -4,12 +4,12 @@ Repository for the development of the JHS Autonomous Race Car Club's ROS  Jetson
 Check out system [flowcharts](https://drive.google.com/open?id=1oScZmCizjCHx7lIW-BQ1HAR4U3CumyJK)
 
 Master   
-[![Build Status](https://travis-ci.com/ARCC-RACE/jetson_car.svg?branch=master)
-[![CodeFactor](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/badge/master)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/overview/master)
+[![Build Status](https://travis-ci.com/ARCC-RACE/jetson_car.svg?branch=master)](https://travis-ci.com/ARCC-RACE/jetson_car)
+[![CodeFactor](https://www.codefactor.io/repository/github/ARCC-RACE/jetson_car/badge/master)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/overview/master)
 
 Development   
-[![Build Status](https://travis-ci.com/ARCC-RACE/jetson_car.svg?branch=development)
-[![CodeFactor](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/badge/development)](https://www.codefactor.io/repository/github/jhs-arcc-club/jetson_car/overview/development)
+[![Build Status](https://travis-ci.com/ARCC-RACE/jetson_car.svg?branch=development)](https://travis-ci.com/ARCC-RACE/jetson_car)
+[![CodeFactor](https://www.codefactor.io/repository/github/arcc-race/jetson_car/badge/development)](https://www.codefactor.io/repository/github/arcc-race/jetson_car/overview/development)
 
 ## Getting Started
 - Make sure you have installed git lfs on the jetson, controller, and development computer
