@@ -98,3 +98,5 @@ CTestTestfile.cmake
 # Ignore large training and testing datasets
 jetsoncar_ws/src/drivers/nn_tools/dataset/training_set/*
 jetsoncar_ws/src/drivers/nn_tools/dataset/test_set/*
+
+/venv/
