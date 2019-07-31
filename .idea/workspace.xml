@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="40776461-5eb3-41a8-b952-bb6f0a594c16" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/jetson-hal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/jetson-rosey" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitmodules" beforeDir="false" afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/package.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/setup_python2.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/setup_python3.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/deepq.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/hal_1687.99878659.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/hal_env.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/hal_learn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/hal_learn_example.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/liveplot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/memory.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/hal/src/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/models/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/models/rosey.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/package.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/src/rosey.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/src/rosey_drive.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey/src/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/models/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/models/rosey.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/package.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/src/rosey.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/src/rosey_drive.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey2/src/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/models/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/models/rosey.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/package.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/src/rosey.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/src/rosey_drive.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jetsoncar_ws/src/drivers/rosey3/src/utils.py" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1OkmD686PVPHiCIVLhXiQ0Cqs1F" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="40776461-5eb3-41a8-b952-bb6f0a594c16" name="Default Changelist" comment="" />
+      <created>1550121109810</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1550121109810</updated>
+      <workItem from="1550121112622" duration="144000" />
+      <workItem from="1550441849596" duration="5000" />
+      <workItem from="1550447327088" duration="1262000" />
+      <workItem from="1552414585396" duration="54000" />
+      <workItem from="1564529846763" duration="3504000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

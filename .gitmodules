@@ -4,6 +4,9 @@
 [submodule "jetsoncar_ws/src/realsense2_description"]
 	path = jetsoncar_ws/src/realsense2_description
 	url = https://github.com/Michael-Equi/realsense2_description.git
-[submodule "jetsoncar_ws/src/drivers/gym-gazebo"]
-	path = jetsoncar_ws/src/drivers/gym-gazebo
-	url = https://github.com/erlerobot/gym-gazebo.git
+[submodule "jetsoncar_ws/src/drivers/jetson-hal"]
+	path = jetsoncar_ws/src/drivers/jetson-hal
+	url = https://github.com/ARCC-RACE/jetson-hal.git
+[submodule "jetsoncar_ws/src/drivers/jetson-rosey"]
+	path = jetsoncar_ws/src/drivers/jetson-rosey
+	url = https://github.com/ARCC-RACE/jetson-rosey.git
