@@ -12,6 +12,7 @@ Development
 [![CodeFactor](https://www.codefactor.io/repository/github/arcc-race/jetson_car/badge/development)](https://www.codefactor.io/repository/github/arcc-race/jetson_car/overview/development)
 
 ## Getting Started
+- Make sure that you have [installed ROS2](https://index.ros.org/doc/ros2/Installation/Dashing/)
 - Make sure you have installed git lfs on the jetson, controller, and development computer
    - Git LFS will allow you to easily keep ML models up to date across computers with git version control
    - https://git-lfs.github.com/
@@ -31,7 +32,6 @@ Development
 - On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `catkin_make` in the jetsoncar_ws
 - Run the controller.sh or jetson.sh scripts to get the devices setup and communicating with each other OR run `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311` and `export ROS_HOSTNAME=hostname_of_machine.local`
    - It is highly recommended that you run the controller.sh and jetson.sh scripts on their respective devices
-- See `DualShock 4 Controller Setup` section for setting up the controller with the correct platform
 
 #### Important Notes
 - When running the jetson car with WiFi make sure that WiFi power saving mode is off. `sudo iw dev wlan0 set power_save off` and check with `sudo iw dev wlan0 get power_save`. This needs to be done each time the WiFi reconnects to a new network.
