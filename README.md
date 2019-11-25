@@ -82,6 +82,17 @@ Development
       - Add the line `ACTION=="add", KERNEL=="i2c-[0-1]*", MODE="0666"` to the `50-i2c.rules` file
       - See [this](https://forum.up-community.org/discussion/2141/tutorial-gpio-i2c-spi-access-without-root-permissions) for additional information
 
+### Jetson ROS install
+
+1. Install ROS2 following [this link](https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Install-Debians/). Make sure you also echo your source command into the bashrc and install autocomplete
+
+2. Test the ros2 build. Run `ros2 run demo_nodes_cpp talker` in one terminal and `ros2 run demo_nodes_py listener` in another. You should see the `talker` saying that it’s Publishing messages and the `listener` saying I heard those messages. 
+
+3. Install ROS2 Joy node.`sudo apt-get install ros-dashing-joy`.
+
+4. Test ROS2 Joy node by running `ros2 run joy joy-node`, plugging in a controller, then opening another terminal and runnign `ros2 topic echo /joy`, and a stream should output
+
+
 ### [RTAB Mapping setup](https://github.com/introlab/rtabmap_ros#installation)
 - `sudo apt-get install ros-kinetic-rtabmap-ros ros-kinetic-robot-localization ros-kinetic-pointcloud-to-laserscan ros-kinetic-depthimage-to-laserscan`
 
