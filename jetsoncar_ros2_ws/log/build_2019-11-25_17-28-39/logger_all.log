@@ -1,0 +1,100 @@
+[0.203s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.203s] DEBUG:colcon:Parsed command line arguments: Namespace(ament_cmake_args=None, base_paths='.', build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f0c71398eb8>>, merge_install=False, metas='./colcon.meta', packages_above=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, parallel_workers=4, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f0c71398eb8>, verb_name='build', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f0c713a1358>)
+[0.255s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.256s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.256s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.256s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.256s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.256s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extensions ['ignore', 'ignore_ament_install']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'ignore'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'ignore_ament_install'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extensions ['colcon_pkg']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'colcon_pkg'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extensions ['colcon_meta']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'colcon_meta'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extensions ['ros']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'ros'
+[0.272s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extensions ['cmake', 'python']
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'cmake'
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'python'
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extensions ['python_setup_py']
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws) by extension 'python_setup_py'
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build) by extensions ['ignore', 'ignore_ament_install']
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build) by extension 'ignore'
+[0.273s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build) ignored
+[0.274s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install) by extensions ['ignore', 'ignore_ament_install']
+[0.275s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install) by extension 'ignore'
+[0.275s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install) ignored
+[0.275s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/log) by extensions ['ignore', 'ignore_ament_install']
+[0.275s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/log) by extension 'ignore'
+[0.275s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/log) ignored
+[0.275s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extensions ['ignore', 'ignore_ament_install']
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'ignore'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'ignore_ament_install'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extensions ['colcon_pkg']
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'colcon_pkg'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extensions ['colcon_meta']
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'colcon_meta'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extensions ['ros']
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'ros'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extensions ['cmake', 'python']
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'cmake'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'python'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extensions ['python_setup_py']
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src) by extension 'python_setup_py'
+[0.276s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extensions ['ignore', 'ignore_ament_install']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'ignore'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'ignore_ament_install'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extensions ['colcon_pkg']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'colcon_pkg'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extensions ['colcon_meta']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'colcon_meta'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extensions ['ros']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'ros'
+[0.280s] DEBUG:colcon.colcon_core.package_identification:Found ROS schema reference in package manifest in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055'
+[0.280s] WARNING:colcon.colcon_core.package_identification:Failed to parse ROS package manifest in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055': Error(s) in package '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055/package.xml':
+Error(s):
+- The manifest of package "bno055" (with format version 2) must not contain the following tags: member_of_group
+[0.280s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extensions ['cmake', 'python']
+[0.280s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'cmake'
+[0.282s] Level 1:colcon.colcon_core.package_identification:_identify(/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055) by extension 'python'
+[0.282s] DEBUG:colcon.colcon_core.package_identification:Package '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055' with type 'cmake' and name 'bno055'
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.289s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'cmake_args' from command line to 'None'
+[0.289s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'cmake_target' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'cmake_clean_cache' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'cmake_clean_first' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'cmake_force_configure' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'ament_cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'catkin_cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'bno055' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.290s] DEBUG:colcon.colcon_core.verb:Building package 'bno055' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055', 'merge_install': False, 'path': '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055', 'symlink_install': False, 'test_result_base': None}
+[0.291s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.295s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.296s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055'
+[0.301s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.301s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.301s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.307s] DEBUG:colcon.colcon_core.shell:Ignoring prefix path '/opt/ros/dashing'
+[0.319s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055': /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
+[1.267s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055' returned '1': /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
+[1.276s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.277s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.277s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '1'
+[1.277s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.294s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.294s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.294s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[1.308s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.309s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/local_setup.ps1'
+[1.311s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/_local_setup_util_ps1.py'
+[1.313s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/setup.ps1'
+[1.316s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/local_setup.sh'
+[1.317s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/_local_setup_util_sh.py'
+[1.317s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/setup.sh'
+[1.323s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/local_setup.bash'
+[1.324s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash'
+[1.328s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/local_setup.zsh'
+[1.330s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/setup.zsh'

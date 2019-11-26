@@ -1,0 +1,71 @@
+[0.000000] (-) TimerEvent: {}
+[0.000502] (bno055) JobQueued: {'identifier': 'bno055', 'dependencies': OrderedDict()}
+[0.000947] (bno055) JobStarted: {'identifier': 'bno055'}
+[0.034707] (bno055) JobProgress: {'identifier': 'bno055', 'progress': 'cmake'}
+[0.035762] (bno055) Command: {'cmd': ['/usr/bin/cmake', '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055', '-DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055'], 'cwd': '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('SPACESHIP_ROOT', '/home/caelin/.nvm/versions/node/v13.1.0/lib/node_modules/spaceship-prompt'), ('USER', 'caelin'), ('XDG_SEAT', 'seat0'), ('TEXTDOMAIN', 'im-config'), ('SSH_AGENT_PID', '1131'), ('XDG_SESSION_TYPE', 'x11'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/dashing/opt/yaml_cpp_vendor/lib:/opt/ros/dashing/opt/rviz_ogre_vendor/lib:/opt/ros/dashing/lib'), ('HOME', '/home/caelin'), ('OLDPWD', '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src'), ('QT4_IM_MODULE', 'xim'), ('LESS', '-R'), ('DESKTOP_SESSION', 'ubuntu'), ('NVM_BIN', '/home/caelin/.nvm/versions/node/v13.1.0/bin'), ('GIO_LAUNCHED_DESKTOP_FILE', '/home/caelin/.local/share/applications/jetbrains-pycharm.desktop'), ('TERMINAL_EMULATOR', 'JetBrains-JediTerm'), ('ZSH', '/home/caelin/.oh-my-zsh'), ('LSCOLORS', 'Gxfxcxdxbxegedabagacad'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('PAGER', 'less'), ('ROS_PYTHON_VERSION', '3'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '14997'), ('NVM_DIR', '/home/caelin/.nvm'), ('IM_CONFIG_PHASE', '2'), ('ROS_DISTRO', 'dashing'), ('LOGNAME', 'caelin'), ('GTK_IM_MODULE', 'ibus'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_ID', '1'), ('USERNAME', 'caelin'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('WINDOWPATH', '1'), ('PATH', '/opt/ros/dashing/bin:/home/caelin/.nvm/versions/node/v13.1.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('__INTELLIJ_COMMAND_HISTFILE__', '/home/caelin/.PyCharm2019.2/config/terminal/history/history-'), ('SESSION_MANAGER', 'local/caelin:@/tmp/.ICE-unix/1005,unix/caelin:/tmp/.ICE-unix/1005'), ('XDG_MENU_PREFIX', 'gnome-'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LANG', 'en_US.UTF-8'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/dashing'), ('SHELL', '/usr/bin/zsh'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('TEXTDOMAINDIR', '/usr/share/locale/'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('XDG_VTNR', '1'), ('QT_IM_MODULE', 'ibus'), ('SPACESHIP_VERSION', '3.11.2'), ('PWD', '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('CLUTTER_IM_MODULE', 'xim'), ('ZDOTDIR', ''), ('NVM_CD_FLAGS', '-q'), ('PYTHONPATH', '/opt/ros/dashing/lib/python3.6/site-packages'), ('CMAKE_PREFIX_PATH', '/opt/ros/dashing')]), 'shell': False}
+[0.103069] (-) TimerEvent: {}
+[0.203740] (-) TimerEvent: {}
+[0.304188] (-) TimerEvent: {}
+[0.404594] (-) TimerEvent: {}
+[0.504991] (-) TimerEvent: {}
+[0.535573] (bno055) StdoutLine: {'line': b'-- The C compiler identification is GNU 7.4.0\n'}
+[0.605118] (-) TimerEvent: {}
+[0.705467] (-) TimerEvent: {}
+[0.709660] (bno055) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 7.4.0\n'}
+[0.717451] (bno055) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc\n'}
+[0.805596] (-) TimerEvent: {}
+[0.829374] (bno055) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc -- works\n'}
+[0.831581] (bno055) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.905737] (-) TimerEvent: {}
+[0.938498] (bno055) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.947531] (bno055) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.005879] (-) TimerEvent: {}
+[1.106216] (-) TimerEvent: {}
+[1.206582] (-) TimerEvent: {}
+[1.258428] (bno055) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.263379] (bno055) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++\n'}
+[1.306696] (-) TimerEvent: {}
+[1.379226] (bno055) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ -- works\n'}
+[1.380046] (bno055) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.406817] (-) TimerEvent: {}
+[1.500389] (bno055) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.505452] (bno055) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.506896] (-) TimerEvent: {}
+[1.607234] (-) TimerEvent: {}
+[1.708535] (-) TimerEvent: {}
+[1.809842] (-) TimerEvent: {}
+[1.910663] (-) TimerEvent: {}
+[2.011573] (-) TimerEvent: {}
+[2.018314] (bno055) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[2.020603] (bno055) StdoutLine: {'line': b'-- Found ament_cmake: 0.7.3 (/opt/ros/dashing/share/ament_cmake/cmake)\n'}
+[2.068154] (bno055) StdoutLine: {'line': b'-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.6.8", minimum required is "3") \n'}
+[2.068419] (bno055) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /usr/bin/python3\n'}
+[2.111636] (-) TimerEvent: {}
+[2.212025] (-) TimerEvent: {}
+[2.312418] (-) TimerEvent: {}
+[2.353558] (bno055) StdoutLine: {'line': b'-- Found rclpy: 0.7.8 (/opt/ros/dashing/share/rclpy/cmake)\n'}
+[2.354686] (bno055) StdoutLine: {'line': b'-- Found sensor_msgs: 0.7.0 (/opt/ros/dashing/share/sensor_msgs/cmake)\n'}
+[2.372677] (bno055) StdoutLine: {'line': b'-- Found rosidl_adapter: 0.7.7 (/opt/ros/dashing/share/rosidl_adapter/cmake)\n'}
+[2.412554] (-) TimerEvent: {}
+[2.455333] (bno055) StderrLine: {'line': b'CMake Error at CMakeLists.txt:24 (find_package):\n'}
+[2.455553] (bno055) StderrLine: {'line': b'  By not providing "Findmessage_generation.cmake" in CMAKE_MODULE_PATH this\n'}
+[2.455661] (bno055) StderrLine: {'line': b'  project has asked CMake to find a package configuration file provided by\n'}
+[2.455752] (bno055) StderrLine: {'line': b'  "message_generation", but CMake did not find one.\n'}
+[2.455833] (bno055) StderrLine: {'line': b'\n'}
+[2.455910] (bno055) StderrLine: {'line': b'  Could not find a package configuration file provided by\n'}
+[2.455992] (bno055) StderrLine: {'line': b'  "message_generation" with any of the following names:\n'}
+[2.456073] (bno055) StderrLine: {'line': b'\n'}
+[2.456263] (bno055) StderrLine: {'line': b'    message_generationConfig.cmake\n'}
+[2.456353] (bno055) StderrLine: {'line': b'    message_generation-config.cmake\n'}
+[2.456432] (bno055) StderrLine: {'line': b'\n'}
+[2.456508] (bno055) StderrLine: {'line': b'  Add the installation prefix of "message_generation" to CMAKE_PREFIX_PATH or\n'}
+[2.456584] (bno055) StderrLine: {'line': b'  set "message_generation_DIR" to a directory containing one of the above\n'}
+[2.456656] (bno055) StderrLine: {'line': b'  files.  If "message_generation" provides a separate development package or\n'}
+[2.456729] (bno055) StderrLine: {'line': b'  SDK, be sure it has been installed.\n'}
+[2.456800] (bno055) StderrLine: {'line': b'\n'}
+[2.456870] (bno055) StderrLine: {'line': b'\n'}
+[2.456941] (bno055) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.457023] (bno055) StdoutLine: {'line': b'See also "/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/CMakeFiles/CMakeOutput.log".\n'}
+[2.462471] (bno055) CommandEnded: {'returncode': 1}
+[2.463889] (bno055) JobEnded: {'identifier': 'bno055', 'rc': 1}
+[2.473604] (-) EventReactorShutdown: {}

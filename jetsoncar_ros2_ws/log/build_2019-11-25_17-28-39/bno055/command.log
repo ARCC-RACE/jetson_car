@@ -1,0 +1,2 @@
+Invoking command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055': /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
+Invoked command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055' returned '1': /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055

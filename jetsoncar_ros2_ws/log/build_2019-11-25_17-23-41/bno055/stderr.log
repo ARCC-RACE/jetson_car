@@ -1,0 +1,8 @@
+CMake Error at /opt/ros/dashing/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:93 (message):
+  rosidl_generate_interfaces() the passed file 'msg/bno055_info.msg' doesn't
+  exist relative to the CMAKE_CURRENT_SOURCE_DIR
+  '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055'
+Call Stack (most recent call first):
+  CMakeLists.txt:27 (rosidl_generate_interfaces)
+
+

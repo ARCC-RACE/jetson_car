@@ -1,0 +1,25 @@
+In file included from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_c/bno055/msg/bno055__functions.h:19:0[m[K,
+                 from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_c/bno055/msg/bno055__functions.c:4[m[K:
+[01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_c/bno055/msg/bno055__struct.h:22:10:[m[K [01;31m[Kfatal error: [m[Kbno055/msg/header__struct.h: No such file or directory
+ #include [01;31m[K"bno055/msg/header__struct.h"[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+make[2]: *** [CMakeFiles/new_msg__rosidl_generator_c.dir/rosidl_generator_c/bno055/msg/bno055__functions.c.o] Error 1
+make[1]: *** [CMakeFiles/new_msg__rosidl_generator_c.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+In file included from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_typesupport_introspection_cpp/bno055/msg/bno055__type_support.cpp:12:0[m[K:
+[01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_cpp/bno055/msg/bno055__struct.hpp:29:10:[m[K [01;31m[Kfatal error: [m[Kbno055/msg/header__struct.hpp: No such file or directory
+ #include [01;31m[K"bno055/msg/header__struct.hpp"[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+make[2]: *** [CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/bno055/msg/bno055__type_support.cpp.o] Error 1
+make[1]: *** [CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/all] Error 2
+In file included from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_typesupport_fastrtps_cpp/bno055/msg/bno055__rosidl_typesupport_fastrtps_cpp.hpp:11:0[m[K,
+                 from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_typesupport_fastrtps_cpp/bno055/msg/dds_fastrtps/bno055__type_support.cpp:4[m[K:
+[01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_cpp/bno055/msg/bno055__struct.hpp:29:10:[m[K [01;31m[Kfatal error: [m[Kbno055/msg/header__struct.hpp: No such file or directory
+ #include [01;31m[K"bno055/msg/header__struct.hpp"[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+make[2]: *** [CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bno055/msg/dds_fastrtps/bno055__type_support.cpp.o] Error 1
+make[1]: *** [CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/all] Error 2
+make: *** [all] Error 2

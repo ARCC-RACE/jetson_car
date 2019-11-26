@@ -1,0 +1,70 @@
+Invoking command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055': CMAKE_PREFIX_PATH=/opt/ros/dashing /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
+-- Found ament_cmake: 0.7.3 (/opt/ros/dashing/share/ament_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.6.8", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Found rclpy: 0.7.8 (/opt/ros/dashing/share/rclpy/cmake)
+-- Found sensor_msgs: 0.7.0 (/opt/ros/dashing/share/sensor_msgs/cmake)
+-- Found rosidl_adapter: 0.7.7 (/opt/ros/dashing/share/rosidl_adapter/cmake)
+-- Found rosidl_default_generators: 0.7.0 (/opt/ros/dashing/share/rosidl_default_generators/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found version "3.6.8") 
+-- Using single matching rosidl_typesupport_c: rosidl_typesupport_fastrtps_c
+-- Using single matching rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp
+-- Found rmw_implementation_cmake: 0.7.2 (/opt/ros/dashing/share/rmw_implementation_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.6.8", minimum required is "3.5") 
+-- Found python_cmake_module: 0.7.9 (/opt/ros/dashing/share/python_cmake_module/cmake)
+-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.6m.so (found suitable version "3.6.8", minimum required is "3.5") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.6m
+-- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.6m.so
+-- Found PythonExtra: .so  
+-- Found ament_lint_auto: 0.7.11 (/opt/ros/dashing/share/ament_lint_auto/cmake)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055
+Invoked command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055' returned '0': CMAKE_PREFIX_PATH=/opt/ros/dashing /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
+Invoking command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055': CMAKE_PREFIX_PATH=/opt/ros/dashing /usr/bin/cmake --build /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055 -- -j4 -l4
+[  3%] [34m[1mGenerating C code for ROS interfaces[0m
+[35m[1mScanning dependencies of target new_msg__cpp[0m
+[  6%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[  6%] Built target new_msg__cpp
+[35m[1mScanning dependencies of target new_msg__rosidl_generator_c[0m
+[ 10%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[ 13%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[ 17%] [32mBuilding C object CMakeFiles/new_msg__rosidl_generator_c.dir/rosidl_generator_c/bno055/msg/bno055__functions.c.o[0m
+In file included from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_c/bno055/msg/bno055__functions.h:19:0[m[K,
+                 from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_c/bno055/msg/bno055__functions.c:4[m[K:
+[01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_c/bno055/msg/bno055__struct.h:22:10:[m[K [01;31m[Kfatal error: [m[Kbno055/msg/header__struct.h: No such file or directory
+ #include [01;31m[K"bno055/msg/header__struct.h"[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+CMakeFiles/new_msg__rosidl_generator_c.dir/build.make:93: recipe for target 'CMakeFiles/new_msg__rosidl_generator_c.dir/rosidl_generator_c/bno055/msg/bno055__functions.c.o' failed
+CMakeFiles/Makefile2:170: recipe for target 'CMakeFiles/new_msg__rosidl_generator_c.dir/all' failed
+make[2]: *** [CMakeFiles/new_msg__rosidl_generator_c.dir/rosidl_generator_c/bno055/msg/bno055__functions.c.o] Error 1
+make[1]: *** [CMakeFiles/new_msg__rosidl_generator_c.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[35m[1mScanning dependencies of target new_msg__rosidl_typesupport_introspection_cpp[0m
+[ 20%] [32mBuilding CXX object CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/bno055/msg/bno055__type_support.cpp.o[0m
+[35m[1mScanning dependencies of target new_msg__rosidl_typesupport_fastrtps_cpp[0m
+[ 24%] [32mBuilding CXX object CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bno055/msg/dds_fastrtps/bno055__type_support.cpp.o[0m
+In file included from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_typesupport_introspection_cpp/bno055/msg/bno055__type_support.cpp:12:0[m[K:
+[01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_cpp/bno055/msg/bno055__struct.hpp:29:10:[m[K [01;31m[Kfatal error: [m[Kbno055/msg/header__struct.hpp: No such file or directory
+ #include [01;31m[K"bno055/msg/header__struct.hpp"[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/build.make:79: recipe for target 'CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/bno055/msg/bno055__type_support.cpp.o' failed
+make[2]: *** [CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/bno055/msg/bno055__type_support.cpp.o] Error 1
+CMakeFiles/Makefile2:207: recipe for target 'CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/all' failed
+make[1]: *** [CMakeFiles/new_msg__rosidl_typesupport_introspection_cpp.dir/all] Error 2
+In file included from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_typesupport_fastrtps_cpp/bno055/msg/bno055__rosidl_typesupport_fastrtps_cpp.hpp:11:0[m[K,
+                 from [01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_typesupport_fastrtps_cpp/bno055/msg/dds_fastrtps/bno055__type_support.cpp:4[m[K:
+[01m[K/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/rosidl_generator_cpp/bno055/msg/bno055__struct.hpp:29:10:[m[K [01;31m[Kfatal error: [m[Kbno055/msg/header__struct.hpp: No such file or directory
+ #include [01;31m[K"bno055/msg/header__struct.hpp"[m[K
+          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/build.make:79: recipe for target 'CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bno055/msg/dds_fastrtps/bno055__type_support.cpp.o' failed
+make[2]: *** [CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bno055/msg/dds_fastrtps/bno055__type_support.cpp.o] Error 1
+CMakeFiles/Makefile2:407: recipe for target 'CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/all' failed
+make[1]: *** [CMakeFiles/new_msg__rosidl_typesupport_fastrtps_cpp.dir/all] Error 2
+Makefile:140: recipe for target 'all' failed
+make: *** [all] Error 2
+Invoked command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055' returned '2': CMAKE_PREFIX_PATH=/opt/ros/dashing /usr/bin/cmake --build /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055 -- -j4 -l4

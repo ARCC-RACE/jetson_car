@@ -1,0 +1,19 @@
+Invoking command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055': CMAKE_PREFIX_PATH=/opt/ros/dashing /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
+-- Found ament_cmake: 0.7.3 (/opt/ros/dashing/share/ament_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.6.8", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Found rclpy: 0.7.8 (/opt/ros/dashing/share/rclpy/cmake)
+-- Found sensor_msgs: 0.7.0 (/opt/ros/dashing/share/sensor_msgs/cmake)
+-- Found rosidl_adapter: 0.7.7 (/opt/ros/dashing/share/rosidl_adapter/cmake)
+-- Found rosidl_default_generators: 0.7.0 (/opt/ros/dashing/share/rosidl_default_generators/cmake)
+CMake Error at /opt/ros/dashing/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:93 (message):
+  rosidl_generate_interfaces() the passed file 'msg/bno055_info.msg' doesn't
+  exist relative to the CMAKE_CURRENT_SOURCE_DIR
+  '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055'
+Call Stack (most recent call first):
+  CMakeLists.txt:27 (rosidl_generate_interfaces)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055/CMakeFiles/CMakeOutput.log".
+Invoked command in '/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/build/bno055' returned '1': CMAKE_PREFIX_PATH=/opt/ros/dashing /usr/bin/cmake /home/caelin/Github/jetson_car/jetsoncar_ros2_ws/src/bno055 -DCMAKE_INSTALL_PREFIX=/home/caelin/Github/jetson_car/jetsoncar_ros2_ws/install/bno055
