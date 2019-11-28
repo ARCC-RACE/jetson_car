@@ -27,6 +27,8 @@ Development
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - Clone/download the repository on both the jetson and the controller
 - See the `Nvidia Jetson Setup` section
+- Install EmPy `pip3 install EmPy` or `python3 -m pip install EmPy`
+- Install Lark `pip3 install lark-parser` or `python3 -m pip install lark-parser`
 - If running on a desktop computer / controller without realsense packages installed run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install --packages-ignore="realsense2_camera"` in workspace
    - If you want to run the realsense2 ROS node on a desktop / controller see `Librealsense Setup (D415/D435)` section and use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws (do not push this change as it will brake the jetson side)
 - On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install` in the jetsoncar_ws
