@@ -62,18 +62,16 @@ Development
 
 
 ### Nvidia Jetson Setup
-- Follow Nvidia Jetson setup and run as user `nvidia` (password nvidia)
-- Check to make sure you are running L4T version 28.2.1 for use with convenience scripts
+- Follow Nvidia Jetson setup and run as user `jetsoncar` (password jetsoncar)
+- Check to make sure you are running L4T version 32.2.1 for use with convenience scripts
    - If you version is off download jetpack [here](https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3)
    - Follow [this tutorial on reflashing the Jetson TX2](https://www.youtube.com/watch?v=D7lkth34rgM)
-- make sure you have cloned https://github.com/JHS-ARCC-Club/jetson_car.git to Desktop
-- Run the following scripts in this order (in scripts/jetsonhacks): installLibrealsense.sh, buildPatchedKernal.sh, installROS.sh
-- [Install USB driver for some arduino nano](https://devtalk.nvidia.com/default/topic/1032862/jetson-tx2/a-guide-to-solve-usb-serial-driver-problems-on-tx2/)
+- make sure you have cloned https://github.com/JHS-ARCC-Club/jetson_car.git to home directory
 - Run the `/scripts/jetson.sh` script to setup network
-- Setup pip and download keras and tensorflow for python
-   - `sudo apt-get install -y python-pip`
-   - `pip install keras`
-   - `sudo pip install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
+- Setup pip and download keras and tensorflow for python3
+   - `sudo apt-get install -y python3-pip`
+   - `pip3 install keras`
+   - `sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
 - The following are done in the `jetson.sh` script but provided here for reference
    - `sudo usermod -a -G dialout $USER` to give proper permissions to the USB peripherals
    - Add a udev rule for i2c-1 so that the IMU interface program can access it
@@ -84,29 +82,13 @@ Development
 
 ### Jetson ROS install
 
-1. Install ROS2 following [this link](https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Install-Debians/). Make sure you also echo your source command into the bashrc and install autocomplete
+1. Install ROS2 following [this link](https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Install-Debians/). Make sure you also echo your source command into the bashrc and install autocomplete. You should be able to install ROS through debian packages. No need to build from source.
 
 2. Test the ros2 build. Run `ros2 run demo_nodes_cpp talker` in one terminal and `ros2 run demo_nodes_py listener` in another. You should see the `talker` saying that it’s Publishing messages and the `listener` saying I heard those messages. 
 
 3. Install ROS2 Joy node.`sudo apt-get install ros-dashing-joy`.
 
-4. Test ROS2 Joy node by running `ros2 run joy joy-node`, plugging in a controller, then opening another terminal and runnign `ros2 topic echo /joy`, and a stream should output
-
-
-### [RTAB Mapping setup](https://github.com/introlab/rtabmap_ros#installation)
-- `sudo apt-get install ros-kinetic-rtabmap-ros ros-kinetic-robot-localization ros-kinetic-pointcloud-to-laserscan ros-kinetic-depthimage-to-laserscan`
-
-### DualShock 4 Controller Setup (Ubuntnu 16.04)
-- Connect to the controller by pressing and holding the `playstation button` and the `share` button until the light begins flashing white
-- Go into Bluetooth settings and add the controller named `wireless controller`
-- Test the connection by making sure the `/dev/input/js0` file exits
-- Run the `joy_node` ROS node and echo the `/joy` topic to confirm data is being sent properly from the controller to the computer
-
-
-### DualShock 4 Controller Setup (Ubuntu MATE RPI)
-- Install `bluez` driver `sudo apt-get install bluez`
-- https://github.com/macunixs/dualshock4-pi/blob/master/README.md
-- Follow the steps for Ubutnu 16.04 above
+4. Test ROS2 Joy node by running `ros2 run joy joy-node`, plugging in a controller, then opening another terminal and runnign `ros2 topic echo /joy`, and a stream should of joystick commands be visible.
 
 ## Running the tests
 
@@ -114,7 +96,7 @@ See the travis.yaml for running install/make tests and verifying a proper build.
 
 ## Built With
 
-* [ROS](https://www.ros.org/) - Modern robot framework for running software
+* [ROS2](https://index.ros.org/doc/ros2/) - Modern robot framework for running software
 * [librealsense](https://github.com/IntelRealSense/librealsense) - Intel Realsense library for D415/D435
 * [Git LFS](https://git-lfs.github.com/) - Manage and store trained AI models
 * [Travis CI](https://travis-ci.org/) - Perform build tests
@@ -122,9 +104,10 @@ See the travis.yaml for running install/make tests and verifying a proper build.
 ## Authors
 
 * **Michael Equi** - *Initial work*
+* **Caelin Sutch** - *ROS2/phase 2 development*
 
 See also the list of [contributors](https://github.com/JHS-ARCC-Club/jetson_car/graphs/contributors) who participated in this project.
 
 ## Acknowledgments
 
-* README Tempalte source https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+* README template source https://gist.github.com/PurpleBooth/109311bb0361f32d87a2

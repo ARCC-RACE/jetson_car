@@ -1,3 +1,0 @@
-/home/nvidia/Desktop/jetson_car/drivers/carHWComTest/CMakeFiles/edit_cache.dir
-/home/nvidia/Desktop/jetson_car/drivers/carHWComTest/CMakeFiles/rebuild_cache.dir
-/home/nvidia/Desktop/jetson_car/drivers/carHWComTest/CMakeFiles/carHWComTest.dir
