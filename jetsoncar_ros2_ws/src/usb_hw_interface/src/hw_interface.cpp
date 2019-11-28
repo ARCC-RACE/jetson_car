@@ -33,7 +33,7 @@ class HWInterface : public rclcpp::Node
 public:
     HWInterface(): Node("hw_interface"), controller("/dev/ttyACM0", 115200)
     {
-        cmd_sub_ = this->create_subscription<ackermann_msgs::msg::AckermannDriveStamped>("hw_cmd", 2, std::bind(&HWInterface::hw_cmd_callback, this, _1));
+        cmd_sub_ = this->create_subscription<ackermann_msgs::msg::AckermannDriveStamped>("/hw/cmd", 2, std::bind(&HWInterface::hw_cmd_callback, this, _1));
         joy_pub_ = this->create_publisher<sensor_msgs::msg::Joy>("joy", 2);
         timer_ = this->create_wall_timer(10ms, std::bind(&HWInterface::timer_callback, this));
 
