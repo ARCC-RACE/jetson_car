@@ -12,46 +12,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="298dff28-2a2e-40b4-983c-bcbd233527ec" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/include/serial/impl/unix.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/include/serial/impl/win.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/include/serial/serial.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/include/serial/v8stdint.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/include/usb_hw_interface/racecar_arduino_com.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/src/hw_interface.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/src/racecar_arduino_com.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/src/serial.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/src/usb_hw_interface/src/unix.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CMakeCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CMakeCXXCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CMakeSystem.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CompilerIdC/a.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.5.1/CompilerIdCXX/a.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/CMakeOutput.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Makefile.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Makefile2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/CXX.includecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/DependInfo.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/build.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/cmake_clean.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/depend.internal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/flags.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/link.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/main.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/progress.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/racecar_arduino_com.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/serial.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/carHWComTest.dir/unix.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/cmake.check_cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/feature_tests.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/feature_tests.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/feature_tests.cxx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/progress.marks" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/carHWComTest.cbp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/racecar_arduino_com.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/racecar_arduino_com.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/racecar_hardware_interface/racecar_arduino_com.h" beforeDir="false" afterPath="$PROJECT_DIR$/racecar_hardware_interface/racecar_arduino_com.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/_local_setup_util_ps1.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/_local_setup_util_ps1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/_local_setup_util_sh.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/_local_setup_util_sh.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/local_setup.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/local_setup.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/setup.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/install/setup.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/log/latest_build" beforeDir="false" afterPath="$PROJECT_DIR$/../../jetsoncar_ros2_ws/log/latest_build" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +47,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -136,6 +112,9 @@
       <workItem from="1552687329121" duration="2000" />
       <workItem from="1574884910076" duration="1004000" />
       <workItem from="1574885923984" duration="3963000" />
+      <workItem from="1574911850906" duration="3924000" />
+      <workItem from="1574956333615" duration="4000" />
+      <workItem from="1574962452245" duration="11000" />
     </task>
     <servers />
   </component>

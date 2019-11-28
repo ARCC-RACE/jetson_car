@@ -27,9 +27,9 @@ Development
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - Clone/download the repository on both the jetson and the controller
 - See the `Nvidia Jetson Setup` section
-- If running on a desktop computer / controller without realsense packages installed run `rosdep install --from-paths src --ignore-src -r -y` and `catkin_make -DCATKIN_BLACKLIST_PACKAGES="realsense2_camera"` in workspace
+- If running on a desktop computer / controller without realsense packages installed run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install --packages-ignore="realsense2_camera"` in workspace
    - If you want to run the realsense2 ROS node on a desktop / controller see `Librealsense Setup (D415/D435)` section and use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws (do not push this change as it will brake the jetson side)
-- On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `catkin_make` in the jetsoncar_ws
+- On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install` in the jetsoncar_ws
 - Run the controller.sh or jetson.sh scripts to get the devices setup and communicating with each other OR run `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311` and `export ROS_HOSTNAME=hostname_of_machine.local`
    - It is highly recommended that you run the controller.sh and jetson.sh scripts on their respective devices
 
