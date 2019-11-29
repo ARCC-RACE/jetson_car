@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(bno055)
+project(_bno055)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -23,8 +23,10 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
-# Set Message Files
 set(msg_files
   "msg/Bno055.msg"
 )
@@ -34,8 +36,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES builtin_interfaces std_msgs
 )
 
-# Generate executable
-install(PROGRAMS src/bno055_ros.py DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS src/bno055_ros.py
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
