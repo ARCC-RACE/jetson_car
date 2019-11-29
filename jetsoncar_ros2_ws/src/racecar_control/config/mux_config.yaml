@@ -4,4 +4,6 @@ control_mux:
     ai_topic: "/ai/cmd"
     joy_topic: "/joy"
     hw_interface_topic: "/hw/cmd"
+    deadzone: 0.05
+    flip_steering: false
 
