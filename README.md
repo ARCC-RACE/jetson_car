@@ -14,15 +14,6 @@ Development
 ## Getting Started
 - Make sure that you have [installed ROS2](https://index.ros.org/doc/ros2/Installation/Dashing/)
 - Make sure you have installed git lfs on the jetson, controller, and development computer
-   - Git LFS will allow you to easily keep ML models up to date across computers with git version control
-   - https://git-lfs.github.com/
-   - [Install of git lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
-      - This will need to be installed by source on the [Jetson](https://github.com/Netzeband/JetsonTX1_im2txt/wiki/JetsonBasicSetupGit) (DO NOT follow the instructions exactly. See below)
-         - Get latest version of [Go for Linux ARMv8](https://golang.org/dl/) and run the extract command
-         - Make sure that the $GOPATH is set to home/$USER/gocode and that Go is version 1.8 or higher `go version`
-         - `go get github.com/git-lfs/git-lfs`
-         - `sudo cp ~/gocode/bin/git-lfs /usr/local/bin`
-         - `git lfs install`
 - Connect the nvidia jetson to the same network as the controller and make sure that you have an internet connection
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - Clone/download the repository on both the jetson and the controller

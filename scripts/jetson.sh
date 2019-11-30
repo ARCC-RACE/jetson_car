@@ -3,15 +3,16 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# NOT NEEDED FOR ROS2 setup
 # Set up the correct ROS_MASTER_URI and hostname
-if ! grep "export ROS_HOSTNAME=$(hostname).local" ~/.bashrc ; then
-  echo -e "\n#################### Added by jetson.sh for autonomous racecar ####################" >> ~/.bashrc
-  echo "# Comment out the lines below when using for other applications" >> ~/.bashrc
-  echo "export ROS_HOSTNAME=$(hostname).local" >> ~/.bashrc
-  echo "export ROS_MASTER_URI=http://$(hostname).local:11311" >> ~/.bashrc
-  echo "Adding ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash in ~/.bashrc -> change if needed!"
-  echo "source ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash" >> ~/.bashrc
-fi
+#if ! grep "export ROS_HOSTNAME=$(hostname).local" ~/.bashrc ; then
+#  echo -e "\n#################### Added by jetson.sh for autonomous racecar ####################" >> ~/.bashrc
+#  echo "# Comment out the lines below when using for other applications" >> ~/.bashrc
+#  echo "export ROS_HOSTNAME=$(hostname).local" >> ~/.bashrc
+#  echo "export ROS_MASTER_URI=http://$(hostname).local:11311" >> ~/.bashrc
+#  echo "Adding ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash in ~/.bashrc -> change if needed!"
+#  echo "source ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash" >> ~/.bashrc
+#fi
 
 # Add usergroup for program acces to USB
 sudo usermod -a -G dialout $USER
