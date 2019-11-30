@@ -57,6 +57,9 @@ class ControlMux(Node):
         self.throttle = 0.0
         self.last_joy_cmd = None
 
+        self.data_collection_mode_counter =0 # this keeps track for how many ticks the data collection mode has been selected
+        # to create a delay for seem less manual to AI switching without collecting data
+
     # should get update at ~100Hz from hardware controller that reads joystick
     def joy_cb(self, msg):
 
@@ -72,8 +75,12 @@ class ControlMux(Node):
             self.is_autonomous = True
             self.is_data_collecting = False
         elif msg.buttons[1] == 1:
-            self.is_data_collecting = True
-            self.is_autonomous = False
+            if not self.is_data_collecting and self.data_collection_mode_counter < 125:
+                self.data_collection_mode_counter += 1
+            else:
+                self.data_collection_mode_counter = 0
+                self.is_data_collecting = True
+                self.is_autonomous = False
         else:
             self.is_data_collecting = False
             self.is_autonomous = False
