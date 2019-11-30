@@ -14,8 +14,8 @@ fi
 #  echo "source ~/Desktop/jetson_car/jetsoncar_ws/devel/setup.bash" >> ~/.bashrc
 #fi
 
-# Add usergroup for program acces to USB
-sudo usermod -a -G dialout $USER
+# Add usergroup for program acces to USB NOT WORKING
+# sudo usermod -a -G dialout $USER
 
 # Make sure all programs have access to the I2C bus devices (primarily for IMU)
 if ! find /etc/udev/rules.d/50-i2c.rules ; then
@@ -28,8 +28,11 @@ fi
 if ! grep "sudo iw wlan0 set power_save off" ~/.bashrc ; then
    echo "sudo iw wlan0 set power_save off" >> ~/.bashrc
 fi
-if ! grep "sudo ~/jetson_clocks.sh" ~/.bashrc ; then
-   echo "sudo ~/jetson_clocks.sh" >> ~/.bashrc
+if ! grep "sudo jetson_clocks" ~/.bashrc ; then
+   echo "sudo jetson_clocks" >> ~/.bashrc
+fi
+if ! grep "sudo chmod a+rw /dev/ttyACM0" ~/.bashrc ; then
+   echo "sudo chmod a+rw /dev/ttyACM0" >> ~/.bashrc
 fi
 
 echo "Reboot your jetson"
