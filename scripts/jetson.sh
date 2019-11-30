@@ -35,4 +35,8 @@ if ! grep "sudo chmod a+rw /dev/ttyACM0" ~/.bashrc ; then
    echo "sudo chmod a+rw /dev/ttyACM0" >> ~/.bashrc
 fi
 
+if ! grep ". ~/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash" ~/.bashrc ; then
+   echo ". ~/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash" >> ~/.bashrc
+fi
+
 echo "Reboot your jetson"
