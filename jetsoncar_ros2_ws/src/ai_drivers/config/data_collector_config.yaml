@@ -1,0 +1,10 @@
+data_collector:
+  ros__parameters:
+    absolute_max_speed: 0.75 #match with mux_config
+    data_collection_rate: 5.0 #Hz
+    triple_camera_mode: false #L, R, center cameras for 3x training +  edge cases
+    center_camera_topic: "/front_cam/color/image_raw"
+    right_camera_topic: ""
+    left_camera_topic: ""
+    data_store_root_dir: "/media/data_usb/dataset"
+

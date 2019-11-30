@@ -1,6 +1,6 @@
 control_mux:
   ros__parameters:
-    absolute_max_speed: 0.75
+    absolute_max_speed: 0.75 #match with data_collector_config
     ai_topic: "/ai/cmd"
     joy_topic: "/joy"
     hw_interface_topic: "/hw/cmd"

@@ -1,8 +1,6 @@
-import os
-from glob import glob
 from setuptools import setup
 
-package_name = 'racecar_control'
+package_name = 'ai_drivers'
 
 setup(
     name=package_name,
@@ -12,7 +10,6 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name), glob('launch/*.launch.py'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -23,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'control_mux = racecar_control.control_mux:main',
+            'model_loader = ai_drivers.model_loader:main',
+            'data_collector = ai_drivers.data_collector:main'
         ],
     },
 )

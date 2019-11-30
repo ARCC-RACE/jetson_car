@@ -1,4 +1,4 @@
-from smbus import SMBus
+from jetsoncar_ros2_ws.src._bno055.src.smbus import SMBus
 import math
 
 class pmbus:

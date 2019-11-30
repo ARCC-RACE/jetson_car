@@ -1,5 +1,5 @@
 try:
-    import smbus
+    from jetsoncar_ros2_ws.src._bno055.src import smbus
 except:
     print 'Try sudo apt-get install python-smbus'
     

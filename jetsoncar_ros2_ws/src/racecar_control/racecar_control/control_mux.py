@@ -25,7 +25,7 @@ class ControlMux(Node):
     def __init__(self):
         super().__init__('control_mux')
 
-        self.declare_parameter("absolute_max_speed", value=0.5)
+        self.declare_parameter("absolute_max_speed", value=0.75)
         self.declare_parameter("deadzone", value=0.05)
         self.declare_parameter("flip_steering", value=False)
         self.declare_parameter("ai_topic", value="/ai/cmd")
