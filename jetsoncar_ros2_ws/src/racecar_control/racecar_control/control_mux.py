@@ -38,6 +38,7 @@ class ControlMux(Node):
 
         self.declare_parameter("absolute_max_speed", value=0.75)
         self.declare_parameter("deadzone", value=0.05)
+        self.declare_parameter("steering_trim_range", value=0.3)
         self.declare_parameter("flip_steering", value=False)
         self.declare_parameter("ai_topic", value="/ai/cmd")
         self.declare_parameter("joy_topic", value="/joy")
@@ -62,6 +63,7 @@ class ControlMux(Node):
         self.flip_steering = self.get_parameter("flip_steering").value
         self.absolute_max_speed = self.get_parameter("absolute_max_speed").value # Does not change during runtime
         self.deadzone = self.get_parameter('deadzone').value
+        self.steering_trim_range = self.get_parameter('steering_trim_range').value
         self.steering_trim = 0.0 # this will change based on CH6
         self.max_speed = 0.0 # this will change based on CH5
         self.steering = 0.0
@@ -100,7 +102,7 @@ class ControlMux(Node):
         if self.max_speed > 0.95:
             self.max_speed = 1.0
 
-        self.steering_trim = range_map(msg.axes[3], -1, 1, -0.3, 0.3) # update steering trim state variable
+        self.steering_trim = range_map(msg.axes[3], -1, 1, -self.steering_trim_range, self.steering_trim_range) # update steering trim state variable
 
         if self.safety_on:
             self.throttle = 0.0

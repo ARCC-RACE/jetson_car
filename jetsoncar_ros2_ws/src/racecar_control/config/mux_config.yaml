@@ -5,5 +5,6 @@ control_mux:
     joy_topic: "/joy"
     hw_interface_topic: "/hw/cmd"
     deadzone: 0.05
+    steering_trim_range: 0.3
     flip_steering: false
 
