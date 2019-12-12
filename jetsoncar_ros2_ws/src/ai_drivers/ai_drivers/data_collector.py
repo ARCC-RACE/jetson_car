@@ -43,11 +43,13 @@ class DataCollector(Node):
         self.collection_timer = self.create_timer(1.0/self.get_parameter("data_collection_rate").value, self.collect_data_cb)
 
     def data_collecting_status_cb(self, msg):
+        last_state = self.collect_data
         self.collect_data = msg.data
-        if self.collect_data:
-            self.get_logger().info("Collecting Data")
-        else:
-            self.get_logger().info("Not Collecting Data")
+        if last_state != self.collect_data:
+            if self.collect_data:
+                self.get_logger().info("Collecting Data")
+            else:
+                self.get_logger().info("Not Collecting Data")
 
     def safety_status_cb(self, msg):
         self.safety_on = msg.data

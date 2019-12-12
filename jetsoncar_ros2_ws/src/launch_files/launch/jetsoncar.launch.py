@@ -22,6 +22,7 @@ def generate_launch_description():
             package='ai_drivers',
             node_executable='data_collector',
             node_name='data_collector',
+            output='screen',
             parameters=['src/ai_drivers/config/data_collector_config.yaml']
         )
     ])
