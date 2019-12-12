@@ -17,8 +17,19 @@ handled on the joystick and by the AI model"""
 ### CH2 - axes[1] throttle
 ### CH3 - button[0] (0/1) safety
 ### CH4 - button[1] (0/1/2) manual, manual w/ data collection, AI
-### CH5 - axes[2] AI max speed
-### CH6 - axes[3] set manual max speed
+### CH5 - axes[2] AI/manual max speed
+### CH6 - axes[3] steering trim
+
+def constrain(x, min, max):
+    if x < min:
+        return min
+    elif x > max:
+        return max
+    else:
+        return x
+
+def range_map(x, in_min, in_max, out_min, out_max):
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 class ControlMux(Node):
 
@@ -40,8 +51,8 @@ class ControlMux(Node):
         self.safety_pub = self.create_publisher(Bool, 'safety_on', 10)
         self.is_autonomous_pub = self.create_publisher(Bool, 'is_autonomous', 10)
         self.is_data_collecting_pub = self.create_publisher(Bool, 'is_data_collecting', 10)
-        self.ai_max_speed_pub = self.create_publisher(Float64, 'ai_max_speed', 10)
-        self.manual_max_speed_pub = self.create_publisher(Float64, 'manual_max_speed', 10)
+        self.max_speed_pub = self.create_publisher(Float64, 'max_speed', 10)
+        self.steering_trim_pub = self.create_publisher(Float64, 'steering_trim', 10)
 
 
         # operational variables
@@ -51,8 +62,8 @@ class ControlMux(Node):
         self.flip_steering = self.get_parameter("flip_steering").value
         self.absolute_max_speed = self.get_parameter("absolute_max_speed").value # Does not change during runtime
         self.deadzone = self.get_parameter('deadzone').value
-        self.manual_max_speed = 0.0 # this will change based on CH6
-        self.autonomous_max_speed = 0.0 # this will change based on CH5
+        self.steering_trim = 0.0 # this will change based on CH6
+        self.max_speed = 0.0 # this will change based on CH5
         self.steering = 0.0
         self.throttle = 0.0
         self.last_joy_cmd = None
@@ -85,17 +96,16 @@ class ControlMux(Node):
             self.is_data_collecting = False
             self.is_autonomous = False
 
-        self.manual_max_speed = (msg.axes[2]+1)/2
-        if self.manual_max_speed > 0.95:
-            self.manual_max_speed = 1.0
-        self.autonomous_max_speed = (msg.axes[3]+1)/2
-        if self.autonomous_max_speed > 0.95:
-            self.autonomous_max_speed = 1.0
+        self.max_speed = (msg.axes[2]+1)/2
+        if self.max_speed > 0.95:
+            self.max_speed = 1.0
+
+        self.steering_trim = range_map(msg.axes[3], -1, 1, -0.3, 0.3) # update steering trim state variable
 
         if self.safety_on:
             self.throttle = 0.0
         elif not self.is_autonomous: # if the car is set to manual
-            throttle  = msg.axes[1]*self.absolute_max_speed*self.manual_max_speed
+            throttle  = msg.axes[1]*self.absolute_max_speed*self.max_speed
             if abs(throttle) < self.deadzone:
                 self.throttle = 0.0
             else:
@@ -104,21 +114,23 @@ class ControlMux(Node):
             if self.flip_steering:
                 self.steering*=-1.0
 
+
+
         # if this cb does not update throttle or steering then it is using the AI's values for throttle and steering
         # send update to thruster controller
         hw_cmd = AckermannDriveStamped()
         # print(self.get_clock().now())
         # hw_cmd.header.stamp = self.get_clock().now()
-        hw_cmd.drive.steering_angle = self.steering
-        hw_cmd.drive.speed = self.throttle
+        hw_cmd.drive.steering_angle = constrain(self.steering + self.steering_trim, -1.0, 1.0)
+        hw_cmd.drive.speed = constrain(self.throttle, -1.0, 1.0)
         self.hw_cmd_pub.publish(hw_cmd)
 
         # send updated operational variables
         self.safety_pub.publish(Bool(data=self.safety_on))
         self.is_autonomous_pub.publish(Bool(data=self.is_autonomous))
         self.is_data_collecting_pub.publish(Bool(data=self.is_data_collecting))
-        self.ai_max_speed_pub.publish(Float64(data=self.autonomous_max_speed))
-        self.manual_max_speed_pub.publish(Float64(data=self.manual_max_speed))
+        self.max_speed_pub.publish(Float64(data=self.max_speed))
+        self.steering_trim_pub.publish(Float64(data=self.steering_trim))
 
         # update last joy
         self.last_joy_cmd = msg
