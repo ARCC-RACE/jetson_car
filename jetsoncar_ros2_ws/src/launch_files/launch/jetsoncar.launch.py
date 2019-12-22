@@ -3,6 +3,8 @@ import launch.actions
 import launch.substitutions
 import launch_ros.actions
 from launch_ros.actions import Node
+from ament_index_python.packages import get_package_prefix
+import os
 
 
 def generate_launch_description():
@@ -11,7 +13,7 @@ def generate_launch_description():
             package='racecar_control',
             node_executable='control_mux',
             node_name='control_mux',
-            parameters=['src/racecar_control/config/mux_config.yaml']
+            parameters=[os.path.join(get_package_prefix('racecar_control'), '../../src/racecar_control/config/mux_config.yaml')]
         ),
         Node(
             package='usb_hw_interface',
@@ -23,6 +25,12 @@ def generate_launch_description():
             node_executable='data_collector',
             node_name='data_collector',
             output='screen',
-            parameters=['src/ai_drivers/config/data_collector_config.yaml']
-        )
+            parameters=[os.path.join(get_package_prefix('ai_drivers'), '../../src/ai_drivers/config/data_collector_config.yaml')]
+        ),
+	# Realsense
+        Node(
+            package='realsense_ros2_camera', 
+	    node_executable='realsense_ros2_camera',
+            output='screen',
+	    parameters=[os.path.join(get_package_prefix('launch_files'), '../../src/launch_files/config/realsense_config.yaml')])
     ])

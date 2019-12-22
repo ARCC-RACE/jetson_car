@@ -39,4 +39,8 @@ if ! grep ". ~/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash" ~/.bashrc
    echo ". ~/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash" >> ~/.bashrc
 fi
 
+if ! grep ". ~/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash" ~/.bashrc ; then
+   echo ". ~/Github/jetson_car/jetsoncar_ros2_ws/install/setup.bash" >> ~/.bashrc
+fi
+
 echo "Reboot your jetson"

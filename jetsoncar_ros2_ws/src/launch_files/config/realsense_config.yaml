@@ -1,0 +1,16 @@
+RealSenseCameraNode:
+  ros__parameters:
+    enable_pointcloud: false
+    enable_aligned_pointcloud: false
+    enable_depth: true
+    enable_aligned_depth: true
+    enable_infra1: false
+    enabel_infra2: false
+    depth_width: 848
+    depth_heigt: 480
+    depth_fps: 30
+    enable_color: true
+    color_width: 848
+    color_height: 480
+    color_fps: 30
+ 
