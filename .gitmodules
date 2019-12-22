@@ -7,3 +7,6 @@
 [submodule "jetsoncar_ws/src/drivers/jetson-rosey"]
 	path = jetsoncar_ws/src/drivers/jetson-rosey
 	url = https://github.com/ARCC-RACE/jetson-rosey.git
+[submodule "jetsoncar_ros2_ws/src/ros2_intel_realsense"]
+	path = jetsoncar_ros2_ws/src/ros2_intel_realsense
+	url = https://github.com/intel/ros2_intel_realsense.git

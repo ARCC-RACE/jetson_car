@@ -27,10 +27,9 @@ def generate_launch_description():
             output='screen',
             parameters=[os.path.join(get_package_prefix('ai_drivers'), '../../src/ai_drivers/config/data_collector_config.yaml')]
         ),
-	# Realsense
         Node(
             package='realsense_ros2_camera', 
-	    node_executable='realsense_ros2_camera',
+	        node_executable='realsense_ros2_camera',
             output='screen',
-	    parameters=[os.path.join(get_package_prefix('launch_files'), '../../src/launch_files/config/realsense_config.yaml')])
+	        parameters=[os.path.join(get_package_prefix('launch_files'), '../../src/launch_files/config/realsense_config.yaml')])
     ])
