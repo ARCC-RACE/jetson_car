@@ -18,11 +18,12 @@ Development
 - Before setup make sure to `sudo apt-get update` and `sudo apt-get upgrade`
 - Clone/download the repository on both the jetson and the controller
 - See the `Nvidia Jetson Setup` section
-- Install EmPy `pip3 install EmPy` or `python3 -m pip install EmPy`
-- Install Lark `pip3 install lark-parser` or `python3 -m pip install lark-parser`
-- If running on a desktop computer / controller without realsense packages installed run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install --packages-ignore="realsense2_camera"` in workspace
-   - If you want to run the realsense2 ROS node on a desktop / controller see `Librealsense Setup (D415/D435)` section and use the realsense2_camera pkg in the 	`drivers` folder by copying it into a local catkin_ws (do not push this change as it will brake the jetson side)
+- ~Install EmPy `pip3 install EmPy` or `python3 -m pip install EmPy`
+- Install Lark `pip3 install lark-parser` or `python3 -m pip install lark-parser`~
+- Install non ROS dependencies for intel realsense `sudo apt-get install -y libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev;sudo apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev`
+- Run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install`
 - On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install` in the jetsoncar_ws
+   - If you have issues building the realsense node see [this](https://github.com/intel/ros2_intel_realsense/issues/93)
 - Run the controller.sh or jetson.sh scripts to get the devices setup and communicating with each other OR run `export ROS_MASTER_URI=http://tegra-ubuntu.local:11311` and `export ROS_HOSTNAME=hostname_of_machine.local`
    - It is highly recommended that you run the controller.sh and jetson.sh scripts on their respective devices
 
@@ -59,14 +60,14 @@ Development
 - Check to make sure you are running L4T version 32.2.1 for use with convenience scripts
    - If you version is off download jetpack [here](https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3)
    - Follow [this tutorial on reflashing the Jetson TX2](https://www.youtube.com/watch?v=D7lkth34rgM)
-- make sure you have cloned https://github.com/JHS-ARCC-Club/jetson_car.git to home directory
-- Run the `/scripts/jetson.sh` script to setup network
+- make sure you have cloned https://github.com/JHS-ARCC-Club/jetson_car.git to home directory and init/updated submodules
 - Setup pip and download keras and tensorflow for python3
    - `sudo apt-get install -y python3-pip`
    - `pip3 install keras`
    - `sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
+- Run the `/scripts/jetson.sh` script to setup network
 - The following are done in the `jetson.sh` script but provided here for reference
-   - `sudo usermod -a -G dialout $USER` to give proper permissions to the USB peripherals
+   - `sudo chmod a+rw /dev/ttyACM0` to give proper permissions to the USB peripherals
    - Add a udev rule for i2c-1 so that the IMU interface program can access it
       - Go to `/etc/udev/rules.d`
       - Add a file called `50-i2c.rules`

@@ -1,16 +1,22 @@
-RealSenseCameraNode:
+camera:
   ros__parameters:
+    base_frame_id: d435_link
+    align_depth: true
     enable_pointcloud: false
-    enable_aligned_pointcloud: false
-    enable_depth: true
-    enable_aligned_depth: true
-    enable_infra1: false
-    enabel_infra2: false
-    depth_width: 848
-    depth_heigt: 480
-    depth_fps: 30
-    enable_color: true
-    color_width: 848
-    color_height: 480
-    color_fps: 30
- 
+    dense_pointcloud: false
+    color0:
+      enabled: true
+      resolution: [848,480]
+      fps: 60
+    depth0:
+      enabled: true
+      resolution: [848,480]
+      fps: 60
+    infra1:
+      enabled: false
+      resolution: [848,480]
+      fps: 30
+    infra2:
+      enabled: false
+      resolution: [848,480]
+      fps: 30

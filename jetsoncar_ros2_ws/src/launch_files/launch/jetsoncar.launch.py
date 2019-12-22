@@ -13,7 +13,8 @@ def generate_launch_description():
             package='racecar_control',
             node_executable='control_mux',
             node_name='control_mux',
-            parameters=[os.path.join(get_package_prefix('racecar_control'), '../../src/racecar_control/config/mux_config.yaml')]
+            parameters=[os.path.join(get_package_prefix('racecar_control'),
+                                     '../../src/racecar_control/config/mux_config.yaml')]
         ),
         Node(
             package='usb_hw_interface',
@@ -25,11 +26,18 @@ def generate_launch_description():
             node_executable='data_collector',
             node_name='data_collector',
             output='screen',
-            parameters=[os.path.join(get_package_prefix('ai_drivers'), '../../src/ai_drivers/config/data_collector_config.yaml')]
+            parameters=[os.path.join(get_package_prefix('ai_drivers'),
+                                     '../../src/ai_drivers/config/data_collector_config.yaml')]
         ),
         Node(
-            package='realsense_ros2_camera', 
-	        node_executable='realsense_ros2_camera',
+            package='realsense_node',
+            node_executable='realsense_node',
+            node_namespace='',
             output='screen',
-	        parameters=[os.path.join(get_package_prefix('launch_files'), '../../src/launch_files/config/realsense_config.yaml')])
+            parameters=[os.path.join(get_package_prefix('launch_files'),
+                                     '../../src/launch_files/config/realsense_config.yaml')]
+        ),
     ])
+
+
+
