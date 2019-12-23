@@ -5,7 +5,7 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from std_msgs.msg import Byte, Bool, Float64, String # for mode reading and file input
 
 import numpy as np
-import cv2, os, sys, yaml
+import cv2, os, sys, yaml, importlib
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 
@@ -43,6 +43,8 @@ class ModelLoader(Node):
         self.ackermann_cmd_publisher = self.create_publisher(AckermannDriveStamped, self.get_parameter("ai_ackermann_drive_topic").value, 1)
 
         self.loaded_model = None
+        self.package_name = None
+        self.utils = None # holds functions for preprocessing and postprocessing data for AI
         self.last_color_image = None
         self.last_depth_image = None
         self.recursion_factor = None
@@ -50,13 +52,21 @@ class ModelLoader(Node):
         # self.last_imu_status = None
 
     def new_model_cb(self, path):
-        self.loaded_model = None # stop any more model processing if a previous model was in use
         model_path = os.path.join(path.data, "model.h5")
         config_path = os.path.join(path.data, "config.yaml")
+        self.package_name = os.path.basename(path.data)
+
         if os.path.exists(model_path):
+
+            if self.loaded_model is not None:
+                self.loaded_model = None  # stop any more model processing if a previous model was in use
+                sys.path[-1] = os.path.dirname(path.data)  # allows us to change import utils
+            else:
+                sys.path.append(os.path.dirname(path.data))  # allows us to import utils
+
             self.recursion_factor = None
+            self.utils = None
             config_file = yaml.load(open(config_path))
-            sys.path.append(path.data)  # allows us to import utils
             self.get_logger().info("Loading Model")
             self.loaded_model = load_model(model_path)
             self.get_logger().info("Model Loaded")
@@ -83,13 +93,14 @@ class ModelLoader(Node):
 
     def update_cb(self):
         if not (self.loaded_model is None and self.last_depth_image is None and self.last_color_image is None):
-            from utils import preprocess_data, postprocess_data
+            if self.utils is None:
+                self.utils = importlib.import_module(".utils", self.package_name)
             # preprocess_data will take in images and IMU and return array to make prediction (input to network) and a recursion factor
                 # recursion factor starts as None. Make sure None case is handled
             # postprocess data will take in output of network and return steering, throttle
-            x, self.recursion_factor = preprocess_data(last_color_image=self.last_color_image, last_depth_image=self.last_depth_image, recursion_factor=self.recursion_factor)
+            x, self.recursion_factor = self.utils.preprocess_data(last_color_image=self.last_color_image, last_depth_image=self.last_depth_image, recursion_factor=self.recursion_factor)
             command = self.loaded_model.predict(x, batch_size=1)
-            steer, throttle = postprocess_data(command)
+            steer, throttle = self.utils.postprocess_data(command)
 
             ai_cmd = AckermannDriveStamped()
             # print(self.get_clock().now())

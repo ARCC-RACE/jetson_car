@@ -123,8 +123,8 @@ class ControlMux(Node):
         hw_cmd = AckermannDriveStamped()
         # print(self.get_clock().now())
         # hw_cmd.header.stamp = self.get_clock().now()
-        hw_cmd.drive.steering_angle = constrain(self.steering + self.steering_trim, -1.0, 1.0)
-        hw_cmd.drive.speed = constrain(self.throttle, -1.0, 1.0)
+        hw_cmd.drive.steering_angle = float(constrain(self.steering + self.steering_trim, -1.0, 1.0))
+        hw_cmd.drive.speed = float(constrain(self.throttle, -1.0, 1.0))
         self.hw_cmd_pub.publish(hw_cmd)
 
         # send updated operational variables
@@ -141,7 +141,7 @@ class ControlMux(Node):
 
     def ai_cb(self, msg):
         if not self.safety_on and self.is_autonomous:
-            throttle  = msg.drive.speed*self.absolute_max_speed*self.autonomous_max_speed
+            throttle  = msg.drive.speed*self.absolute_max_speed*self.max_speed
             if abs(throttle) < self.deadzone:
                 self.throttle = 0
             else:

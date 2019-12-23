@@ -30,6 +30,14 @@ def generate_launch_description():
                                      '../../src/ai_drivers/config/data_collector_config.yaml')]
         ),
         Node(
+            package='ai_drivers',
+            node_executable='model_loader',
+            node_name='model_loader',
+            output='screen',
+            parameters=[os.path.join(get_package_prefix('ai_drivers'),
+                                     '../../src/ai_drivers/config/model_loader_config.yaml')]
+        ),
+        Node(
             package='realsense_node',
             node_executable='realsense_node',
             node_namespace='',
