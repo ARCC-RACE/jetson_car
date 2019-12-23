@@ -1,0 +1,10 @@
+data_collector:
+  ros__parameters:
+    absolute_max_speed: 0.75 #match with mux_config
+    ai_ackermann_drive_topic: "/ai/cmd"
+    center_camera_topic: "/camera/color/image_raw"
+    center_camera_depth_topic: "/camera/depth/image_rect_raw"
+    imu_data_topic: ""
+    imu_status_topic: ""
+
+

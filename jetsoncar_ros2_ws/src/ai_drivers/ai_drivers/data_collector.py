@@ -82,7 +82,7 @@ class DataCollector(Node):
         self.imu_status = Bno055() #last IMU message include calibration status
 
         # define subscribers for the image topics and variable to store the last image from each topic
-        self.last_front_color_image =None
+        self.last_front_color_image = None
         self.last_front_depth_image = None
 
         self.create_subscription(Image, self.get_parameter('center_camera_topic').value, self.center_camera_cb, 1)
@@ -163,7 +163,9 @@ class DataCollector(Node):
 
             if not collection_entry_exists:
                 dataset =  manifest.findall('dataset')[current_dataset_index]
-                collection_entry = ET.Element("collection_entry",  {"date":str(date), "notes":self.get_parameter("entry_notes").value})
+                collection_entry = ET.Element("collection_entry",  {"date":str(date), "notes":self.get_parameter("entry_notes").value,
+                                                                    "rate":str(self.get_parameter("data_collection_rate").value),
+                                                                    "triple_cam":str(self.get_parameter("triple_camera_mode").value)})
                 dataset.append(collection_entry)
                 manifest_tree.write(xml_manifest_path)
 
@@ -192,6 +194,7 @@ class DataCollector(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+    time.sleep(0.1) # magic sleep
     data_collector = DataCollector()
     rclpy.spin(data_collector)
     data_collector.destroy_node()
