@@ -113,7 +113,7 @@ class DataCollector(Node):
 
     def center_camera_cb(self, image):
         try:
-            self.last_front_color_image = self.bridge.imgmsg_to_cv2(image)
+            self.last_front_color_image = self.bridge.imgmsg_to_cv2(image, desired_encoding="bgr8")
         except CvBridgeError as e:
             self.get_logger().error(e)
 
