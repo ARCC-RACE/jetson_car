@@ -63,7 +63,7 @@ Development
 - make sure you have cloned https://github.com/JHS-ARCC-Club/jetson_car.git to home directory and init/updated submodules
 - Setup pip and download keras and tensorflow for python3
    - [Install python3 tensorflow](https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform/index.html)
-   - `sudo python3 -m pip install keras`
+   - `sudo apt install gfortran python3-scipy python3-keras`
    - If you encounter errors loading the models try uninstalling keras and installing the latest version
       - `sudo python3 -m pip uninstall keras`
       - `sudo python3 -m pip install keras`
