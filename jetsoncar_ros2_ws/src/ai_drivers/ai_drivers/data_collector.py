@@ -165,7 +165,8 @@ class DataCollector(Node):
                 dataset =  manifest.findall('dataset')[current_dataset_index]
                 collection_entry = ET.Element("collection_entry",  {"date":str(date), "notes":self.get_parameter("entry_notes").value,
                                                                     "rate":str(self.get_parameter("data_collection_rate").value),
-                                                                    "triple_cam":str(self.get_parameter("triple_camera_mode").value)})
+                                                                    "triple_cam":str(self.get_parameter("triple_camera_mode").value),
+                                                                    "start_stamp":str(time_stamp)})
                 dataset.append(collection_entry)
                 manifest_tree.write(xml_manifest_path)
 
