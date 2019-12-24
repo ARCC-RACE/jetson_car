@@ -11,7 +11,7 @@ data_collector:
     left_camera_topic: ""
     imu_data_topic: ""
     imu_status_topic: ""
-    data_root_dir: "/home/michael/Desktop/data" #directory where data is managed (will include meta info xml)
+    data_root_dir: "/media/jetsoncar/racecarDataset/data" #directory where data is managed (will include meta info xml)
     dataset_name: "dataset" #specific folder to put data into
     dataset_description: "This is where you can put information to describe your dataset"
     entry_notes: "If you would make a few notes about the dataset entry"

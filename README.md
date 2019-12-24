@@ -62,10 +62,8 @@ Development
    - Follow [this tutorial on reflashing the Jetson TX2](https://www.youtube.com/watch?v=D7lkth34rgM)
 - make sure you have cloned https://github.com/JHS-ARCC-Club/jetson_car.git to home directory and init/updated submodules
 - Setup pip and download keras and tensorflow for python3
-   - `sudo apt-get install -y python3-pip`
-   - `sudo python3 -m pip install keras`
-   - `sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp33 tensorflow-gpu`
-      - Try `sudo python3 -m pip install tensorflow-gpu` before
+   - [Install python3 tensorflow](https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform/index.html)
+   - `sudo apt install gfortran python3-scipy python3-keras`
    - If you encounter errors loading the models try uninstalling keras and installing the latest version
       - `sudo python3 -m pip uninstall keras`
       - `sudo python3 -m pip install keras`
