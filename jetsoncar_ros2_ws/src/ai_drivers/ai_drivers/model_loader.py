@@ -143,7 +143,7 @@ class ModelLoader(Node):
 
     def new_color_image_cb(self, image):
         try:
-            self.last_color_image = self.bridge.imgmsg_to_cv2(image)
+            self.last_color_image = self.bridge.imgmsg_to_cv2(image, desired_encoding="bgr8")
         except CvBridgeError as e:
             self.get_logger().error(e)
 
