@@ -157,15 +157,15 @@ class ModelLoader(Node):
         if not (self.loaded_model is None and self.last_depth_image is None and self.last_color_image is None):
             if self.utils is None or self.tftrt_engine is None:
                 self.utils = importlib.import_module(".utils", self.package_name)
-                frozen_graph = FrozenGraph(self.loaded_model, (self.utils.IMAGE_HEIGHT, self.utils.IMAGE_WIDTH, self.utils.IMAGE_CHANNELS))
-                self.tftrt_engine = TftrtEngine(frozen_graph, 1, 'FP32')
+                # frozen_graph = FrozenGraph(self.loaded_model, (self.utils.IMAGE_HEIGHT, self.utils.IMAGE_WIDTH, self.utils.IMAGE_CHANNELS))
+                # self.tftrt_engine = TftrtEngine(frozen_graph, 1, 'FP32')
 
             # preprocess_data will take in images and IMU and return array to make prediction (input to network) and a recursion factor
                 # recursion factor starts as None. Make sure None case is handled
             # postprocess data will take in output of network and return steering, throttle
             x, self.recursion_factor = self.utils.preprocess_data(last_color_image=self.last_color_image, last_depth_image=self.last_depth_image, recursion_factor=self.recursion_factor)
-            # command = self.loaded_model.predict(x, batch_size=1) # Keras version
-            command = self.tftrt_engine.infer(x) #TensorRT version
+            command = self.loaded_model.predict(x, batch_size=1) # Keras version
+            # command = self.tftrt_engine.infer(x) #TensorRT version
             steer, throttle = self.utils.postprocess_data(command)
 
             ai_cmd = AckermannDriveStamped()
