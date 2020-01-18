@@ -20,6 +20,7 @@ Development
 - See the `Nvidia Jetson Setup` section
 - ~Install EmPy `pip3 install EmPy` or `python3 -m pip install EmPy`
 - Install Lark `pip3 install lark-parser` or `python3 -m pip install lark-parser`~
+- `sudo apt-get install python-rosdep`
 - Install non ROS dependencies for intel realsense `sudo apt-get install -y libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev;sudo apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev`
 - Run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install`
 - On the jetson run `rosdep install --from-paths src --ignore-src -r -y` and `colcon build --symlink-install` in the jetsoncar_ws
