@@ -67,6 +67,7 @@ Development
    - If you encounter errors loading the models try uninstalling keras and installing the latest version
       - `sudo python3 -m pip uninstall keras`
       - `sudo python3 -m pip install keras`
+- `sudo apt-get install python3-libnvinfer-dev uff-converter-tf`
 - Run the `/scripts/jetson.sh` script to setup network
 - The following are done in the `jetson.sh` script but provided here for reference
    - `sudo chmod a+rw /dev/ttyACM0` to give proper permissions to the USB peripherals
