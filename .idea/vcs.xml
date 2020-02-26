@@ -2,6 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/carla_ws/src/ros-bridge" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/jetsoncar_ros2_ws/src/ros2_intel_realsense" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/jetsoncar_ws/src/drivers/jetson-hal" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/jetsoncar_ws/src/drivers/jetson-rosey" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/jetsoncar_ws/src/realsense2_description" vcs="Git" />
   </component>
 </project>

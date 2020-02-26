@@ -10,3 +10,6 @@
 [submodule "jetsoncar_ros2_ws/src/ros2_intel_realsense"]
 	path = jetsoncar_ros2_ws/src/ros2_intel_realsense
 	url = https://github.com/intel/ros2_intel_realsense.git
+[submodule "carla_ws/src/ros-bridge"]
+	path = carla_ws/src/ros-bridge
+	url = https://github.com/carla-simulator/ros-bridge.git

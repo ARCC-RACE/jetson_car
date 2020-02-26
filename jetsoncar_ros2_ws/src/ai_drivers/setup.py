@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'model_loader = ai_drivers.model_loader:main',
-            'data_collector = ai_drivers.data_collector:main'
+            'data_collector = ai_drivers.data_collector:main',
+            'sim_bridge = ai_drivers.sim_bridge:main'
         ],
     },
 )
