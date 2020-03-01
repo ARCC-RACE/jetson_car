@@ -56,7 +56,7 @@ class ModelLoader(Node):
         config_path = os.path.join(path.data, "config.yaml")
         self.package_name = os.path.basename(path.data)
 
-        if os.path.exists(path):
+        if os.path.exists(path.data):
 
             if self.loaded_model is not None:
                 self.loaded_model = None  # stop any more model processing if a previous model was in use
@@ -68,7 +68,7 @@ class ModelLoader(Node):
             self.utils = None
             config_file = yaml.load(open(config_path))
             self.get_logger().info("Loading Model")
-            self.loaded_model = tf.saved_model.load(path)
+            self.loaded_model = tf.saved_model.load(path.data)
             self.get_logger().info("Model Loaded")
 
             if self.update_timer is not None:
