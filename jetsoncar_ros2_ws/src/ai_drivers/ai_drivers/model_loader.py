@@ -65,7 +65,7 @@ class ModelLoader(Node):
                 sys.path.append(os.path.dirname(path.data))  # allows us to import utils
 
             self.recursion_factor = None
-            self.utils = None
+            self.utils = importlib.import_module("utils", self.package_name)
             config_file = yaml.load(open(config_path), Loader=yaml.FullLoader)
             self.get_logger().info("Loading Model")
             self.loaded_model = tf.saved_model.load(path.data)
@@ -93,8 +93,6 @@ class ModelLoader(Node):
 
     def update_cb(self):
         if not (self.loaded_model is None and self.last_depth_image is None and self.last_color_image is None):
-            if self.utils is None:
-                self.utils = importlib.import_module(".utils", self.package_name)
 
             # preprocess_data will take in images and IMU and return array to make prediction (input to network) and a recursion factor
                 # recursion factor starts as None. Make sure None case is handled
