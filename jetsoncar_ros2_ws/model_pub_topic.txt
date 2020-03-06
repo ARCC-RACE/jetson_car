@@ -1,3 +1,0 @@
-publisher: beginning loop
-publishing #1: std_msgs.msg.String(data='/media/1C4843B14843888A/models/rosey1')
-
