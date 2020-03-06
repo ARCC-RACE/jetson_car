@@ -66,7 +66,7 @@ class ModelLoader(Node):
 
             self.recursion_factor = None
             self.utils = None
-            config_file = yaml.load(open(config_path))
+            config_file = yaml.load(open(config_path), Loader=yaml.FullLoader)
             self.get_logger().info("Loading Model")
             self.loaded_model = tf.saved_model.load(path.data)
             self.get_logger().info("Model Loaded")
