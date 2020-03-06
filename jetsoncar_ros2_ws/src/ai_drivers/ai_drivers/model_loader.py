@@ -77,9 +77,9 @@ class ModelLoader(Node):
 
                 update_rate = float(config_file["update_rate"])
                 self.update_timer = self.create_timer(1.0 / update_rate, self.update_cb)
-            except Exceptions as e:
+            except Exception as e:
                 self.loaded_model = None
-                self.get_logger().error("Error loading model: " + e)
+                self.get_logger().error("Error loading model: " + str(e))
         else:
             self.get_logger().error("Path does not exist: " + model_path)
 
@@ -112,7 +112,7 @@ class ModelLoader(Node):
                 ai_cmd.drive.speed = constrain(throttle, -1.0, 1.0)
                 self.ackermann_cmd_publisher.publish(ai_cmd)
             except Exception as e:
-                self.get_logger().error("Error performing update: " + e)
+                self.get_logger().error("Error performing update: " + str(e))
 
 def main(args=None):
     rclpy.init(args=args)
