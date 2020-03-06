@@ -3,7 +3,6 @@ data_collector:
     absolute_max_speed: 0.75 #match with mux_config
     data_collection_rate: 10.0 #Hz
     triple_camera_mode: false #L, R, center cameras for 3x training +  edge cases
-    model_path: "/home/michael/Desktop/test_model" #path to model folder
     ackermann_drive_topic: "/hw/cmd"
     center_camera_topic: "/camera/color/image_raw"
     center_camera_depth_topic: "/camera/depth/image_rect_raw"
@@ -11,7 +10,7 @@ data_collector:
     left_camera_topic: ""
     imu_data_topic: ""
     imu_status_topic: ""
-    data_root_dir: "/home/jetsoncar/Desktop/data" #directory where data is managed (will include meta info xml)
+    data_root_dir: "/media/960D-F3CB/data" #directory where data is managed (will include meta info xml)
     dataset_name: "dataset" #specific folder to put data into
     dataset_description: "This is where you can put information to describe your dataset"
     entry_notes: "If you would make a few notes about the dataset entry"
