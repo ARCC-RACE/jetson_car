@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from tensorflow.python.compiler.tensorrt import trt_convert as trt
 import argparse
 
