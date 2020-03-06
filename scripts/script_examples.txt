@@ -1,0 +1,2 @@
+./rt_converter.py -m /media/960D-F3CB/models/rosey_v3 -d /home/jetsoncar/Desktop/data/dataset/
+./load_model.sh /media/960D-F3CB/models/rosey_v3D

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 from tensorflow.python.compiler.tensorrt import trt_convert as trt
-import argparse
+import argparse, sys, os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--data", help="directory to the dataset for Int8 calibration", type=string)
-parser.add_argument("-m", "--model", help="directory to the tf saved model that you would like to convert to RT", type=string)
+parser.add_argument("-d", "--data", help="directory to the dataset for Int8 calibration")
+parser.add_argument("-m", "--model", help="directory to the tf saved model that you would like to convert to RT")
 args = parser.parse_args()
 
 sys.path.append(args.model)
