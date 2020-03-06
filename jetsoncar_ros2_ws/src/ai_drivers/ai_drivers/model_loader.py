@@ -100,7 +100,7 @@ class ModelLoader(Node):
                 # recursion factor starts as None. Make sure None case is handled
             # postprocess data will take in output of network and return steering, throttle
             x, self.recursion_factor = self.utils.preprocess_data(last_color_image=self.last_color_image, last_depth_image=self.last_depth_image, recursion_factor=self.recursion_factor)
-            command = self.loaded_model(x.astype(np.float32))
+            command = self.loaded_model(x)
             steer, throttle = self.utils.postprocess_data(command)
 
             ai_cmd = AckermannDriveStamped()
