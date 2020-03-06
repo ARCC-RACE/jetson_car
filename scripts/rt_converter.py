@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from tensorflow.python.compiler.tensorrt import trt_convert as trt
-import argparse, sys, os
+import argparse, sys, os, random
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--data", help="directory to the dataset for Int8 calibration")
@@ -23,7 +23,8 @@ conversion_params = conversion_params._replace(use_calibration=True)
 
 def my_calibration_input_fn():
     for i in range(20):
-        image, _ = utils.preprocess_data(utils.load_image(args.data, os.path.join("color_images", x[i])))
+        file = random.choice(os.listdir(os.path.join(args.data, "color_images")))
+        image, _ = utils.preprocess_data(utils.load_image(args.data, os.path.join("color_images", file)), utils.load_image(args.data, os.path.join("depth_images", file)))
         yield image,
 
 
