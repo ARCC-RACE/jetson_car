@@ -41,4 +41,5 @@ if not os.path.isdir(os.path.join(args.model, "rt")):
 
 converter.save(os.path.join(args.model, "rt"))
 shutil.copy(os.path.join(args.model, "utils.py"), os.path.join(args.model, "rt/utils.py"))
+shutil.copy(os.path.join(args.model, "config.yaml"), os.path.join(args.model, "rt/config.yaml"))
 shutil.copy(os.path.join(args.model, "__init__.py"), os.path.join(args.model, "rt/__init__.py"))
