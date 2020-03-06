@@ -57,27 +57,31 @@ class ModelLoader(Node):
         self.package_name = os.path.basename(path.data)
 
         if os.path.exists(path.data):
+            try:
+                if self.utils is not None:
+                    self.utils = None  # stop any more model processing if a previous model was in use
+                    sys.path[-1] = os.path.dirname(path.data)  # allows us to change import utils
+                else:
+                    sys.path.append(os.path.dirname(path.data))  # allows us to import utils
 
-            if self.loaded_model is not None:
-                self.loaded_model = None  # stop any more model processing if a previous model was in use
-                sys.path[-1] = os.path.dirname(path.data)  # allows us to change import utils
-            else:
-                sys.path.append(os.path.dirname(path.data))  # allows us to import utils
+                self.utils = importlib.import_module("utils", self.package_name)
+                config_file = yaml.load(open(config_path), Loader=yaml.FullLoader)
 
-            self.recursion_factor = None
-            self.utils = importlib.import_module("utils", self.package_name)
-            config_file = yaml.load(open(config_path), Loader=yaml.FullLoader)
-            self.get_logger().info("Loading Model")
-            self.loaded_model = tf.saved_model.load(path.data)
-            self.get_logger().info("Model Loaded")
+                self.recursion_factor = None
+                self.get_logger().info("Loading Model")
+                self.loaded_model = tf.saved_model.load(path.data)
+                self.get_logger().info("Model Loaded")
 
-            if self.update_timer is not None:
-                self.update_timer.cancel()
+                if self.update_timer is not None:
+                    self.update_timer.cancel()
 
-            update_rate = float(config_file["update_rate"])
-            self.update_timer = self.create_timer(1.0 / update_rate, self.update_cb)
+                update_rate = float(config_file["update_rate"])
+                self.update_timer = self.create_timer(1.0 / update_rate, self.update_cb)
+            except Exceptions as e:
+                self.loaded_model = None
+                self.get_logger().error("Error loading model: " + e)
         else:
-            self.get_logger().error("Model not found at " + model_path)
+            self.get_logger().error("Path does not exist: " + model_path)
 
     def new_color_image_cb(self, image):
         try:
@@ -92,21 +96,23 @@ class ModelLoader(Node):
             self.get_logger().error(e)
 
     def update_cb(self):
-        if not (self.loaded_model is None and self.last_depth_image is None and self.last_color_image is None):
+        if not (self.loaded_model is None or self.last_depth_image is None or self.last_color_image is None):
+            try:
+                # preprocess_data will take in images and IMU and return array to make prediction (input to network) and a recursion factor
+                    # recursion factor starts as None. Make sure None case is handled
+                # postprocess data will take in output of network and return steering, throttle
+                x, self.recursion_factor = self.utils.preprocess_data(last_color_image=self.last_color_image, last_depth_image=self.last_depth_image, recursion_factor=self.recursion_factor)
+                command = self.loaded_model(x)
+                steer, throttle = self.utils.postprocess_data(command)
 
-            # preprocess_data will take in images and IMU and return array to make prediction (input to network) and a recursion factor
-                # recursion factor starts as None. Make sure None case is handled
-            # postprocess data will take in output of network and return steering, throttle
-            x, self.recursion_factor = self.utils.preprocess_data(last_color_image=self.last_color_image, last_depth_image=self.last_depth_image, recursion_factor=self.recursion_factor)
-            command = self.loaded_model(x)
-            steer, throttle = self.utils.postprocess_data(command)
-
-            ai_cmd = AckermannDriveStamped()
-            # print(self.get_clock().now())
-            # hw_cmd.header.stamp = self.get_clock().now()
-            ai_cmd.drive.steering_angle = constrain(steer, -1.0, 1.0)
-            ai_cmd.drive.speed = constrain(throttle, -1.0, 1.0)
-            self.ackermann_cmd_publisher.publish(ai_cmd)
+                ai_cmd = AckermannDriveStamped()
+                # print(self.get_clock().now())
+                # hw_cmd.header.stamp = self.get_clock().now()
+                ai_cmd.drive.steering_angle = constrain(steer, -1.0, 1.0)
+                ai_cmd.drive.speed = constrain(throttle, -1.0, 1.0)
+                self.ackermann_cmd_publisher.publish(ai_cmd)
+            except Exception as e:
+                self.get_logger().error("Error performing update: " + e)
 
 def main(args=None):
     rclpy.init(args=args)
